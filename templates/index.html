@@ -403,8 +403,8 @@
         APP.socket.on('auth_required', () => { APP.authenticated = false; document.getElementById('login-overlay').classList.remove('hidden'); });
 
         // Client events
-        APP.socket.on('client_joined', data => { APP.clients[data.id] = data; updateClientSelector(); showToast(`Client online: ${data.hostname}`, 'success'); });
-        APP.socket.on('client_left', data => { delete APP.clients[data.id]; updateClientSelector(); if (APP.selectedClient === data.id) { APP.selectedClient = null; document.getElementById('client-selector').value = ''; } showToast(`Client offline: ${data.id}`, 'error'); });
+        APP.socket.on('client_joined', data => { APP.clients[data.id] = data; updateClientSelector(); showToast(`Client online: ${data.hostname}`, 'success'); if (!APP.selectedClient) selectClient(data.id); });
+        APP.socket.on('client_left', data => { delete APP.clients[data.id]; if (APP.selectedClient === data.id) { APP.selectedClient = null; } updateClientSelector(); showToast(`Client offline: ${data.id}`, 'error'); });
 
         // Screen frames (relayed from client)
         APP.socket.on('screen_frame', data => {
@@ -591,12 +591,12 @@
     }
 
     function selectClient(id) {
-        APP.selectedClient = id || null;
-        if (id) {
-            APP.socket.emit('select_client', {client_id: id});
-            emitToClient('start_system_monitor');
-            showToast(`Controlling: ${APP.clients[id]?.hostname || id}`, 'info');
-        }
+        if (!id) return;
+        APP.selectedClient = id;
+        APP.socket.emit('select_client', {client_id: id});
+        if (APP.authenticated) emitToClient('start_system_monitor');
+        document.getElementById('client-selector').value = id;
+        showToast(`Controlling: ${APP.clients[id]?.hostname || id}`, 'info');
     }
 
     async function refreshClientList() {
@@ -610,7 +610,7 @@
 
     // ─── Emit to Client ─────────────────────────────────────────────
     function emitToClient(event, data) {
-        if (!APP.selectedClient) { showToast('Select a client first', 'error'); return; }
+        if (!APP.selectedClient || !APP.clients[APP.selectedClient]) { showToast('Select a client first', 'error'); return; }
         APP.socket.emit(event, data || {});
     }
 
