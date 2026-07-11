@@ -198,6 +198,14 @@ def handle_login(data):
     if username == CONFIG["USERNAME"] and password == CONFIG["PASSWORD"]:
         state.register_operator(request.sid, username)
         emit("login_response", {"success": True})
+        # Send current client list to the newly connected operator
+        # so they see all clients after a page reload / reconnect
+        for client in state.get_client_list():
+            emit("client_joined", {
+                "id": client["id"],
+                "hostname": client["hostname"],
+                "platform": client["platform"]
+            })
     else:
         emit("login_response", {"success": False, "error": "Invalid credentials"})
 
