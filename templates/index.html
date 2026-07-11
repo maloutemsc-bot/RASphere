@@ -394,7 +394,15 @@
 
         APP.socket.on('connect', () => updateConnectionStatus(true));
         APP.socket.on('disconnect', () => { updateConnectionStatus(false); APP.streaming = false; updateStreamButton(); });
-        APP.socket.on('reconnect', () => { updateConnectionStatus(true); showToast('Reconnected', 'success'); });
+        APP.socket.on('reconnect', () => {
+            updateConnectionStatus(true); showToast('Reconnected', 'success');
+            // Re-authenticate after reconnect — otherwise the server won't recognise this operator
+            const saved = localStorage.getItem('rasphere_auth');
+            if (saved && APP.authenticated) {
+                const creds = JSON.parse(saved);
+                APP.socket.emit('login', {username: creds.username, password: creds.password});
+            }
+        });
 
         APP.socket.on('login_response', data => {
             if (data.success) {
@@ -402,10 +410,21 @@
                 document.getElementById('login-overlay').classList.add('hidden');
                 refreshClientList();
                 showToast('Connected to Command Center', 'success');
+                // Re-establish client selection after a reconnect re-auth
+                if (APP.selectedClient) {
+                    APP.socket.emit('select_client', {client_id: APP.selectedClient});
+                }
             } else { document.getElementById('login-error').textContent = data.error || 'Failed'; }
         });
 
         APP.socket.on('auth_required', () => { APP.authenticated = false; document.getElementById('login-overlay').classList.remove('hidden'); });
+
+        // Server sends this when the operator session is lost (e.g. after a reconnect without re-auth)
+        APP.socket.on('operator_error', data => {
+            showToast(data.error || 'Session lost. Log in again.', 'error');
+            APP.authenticated = false;
+            document.getElementById('login-overlay').classList.remove('hidden');
+        });
 
         // Client events
         APP.socket.on('client_joined', data => { APP.clients[data.id] = data; updateClientSelector(); showToast(`Client online: ${data.hostname}`, 'success'); if (!APP.selectedClient) selectClient(data.id); });
@@ -605,16 +624,16 @@
         if (APP.authenticated) emitToClient('start_system_monitor');
         document.getElementById('client-selector').value = id;
         showToast(`Controlling: ${APP.clients[id]?.hostname || id}`, 'info');
-    }
-
-    async function refreshClientList() {
-        try {
-            const r = await fetch('/api/clients', {credentials: 'same-origin'});
-            const data = await r.json();
-            data.clients.forEach(c => { APP.clients[c.id] = c; });
-            updateClientSelector();
-        } catch(e) {}
-    }
+    }        async function refreshClientList() {
+            try {
+                const r = await fetch('/api/clients', {credentials: 'same-origin'});
+                if (!r.ok) throw new Error('HTTP ' + r.status);
+                const data = await r.json();
+                // Merge (don't clear) to avoid races with live socket client_joined/client_left events
+                for (const c of (data.clients || [])) { APP.clients[c.id] = c; }
+                updateClientSelector();
+            } catch(e) { console.warn('refreshClientList failed:', e); }
+        }
 
     // ─── Emit to Client ─────────────────────────────────────────────
     function emitToClient(event, data) {

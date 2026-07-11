@@ -235,6 +235,8 @@ def handle_client_register(data):
 def handle_select_client(data):
     """Operator selects which client to control."""
     if not state.is_operator(request.sid):
+        logger.warning(f"select_client from unauthenticated sid {request.sid}")
+        emit("operator_error", {"error": "Session lost. Please log in again.", "event": "select_client"})
         return
     client_id = (data or {}).get("client_id")
     state.set_operator_target(request.sid, client_id)
@@ -269,11 +271,14 @@ for event_name in RELAY_TO_CLIENT:
         @socketio.on(evt)
         def handler(data=None):
             if not state.is_operator(request.sid):
+                logger.warning(f"Unauthenticated relay '{evt}' from {request.sid} — not registered as operator (reconnect?)")
+                emit("operator_error", {"error": "Session lost. Please log in again.", "event": evt})
                 return
             target_sid = state.get_client_sid(request.sid)
             if target_sid:
                 socketio.emit(evt, data, room=target_sid)
             else:
+                logger.warning(f"No target client for '{evt}' from operator {request.sid}")
                 emit(f"{evt}_error", {"error": "No client selected or client offline"})
         handler.__name__ = f"handle_{evt}"
         return handler
