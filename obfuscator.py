@@ -81,6 +81,10 @@ def _D(b):
                 continue
             
             if c in ('"', "'"):
+                # Skip raw strings (r"...") - can contain invalid escape sequences like \U
+                if i > 0 and line[i-1].lower() == 'r':
+                    i += 1
+                    continue
                 in_str = c
                 start = i
             else:

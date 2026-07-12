@@ -430,13 +430,22 @@
         APP.socket.on('client_joined', data => { APP.clients[data.id] = data; updateClientSelector(); showToast(`Client online: ${data.hostname}`, 'success'); if (!APP.selectedClient) selectClient(data.id); });
         APP.socket.on('client_left', data => { delete APP.clients[data.id]; if (APP.selectedClient === data.id) { APP.selectedClient = null; } updateClientSelector(); showToast(`Client offline: ${data.id}`, 'error'); });
 
-        // Screen frames (relayed from client)
+        // Screen frames (relayed from client) — preload to prevent flicker
+        APP._screenFrameSeq = 0;
         APP.socket.on('screen_frame', data => {
             if (!APP.streaming) return;
-            const img = document.getElementById('screen-image');
-            img.src = 'data:image/jpeg;base64,' + data.image;
-            img.style.display = 'block';
-            document.getElementById('screen-placeholder').style.display = 'none';
+            // Preload image before swapping to avoid white flash
+            // Use sequence number to discard stale frames (out-of-order loading)
+            const seq = ++APP._screenFrameSeq;
+            const preload = new Image();
+            preload.onload = () => {
+                if (seq !== APP._screenFrameSeq) return; // stale, skip
+                const img = document.getElementById('screen-image');
+                img.src = preload.src;
+                img.style.display = 'block';
+                document.getElementById('screen-placeholder').style.display = 'none';
+            };
+            preload.src = 'data:image/jpeg;base64,' + data.image;
             APP.frameCount++;
             const now = performance.now();
             if (now - APP.lastFrameTime >= 1000) {
@@ -505,13 +514,20 @@
         APP.socket.on('file_new_folder_result', data => { showToast(data.success ? 'Created' : 'Error', data.success ? 'success' : 'error'); fileRefresh(); });
         APP.socket.on('file_upload_result', data => { showToast(data.success ? 'Uploaded' : 'Error', data.success ? 'success' : 'error'); fileRefresh(); });
 
-        // Webcam frames
+        // Webcam frames — preload to prevent flicker
+        APP._webcamFrameSeq = 0;
         APP.socket.on('webcam_frame', data => {
             if (APP.currentPanel !== 'webcam-panel') return;
-            const img = document.getElementById('webcam-image');
-            img.src = 'data:image/jpeg;base64,' + data.image;
-            img.style.display = 'block';
-            document.getElementById('webcam-placeholder').style.display = 'none';
+            const seq = ++APP._webcamFrameSeq;
+            const preload = new Image();
+            preload.onload = () => {
+                if (seq !== APP._webcamFrameSeq) return; // stale, skip
+                const img = document.getElementById('webcam-image');
+                img.src = preload.src;
+                img.style.display = 'block';
+                document.getElementById('webcam-placeholder').style.display = 'none';
+            };
+            preload.src = 'data:image/jpeg;base64,' + data.image;
         });
         APP.socket.on('webcam_status', data => {
             APP.webcamActive = data.active;

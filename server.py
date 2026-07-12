@@ -114,6 +114,18 @@ class RelayState:
                     return self.clients[client_id]["sid"]
         return None
 
+    def get_controlling_operator_sid(self, client_sid):
+        """Given a client's sid, return the operator sid controlling it (or None)."""
+        with self.lock:
+            info = self.sid_to_info.get(client_sid)
+            if not info or info["type"] != "client":
+                return None
+            client_id = info["id"]
+            for op_sid, op in self.operators.items():
+                if op.get("controlling") == client_id:
+                    return op_sid
+        return None
+
     def get_client_list(self):
         with self.lock:
             return [
@@ -321,8 +333,9 @@ for event_name in RELAY_TO_OPERATOR:
         def handler(data=None):
             if not state.is_client(request.sid):
                 return
-            # Only emit to operators (not to other clients)
-            for op_sid in list(state.operators.keys()):
+            # Only send to the operator controlling THIS client (not all operators)
+            op_sid = state.get_controlling_operator_sid(request.sid)
+            if op_sid:
                 socketio.emit(evt, data, room=op_sid)
         handler.__name__ = f"handle_client_{evt}"
         return handler
