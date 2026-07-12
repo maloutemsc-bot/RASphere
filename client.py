@@ -727,8 +727,8 @@ def _decrypt_chrome(encrypted_value):
         return "[no data]"
     if len(encrypted_value) < 15 + 16:  # 3 prefix + 12 nonce + 16 tag min
         return "[too short]"
-    if encrypted_value[:3] != b'v10':
-        return "[old format v" + (encrypted_value[:3].decode(errors='replace')) + "]"
+    if encrypted_value[:3] not in (b'v10', b'v20'):
+        return "[unknown format " + encrypted_value[:3].decode(errors='replace') + "]"
 
     try:
         # Find Local State from the installed Chrome/Edge
