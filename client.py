@@ -25,7 +25,7 @@ _SECRET  = "rasphere-client-key-2024"        # Client secret key
 _RECON   = 5                                  # Reconnect delay (seconds)
 _RECON_MAX = 120                              # Max reconnect delay for exponential backoff
 _CLIENT_ID = None                             # None = auto-generate
-_VERSION = "1.0.0"                           # Client version for auto-update checking
+_VERSION = "1.0.1"                           # Client version for auto-update checking
 _KEEPALIVE = 300                              # Keep-alive ping interval (seconds) to prevent Render sleep
 # ══════════════════════════════════════════════════════════════════════
 
