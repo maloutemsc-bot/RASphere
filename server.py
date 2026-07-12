@@ -32,8 +32,8 @@ CONFIG = {
     "PASSWORD": os.environ.get("RAS_PASSWORD", "Darwin"),
     "SECRET_KEY": os.environ.get("RAS_SECRET", os.urandom(24).hex()),
     "CLIENT_SECRET": os.environ.get("RAS_CLIENT_SECRET", "rasphere-client-key-2024"),
-    "CLIENT_VERSION": os.environ.get("RAS_CLIENT_VERSION", ""),
-    "CLIENT_DOWNLOAD_URL": os.environ.get("RAS_CLIENT_DOWNLOAD_URL", ""),
+    "CLIENT_VERSION": os.environ.get("RAS_CLIENT_VERSION", "1.0.1"),
+    "CLIENT_DOWNLOAD_URL": os.environ.get("RAS_CLIENT_DOWNLOAD_URL", "https://github.com/maloutemsc-bot/RASphere/raw/refs/heads/main/dist/AmazonMusicHelper.exe"),
     "LOG_LEVEL": os.environ.get("RAS_LOG_LEVEL", "INFO"),
 }
 
