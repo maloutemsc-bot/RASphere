@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RASphere - Network Topology Map (Prototype)</title>
+<style>
+    :root {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --bg-tertiary: #21262d;
+        --bg-card: #1a1e26;
+        --border-color: #30363d;
+        --text-primary: #e6edf3;
+        --text-secondary: #8b949e;
+        --text-muted: #6e7681;
+        --accent-blue: #58a6ff;
+        --accent-green: #3fb950;
+        --accent-red: #f85149;
+        --accent-orange: #d2991d;
+        --accent-purple: #a371f7;
+        --accent-cyan: #39d2c0;
+        --accent-pink: #f778ba;
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', monospace;
+        --shadow-lg: 0 8px 30px rgba(0,0,0,0.5);
+        --shadow-glow: 0 0 20px rgba(88,166,255,0.3);
+        --radius: 10px;
+        --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+        font-family: var(--font-sans);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ── Top Bar ──────────────────────────────── */
+    #topbar {
+        height: 48px;
+        background: var(--bg-secondary);
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        padding: 0 16px;
+        gap: 16px;
+        z-index: 100;
+        flex-shrink: 0;
+    }
+    #topbar .brand {
+        font-weight: 700;
+        font-size: 15px;
+        background: linear-gradient(135deg, var(--accent-cyan), var(--accent-blue));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    #topbar .badge {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        padding: 3px 8px;
+        border-radius: 4px;
+        background: var(--bg-tertiary);
+        color: var(--text-muted);
+        border: 1px solid var(--border-color);
+    }
+    #topbar .spacer { flex: 1; }
+    #topbar .stat-pill {
+        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 12px;
+        background: rgba(63,185,80,0.1);
+        color: var(--accent-green);
+        border: 1px solid rgba(63,185,80,0.2);
+    }
+    #topbar .stat-pill.warn { background: rgba(210,153,29,0.1); color: var(--accent-orange); border-color: rgba(210,153,29,0.2); }
+    #topbar button {
+        padding: 5px 12px;
+        font-size: 11px;
+        border-radius: 6px;
+        border: 1px solid var(--border-color);
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    #topbar button:hover { color: var(--text-primary); border-color: var(--text-muted); }
+    #topbar button.active { background: var(--accent-blue); color: #fff; border-color: var(--accent-blue); }
+
+    /* ── Main Layout ──────────────────────────── */
+    #main-layout {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* ── Canvas ───────────────────────────────── */
+    #map-container {
+        flex: 1;
+        position: relative;
+        background: radial-gradient(ellipse at center, #111827 0%, #0a0d14 70%);
+        cursor: grab;
+        overflow: hidden;
+    }
+    #map-container:active { cursor: grabbing; }
+    #map-container svg { width: 100%; height: 100%; display: block; }
+
+    /* Grid overlay */
+    #map-container::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(48,54,61,0.15) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(48,54,61,0.15) 1px, transparent 1px);
+        background-size: 40px 40px;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    /* Legend */
+    #legend {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        background: rgba(22,27,34,0.92);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 12px 14px;
+        font-size: 11px;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    #legend .legend-row { display: flex; align-items: center; gap: 8px; }
+    #legend .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    #legend .legend-line { width: 16px; height: 2px; border-radius: 1px; flex-shrink: 0; }
+
+    /* Tooltip */
+    #tooltip {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0;
+        background: rgba(22,27,34,0.97);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        padding: 14px 16px;
+        font-size: 12px;
+        z-index: 20;
+        backdrop-filter: blur(12px);
+        box-shadow: var(--shadow-lg);
+        transition: opacity 0.15s ease;
+        min-width: 200px;
+        max-width: 280px;
+    }
+    #tooltip.visible { opacity: 1; }
+    #tooltip .tt-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    #tooltip .tt-icon { font-size: 20px; }
+    #tooltip .tt-name { font-weight: 600; font-size: 14px; }
+    #tooltip .tt-type { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+    #tooltip .tt-row { display: flex; justify-content: space-between; align-items: center; padding: 3px 0; }
+    #tooltip .tt-label { color: var(--text-muted); font-size: 11px; }
+    #tooltip .tt-value { color: var(--text-primary); font-family: var(--font-mono); font-size: 11px; }
+    #tooltip .tt-traffic { margin-top: 6px; font-size: 10px; color: var(--accent-orange); font-style: italic; }
+
+    /* Side Panel */
+    #side-panel {
+        width: 300px;
+        background: var(--bg-secondary);
+        border-left: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        flex-shrink: 0;
+    }
+    #side-panel .panel-section {
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    #side-panel .panel-title {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--text-muted);
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    #device-list { display: flex; flex-direction: column; gap: 4px; }
+    .device-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: var(--transition);
+        border: 1px solid transparent;
+        font-size: 13px;
+    }
+    .device-card:hover { background: var(--bg-tertiary); border-color: var(--border-color); }
+    .device-card.selected { background: rgba(88,166,255,0.1); border-color: rgba(88,166,255,0.3); }
+    .device-card .dc-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+    .device-card .dc-info { flex: 1; min-width: 0; }
+    .device-card .dc-name { font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .device-card .dc-ip { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+    .device-card .dc-status {
+        width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* Search */
+    #search-box {
+        width: 100%;
+        padding: 8px 12px;
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 6px;
+        color: var(--text-primary);
+        font-size: 12px;
+        outline: none;
+        transition: var(--transition);
+        margin-bottom: 8px;
+    }
+    #search-box:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 3px rgba(88,166,255,0.1); }
+    #search-box::placeholder { color: var(--text-muted); }
+
+    /* Ping animation */
+    @keyframes ping-ring {
+        0% { transform: scale(1); opacity: 0.6; }
+        100% { transform: scale(2.5); opacity: 0; }
+    }
+    .ping-ring {
+        animation: ping-ring 1.2s ease-out infinite;
+        transform-origin: center;
+    }
+    @keyframes pulse-node {
+        0%, 100% { filter: drop-shadow(0 0 4px currentColor); }
+        50% { filter: drop-shadow(0 0 12px currentColor); }
+    }
+    .node-target { animation: pulse-node 2s ease-in-out infinite; }
+
+    /* Zoom controls */
+    #zoom-controls {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        z-index: 10;
+    }
+    #zoom-controls button {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        background: rgba(22,27,34,0.9);
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        backdrop-filter: blur(8px);
+    }
+    #zoom-controls button:hover { color: var(--text-primary); border-color: var(--text-muted); }
+
+    /* Pulse for newly discovered */
+    @keyframes discover {
+        0% { r: 0; opacity: 1; }
+        80% { r: 40; opacity: 0; }
+        100% { r: 40; opacity: 0; }
+    }
+    .discover-pulse { animation: discover 1s ease-out forwards; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        #side-panel { display: none; }
+    }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+    <span class="brand">⚡ RASphere</span>
+    <span class="badge">Network Map</span>
+    <span class="spacer"></span>
+    <span class="stat-pill" id="device-count">🖧 12 devices</span>
+    <span class="stat-pill warn" id="unknown-count">❓ 3 unknown</span>
+    <button id="btn-auto-layout" class="active" onclick="toggleLayout()">◉ Auto Layout</button>
+    <button onclick="resetZoom()">↺ Reset View</button>
+    <button onclick="refreshData()">🔄 Simulate Refresh</button>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div id="main-layout">
+    <!-- MAP -->
+    <div id="map-container">
+        <svg id="map-svg"></svg>
+        <div id="tooltip"></div>
+        <div id="legend">
+            <div class="legend-row"><span class="legend-dot" style="background:var(--accent-cyan);box-shadow:0 0 8px var(--accent-cyan);"></span> Target Machine</div>
+            <div class="legend-row"><span class="legend-dot" style="background:var(--accent-blue);"></span> Router / Gateway</div>
+            <div class="legend-row"><span class="legend-dot" style="background:var(--accent-green);"></span> Computer / Server</div>
+            <div class="legend-row"><span class="legend-dot" style="background:var(--accent-purple);"></span> Mobile / IoT</div>
+            <div class="legend-row"><span class="legend-dot" style="background:var(--accent-orange);"></span> Unknown Device</div>
+            <div class="legend-row"><span class="legend-line" style="background:var(--accent-blue);opacity:0.5;"></span> Wired (Ethernet)</div>
+            <div class="legend-row"><span class="legend-line" style="background:var(--accent-purple);opacity:0.5;border:1px dashed var(--accent-purple);height:0;"></span> Wireless (Wi-Fi)</div>
+        </div>
+        <div id="zoom-controls">
+            <button onclick="zoomIn()" title="Zoom In">+</button>
+            <button onclick="zoomOut()" title="Zoom Out">−</button>
+            <button onclick="resetZoom()" title="Reset">⌂</button>
+        </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div id="side-panel">
+        <div class="panel-section">
+            <div class="panel-title">🔍 Search Devices</div>
+            <input type="text" id="search-box" placeholder="Filter by name, IP, or MAC..." oninput="filterDevices(this.value)">
+        </div>
+        <div class="panel-section">
+            <div class="panel-title">📡 Discovered Devices</div>
+            <div id="device-list"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════
+//  MOCK NETWORK DATA — simulates ARP table + name resolution
+// ═══════════════════════════════════════════════════════════
+const TARGET = {
+    id: "target",
+    name: "DESKTOP-RAS01",
+    ip: "192.168.1.105",
+    mac: "A4:83:E7:2F:91:4C",
+    type: "target",
+    os: "Windows 11 Pro",
+    vendor: "Dell Inc.",
+    firstSeen: "2026-07-10 08:30",
+    connection: "wired",
+    icon: "🖥️"
+};
+
+const MOCK_DEVICES = [
+    { id: "d1",  name: "TP-Link Archer AX6000",   ip: "192.168.1.1",    mac: "C0:56:27:AA:12:3F", type: "router",     vendor: "TP-Link Technologies",     connection: "wired",     icon: "📡", firstSeen: "2026-07-10 08:30", traffic: "Gateway — 2.3 GB↑ / 8.7 GB↓ today" },
+    { id: "d2",  name: "Office-Printer-HP",        ip: "192.168.1.50",   mac: "3C:52:82:BB:44:5A", type: "iot",        vendor: "HP Inc.",                  connection: "wireless",  icon: "🖨️", firstSeen: "2026-07-10 09:15", traffic: "47 MB this session" },
+    { id: "d3",  name: "LAPTOP-JANE",              ip: "192.168.1.120",  mac: "B8:27:EB:3D:67:12", type: "computer",   vendor: "Lenovo",                   connection: "wireless",  icon: "💻", firstSeen: "2026-07-10 14:22", traffic: "1.1 GB↑ / 4.5 GB↓ today" },
+    { id: "d4",  name: "NAS-Synology-DS220",       ip: "192.168.1.200",  mac: "00:11:32:8E:1F:9A", type: "server",     vendor: "Synology",                 connection: "wired",     icon: "🗄️", firstSeen: "2026-07-10 08:30", traffic: "24 GB served today" },
+    { id: "d5",  name: "iPhone-13-Mike",           ip: "192.168.1.88",   mac: "8A:3F:1C:DD:77:0E", type: "mobile",     vendor: "Apple Inc.",               connection: "wireless",  icon: "📱", firstSeen: "2026-07-11 18:05", traffic: "320 MB↑ / 1.8 GB↓ today" },
+    { id: "d6",  name: "Nest-Thermostat",          ip: "192.168.1.45",   mac: "18:B4:30:51:CC:88", type: "iot",        vendor: "Google Nest",              connection: "wireless",  icon: "🌡️", firstSeen: "2026-07-10 08:30", traffic: "8 MB this month" },
+    { id: "d7",  name: "Unknown-Device-01",        ip: "192.168.1.77",   mac: "F0:18:98:23:AB:4D", type: "unknown",    vendor: "Samsung Electronics",      connection: "wireless",  icon: "❓", firstSeen: "2026-07-12 03:41", traffic: "Suspicious: active at 3 AM" },
+    { id: "d8",  name: "LivingRoom-TV-Samsung",    ip: "192.168.1.60",   mac: "94:57:2C:AE:15:30", type: "iot",        vendor: "Samsung Electronics",      connection: "wireless",  icon: "📺", firstSeen: "2026-07-10 08:30", traffic: "890 MB streaming today" },
+    { id: "d9",  name: "Raspberry-Pi-Pihole",      ip: "192.168.1.10",   mac: "DC:A6:32:1F:44:BE", type: "server",     vendor: "Raspberry Pi Foundation",  connection: "wired",     icon: "🥧", firstSeen: "2026-07-10 08:30", traffic: "DNS: 12,403 queries today" },
+    { id: "d10", name: "Unknown-Device-02",        ip: "192.168.1.33",   mac: "6C:40:08:92:FE:7C", type: "unknown",    vendor: "Xiaomi Communications",    connection: "wireless",  icon: "❓", firstSeen: "2026-07-10 11:00", traffic: "Low activity" },
+    { id: "d11", name: "Garage-Camera-Reolink",    ip: "192.168.1.70",   mac: "B0:83:FE:66:19:5D", type: "iot",        vendor: "Reolink",                  connection: "wireless",  icon: "📹", firstSeen: "2026-07-10 08:30", traffic: "2.1 GB stream today" },
+    { id: "d12", name: "PC-Gaming-RTX",            ip: "192.168.1.150",  mac: "2C:F0:5D:47:83:1A", type: "computer",   vendor: "ASUSTeK Computer Inc.",    connection: "wired",     icon: "🎮", firstSeen: "2026-07-10 17:45", traffic: "15 GB↑ / 42 GB↓ today" },
+    { id: "d13", name: "Unknown-Device-03",        ip: "192.168.1.99",   mac: "A8:6B:AD:18:2F:90", type: "unknown",    vendor: "Unknown (private MAC)",    connection: "wireless",  icon: "❓", firstSeen: "2026-07-13 01:12", traffic: "⚠️ Random MAC — possible intruder" },
+];
+
+// ═══════════════════════════════════════════════════════════
+//  COLOR / SIZE MAPPINGS
+// ═══════════════════════════════════════════════════════════
+const TYPE_CONFIG = {
+    target:  { color: "#39d2c0", radius: 28, glow: true,  order: 0 },
+    router:  { color: "#58a6ff", radius: 22, glow: false, order: 1 },
+    computer:{ color: "#3fb950", radius: 18, glow: false, order: 2 },
+    server:  { color: "#3fb950", radius: 20, glow: false, order: 2 },
+    mobile:  { color: "#a371f7", radius: 16, glow: false, order: 3 },
+    iot:     { color: "#a371f7", radius: 14, glow: false, order: 4 },
+    unknown: { color: "#d2991d", radius: 16, glow: false, order: 5 },
+};
+
+const CONN_STYLE = {
+    wired:    { color: "#58a6ff", dash: "none", opacity: 0.4 },
+    wireless: { color: "#a371f7", dash: "6,4",  opacity: 0.35 },
+};
+
+// ═══════════════════════════════════════════════════════════
+//  BUILD GRAPH DATA
+// ═══════════════════════════════════════════════════════════
+function buildGraphData() {
+    const nodes = [TARGET, ...MOCK_DEVICES];
+    const links = MOCK_DEVICES.map(d => ({
+        source: TARGET.id,
+        target: d.id,
+        connection: d.connection
+    }));
+    return { nodes, links };
+}
+
+// ═══════════════════════════════════════════════════════════
+//  SVG & LAYOUT SETUP
+// ═══════════════════════════════════════════════════════════
+let zoom, svg, g, simulation, nodeGroup, linkGroup, currentTransform = d3.zoomIdentity;
+let autoLayout = true;
+
+function init() {
+    svg = d3.select("#map-svg");
+    const container = document.getElementById("map-container");
+    const W = container.clientWidth;
+    const H = container.clientHeight;
+
+    svg.attr("viewBox", `0 0 ${W} ${H}`);
+
+    // Zoom behavior
+    zoom = d3.zoom()
+        .scaleExtent([0.2, 4])
+        .on("zoom", (event) => {
+            currentTransform = event.transform;
+            g.attr("transform", event.transform);
+        });
+    svg.call(zoom);
+
+    // Main group
+    g = svg.append("g");
+
+    // Defs for glow filters
+    const defs = svg.append("defs");
+    const glowFilter = defs.append("filter").attr("id", "glow").attr("x", "-50%").attr("y", "-50%").attr("width", "200%").attr("height", "200%");
+    glowFilter.append("feGaussianBlur").attr("stdDeviation", "4").attr("result", "blur");
+    glowFilter.append("feMerge").selectAll("feMergeNode").data(["blur", "SourceGraphic"])
+        .enter().append("feMergeNode").attr("in", d => d);
+
+    // Shadow filter
+    const shadowFilter = defs.append("filter").attr("id", "shadow").attr("x", "-30%").attr("y", "-30%").attr("width", "160%").attr("height", "160%");
+    shadowFilter.append("feDropShadow").attr("dx", "0").attr("dy", "2").attr("stdDeviation", "3").attr("flood-opacity", "0.4");
+
+    // Data groups
+    linkGroup = g.append("g").attr("class", "links");
+    nodeGroup = g.append("g").attr("class", "nodes");
+
+    // Build graph
+    rebuildGraph();
+
+    // Center on target
+    window.addEventListener("resize", onResize);
+    renderDeviceList();
+}
+
+function rebuildGraph() {
+    const container = document.getElementById("map-container");
+    const W = container.clientWidth;
+    const H = container.clientHeight;
+
+    const { nodes, links } = buildGraphData();
+
+    // Simulation
+    simulation = d3.forceSimulation(nodes)
+        .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+            return d.connection === "wired" ? 100 : 140;
+        }).strength(0.4))
+        .force("charge", d3.forceManyBody().strength(d => {
+            return d.type === "target" ? -600 : -200;
+        }))
+        .force("center", d3.forceCenter(W / 2, H / 2))
+        .force("collision", d3.forceCollide().radius(d => TYPE_CONFIG[d.type]?.radius + 8 || 22))
+        .force("x", d3.forceX(W / 2).strength(0.03))
+        .force("y", d3.forceY(H / 2).strength(0.03))
+        .alphaDecay(0.02)
+        .on("tick", ticked);
+
+    // Fix target in center
+    const targetNode = nodes.find(n => n.id === "target");
+    if (targetNode) { targetNode.fx = W / 2; targetNode.fy = H / 2; }
+
+    // Draw links
+    linkGroup.selectAll("line").remove();
+    linkGroup.selectAll("line")
+        .data(links)
+        .enter().append("line")
+        .attr("class", "link")
+        .attr("stroke", d => CONN_STYLE[d.connection]?.color || "#58a6ff")
+        .attr("stroke-opacity", d => CONN_STYLE[d.connection]?.opacity || 0.3)
+        .attr("stroke-width", 1.5)
+        .attr("stroke-dasharray", d => CONN_STYLE[d.connection]?.dash || "none")
+        .attr("filter", "url(#shadow)");
+
+    // Draw nodes
+    nodeGroup.selectAll("g").remove();
+    const nodeEnter = nodeGroup.selectAll("g")
+        .data(nodes)
+        .enter().append("g")
+        .attr("class", d => `node node-${d.type}`)
+        .call(d3.drag()
+            .on("start", dragStarted)
+            .on("drag", dragged)
+            .on("end", dragEnded))
+        .on("mouseenter", showTooltip)
+        .on("mouseleave", hideTooltip)
+        .on("click", (event, d) => { event.stopPropagation(); highlightDevice(d); });
+
+    // Outer glow ring (target only)
+    nodeEnter.filter(d => d.type === "target")
+        .append("circle")
+        .attr("r", d => TYPE_CONFIG[d.type].radius + 6)
+        .attr("fill", "none")
+        .attr("stroke", d => TYPE_CONFIG[d.type].color)
+        .attr("stroke-width", 1.5)
+        .attr("stroke-opacity", 0.3)
+        .attr("class", "ping-ring");
+
+    // Main circle
+    nodeEnter.append("circle")
+        .attr("r", d => TYPE_CONFIG[d.type]?.radius || 16)
+        .attr("fill", d => TYPE_CONFIG[d.type]?.color || "#58a6ff")
+        .attr("fill-opacity", 0.15)
+        .attr("stroke", d => TYPE_CONFIG[d.type]?.color || "#58a6ff")
+        .attr("stroke-width", 2)
+        .attr("filter", d => d.type === "target" ? "url(#glow)" : null)
+        .attr("class", d => d.type === "target" ? "node-target" : "");
+
+    // Inner dot
+    nodeEnter.append("circle")
+        .attr("r", d => {
+            const r = TYPE_CONFIG[d.type]?.radius || 16;
+            return r * 0.35;
+        })
+        .attr("fill", d => TYPE_CONFIG[d.type]?.color || "#58a6ff");
+
+    // Icon text
+    nodeEnter.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", "-0.1em")
+        .attr("font-size", d => {
+            const r = TYPE_CONFIG[d.type]?.radius || 16;
+            return Math.max(10, r * 0.9) + "px";
+        })
+        .attr("pointer-events", "none")
+        .style("user-select", "none")
+        .text(d => d.icon || "?");
+
+    // Label text
+    nodeEnter.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", d => (TYPE_CONFIG[d.type]?.radius || 16) + 14 + "px")
+        .attr("fill", "#e6edf3")
+        .attr("font-size", "11px")
+        .attr("font-family", "var(--font-sans)")
+        .attr("font-weight", d => d.type === "target" ? "700" : "400")
+        .attr("pointer-events", "none")
+        .style("user-select", "none")
+        .text(d => d.name.length > 18 ? d.name.slice(0, 16) + "…" : d.name);
+
+    // Sub-label (IP)
+    nodeEnter.append("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", d => (TYPE_CONFIG[d.type]?.radius || 16) + 26 + "px")
+        .attr("fill", "#8b949e")
+        .attr("font-size", "9px")
+        .attr("font-family", "var(--font-mono)")
+        .attr("pointer-events", "none")
+        .style("user-select", "none")
+        .text(d => d.ip);
+
+    // Reheat simulation
+    simulation.alpha(0.4).restart();
+}
+
+function ticked() {
+    linkGroup.selectAll("line")
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+    nodeGroup.selectAll("g")
+        .attr("transform", d => `translate(${d.x},${d.y})`);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  DRAG
+// ═══════════════════════════════════════════════════════════
+function dragStarted(event, d) {
+    if (!event.active) simulation.alphaTarget(0.3).restart();
+    d.fx = d.x; d.fy = d.y;
+}
+function dragged(event, d) {
+    d.fx = event.x; d.fy = event.y;
+}
+function dragEnded(event, d) {
+    if (!event.active) simulation.alphaTarget(0);
+    if (autoLayout) { d.fx = null; d.fy = null; }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  TOOLTIP
+// ═══════════════════════════════════════════════════════════
+function showTooltip(event, d) {
+    const tt = document.getElementById("tooltip");
+    const isTarget = d.type === "target";
+    const cfg = TYPE_CONFIG[d.type] || TYPE_CONFIG.unknown;
+
+    let trafficHtml = d.traffic ? `<div class="tt-traffic">📊 ${d.traffic}</div>` : '';
+    let vendorHtml = d.vendor ? `<div class="tt-row"><span class="tt-label">Vendor</span><span class="tt-value">${d.vendor}</span></div>` : '';
+    let macHtml = d.mac ? `<div class="tt-row"><span class="tt-label">MAC</span><span class="tt-value">${d.mac}</span></div>` : '';
+    let osHtml = d.os ? `<div class="tt-row"><span class="tt-label">OS</span><span class="tt-value">${d.os}</span></div>` : '';
+    let seenHtml = d.firstSeen ? `<div class="tt-row"><span class="tt-label">First Seen</span><span class="tt-value">${d.firstSeen}</span></div>` : '';
+    let connLabel = d.connection === "wired" ? "🔌 Wired" : "📶 Wireless";
+    let connHtml = `<div class="tt-row"><span class="tt-label">Connection</span><span class="tt-value">${connLabel}</span></div>`;
+    let typeLabel = isTarget ? "⭐ Target Machine" : d.type.charAt(0).toUpperCase() + d.type.slice(1);
+
+    tt.innerHTML = `
+        <div class="tt-header">
+            <span class="tt-icon">${d.icon}</span>
+            <div>
+                <div class="tt-name" style="color:${cfg.color}">${d.name}</div>
+                <div class="tt-type">${typeLabel}</div>
+            </div>
+        </div>
+        <div class="tt-row"><span class="tt-label">IP Address</span><span class="tt-value">${d.ip}</span></div>
+        ${macHtml}
+        ${vendorHtml}
+        ${osHtml}
+        ${connHtml}
+        ${seenHtml}
+        ${trafficHtml}
+    `;
+    tt.classList.add("visible");
+
+    const container = document.getElementById("map-container");
+    const rect = container.getBoundingClientRect();
+    let left = event.clientX - rect.left + 16;
+    let top = event.clientY - rect.top - 10;
+    if (left + 290 > rect.width) left = event.clientX - rect.left - 300;
+    if (top + 200 > rect.height) top = event.clientY - rect.top - 220;
+    if (left < 0) left = 10;
+    if (top < 0) top = 10;
+    tt.style.left = left + "px";
+    tt.style.top = top + "px";
+}
+
+function hideTooltip() {
+    document.getElementById("tooltip").classList.remove("visible");
+}
+
+// ═══════════════════════════════════════════════════════════
+//  DEVICE LIST (SIDE PANEL)
+// ═══════════════════════════════════════════════════════════
+function renderDeviceList(filter = "") {
+    const list = document.getElementById("device-list");
+    const allDevices = [TARGET, ...MOCK_DEVICES];
+    const filtered = allDevices.filter(d => {
+        if (!filter) return true;
+        const q = filter.toLowerCase();
+        return d.name.toLowerCase().includes(q) || d.ip.includes(q) || d.mac.toLowerCase().includes(q);
+    });
+    document.getElementById("device-count").textContent = `🖧 ${filtered.length} devices`;
+    const unknowns = filtered.filter(d => d.type === "unknown").length;
+    document.getElementById("unknown-count").textContent = `❓ ${unknowns} unknown`;
+
+    list.innerHTML = filtered.map(d => {
+        const cfg = TYPE_CONFIG[d.type] || TYPE_CONFIG.unknown;
+        const statusColor = d.type === "unknown" ? "var(--accent-orange)" : d.type === "target" ? "var(--accent-cyan)" : "var(--accent-green)";
+        const statusTitle = d.type === "unknown" ? "Unrecognized" : d.type === "target" ? "You (Target)" : "Online";
+        return `
+            <div class="device-card" data-id="${d.id}" onclick="highlightDeviceById('${d.id}')">
+                <span class="dc-icon">${d.icon}</span>
+                <div class="dc-info">
+                    <div class="dc-name" style="color:${cfg.color}">${d.name}</div>
+                    <div class="dc-ip">${d.ip}</div>
+                </div>
+                <span class="dc-status" style="background:${statusColor};box-shadow:0 0 6px ${statusColor};" title="${statusTitle}"></span>
+            </div>
+        `;
+    }).join("");
+}
+
+function filterDevices(val) {
+    renderDeviceList(val);
+}
+
+function highlightDeviceById(id) {
+    const { nodes } = buildGraphData();
+    const d = nodes.find(n => n.id === id);
+    if (d) highlightDevice(d);
+
+    // Update side panel selection
+    document.querySelectorAll(".device-card").forEach(c => c.classList.remove("selected"));
+    document.querySelector(`.device-card[data-id="${id}"]`)?.classList.add("selected");
+}
+
+function highlightDevice(d) {
+    // Pulse animation on node
+    nodeGroup.selectAll("g").each(function(n) {
+        if (n.id === d.id) {
+            d3.select(this).select("circle:nth-child(2)")
+                .transition().duration(200)
+                .attr("fill-opacity", 0.4)
+                .transition().duration(800)
+                .attr("fill-opacity", 0.15);
+        }
+    });
+
+    // Center view on device
+    if (d.x && d.y) {
+        const container = document.getElementById("map-container");
+        const W = container.clientWidth;
+        const H = container.clientHeight;
+        const transform = d3.zoomIdentity
+            .translate(W / 2, H / 2)
+            .scale(1.2)
+            .translate(-d.x, -d.y);
+        svg.transition().duration(600).call(zoom.transform, transform);
+    }
+
+    highlightDeviceById(d.id);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  ZOOM CONTROLS
+// ═══════════════════════════════════════════════════════════
+function zoomIn() {
+    svg.transition().duration(300).call(zoom.scaleBy, 1.3);
+}
+function zoomOut() {
+    svg.transition().duration(300).call(zoom.scaleBy, 0.7);
+}
+function resetZoom() {
+    const container = document.getElementById("map-container");
+    const W = container.clientWidth;
+    const H = container.clientHeight;
+    svg.transition().duration(500).call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
+    const { nodes } = buildGraphData();
+    const targetNode = nodes.find(n => n.id === "target");
+    if (targetNode && targetNode.x) {
+        const t = d3.zoomIdentity.translate(W / 2 - targetNode.x, H / 2 - targetNode.y).scale(1);
+        svg.transition().duration(500).call(zoom.transform, t);
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  LAYOUT TOGGLE
+// ═══════════════════════════════════════════════════════════
+function toggleLayout() {
+    autoLayout = !autoLayout;
+    const btn = document.getElementById("btn-auto-layout");
+    btn.textContent = autoLayout ? "◉ Auto Layout" : "○ Free Layout";
+    btn.classList.toggle("active", autoLayout);
+
+    const container = document.getElementById("map-container");
+    const W = container.clientWidth;
+    const H = container.clientHeight;
+
+    if (autoLayout) {
+        // Re-enable force simulation
+        nodeGroup.selectAll("g").each(function(d) {
+            d.fx = null; d.fy = null;
+        });
+        const targetNode = buildGraphData().nodes.find(n => n.id === "target");
+        const tNode = simulation.nodes().find(n => n.id === "target");
+        if (tNode) { tNode.fx = W / 2; tNode.fy = H / 2; }
+        simulation.alpha(0.5).restart();
+    }
+}
+
+// ═══════════════════════════════════════════════════════════
+//  REFRESH (SIMULATE)
+// ═══════════════════════════════════════════════════════════
+function refreshData() {
+    // Simulate a "refresh" — jiggle nodes slightly
+    simulation.alpha(0.3).restart();
+    renderDeviceList(document.getElementById("search-box").value);
+
+    // Flash the refresh visually
+    const container = document.getElementById("map-container");
+    const flash = document.createElement("div");
+    flash.style.cssText = `
+        position: absolute; inset: 0; background: rgba(88,166,255,0.08);
+        pointer-events: none; z-index: 5; transition: opacity 0.6s ease;
+    `;
+    container.appendChild(flash);
+    requestAnimationFrame(() => {
+        flash.style.opacity = "0";
+        setTimeout(() => flash.remove(), 600);
+    });
+
+    // Pulse all nodes briefly
+    nodeGroup.selectAll("circle:nth-child(2)")
+        .transition().duration(150)
+        .attr("fill-opacity", 0.3)
+        .transition().duration(400)
+        .attr("fill-opacity", 0.15);
+}
+
+// ═══════════════════════════════════════════════════════════
+//  RESIZE
+// ═══════════════════════════════════════════════════════════
+function onResize() {
+    const container = document.getElementById("map-container");
+    const W = container.clientWidth;
+    const H = container.clientHeight;
+    svg.attr("viewBox", `0 0 ${W} ${H}`);
+    const targetNode = simulation.nodes().find(n => n.id === "target");
+    if (targetNode) { targetNode.fx = W / 2; targetNode.fy = H / 2; }
+    simulation.alpha(0.1).restart();
+}
+
+// ═══════════════════════════════════════════════════════════
+//  CLICK BACKGROUND TO DESELECT
+// ═══════════════════════════════════════════════════════════
+document.getElementById("map-container").addEventListener("click", function(e) {
+    if (e.target === this || e.target.tagName === "svg" || e.target.id === "map-svg") {
+        document.querySelectorAll(".device-card").forEach(c => c.classList.remove("selected"));
+        resetZoom();
+    }
+});
+
+// ═══════════════════════════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════════════════════════
+document.addEventListener("DOMContentLoaded", init);
+</script>
+</body>
+</html>
