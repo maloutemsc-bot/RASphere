@@ -1167,10 +1167,13 @@
             const mainSvc = ports.length > 0 ? ports[0].service : '';
             const extType = mainSvc ? 'external_service' : 'external';
             const extIcon = mainSvc === 'HTTPS' || mainSvc === 'HTTP' ? '🌐' : (mainSvc ? '🔗' : '☁️');
+            // Prefer hostname/URL for display, fall back to IP
+            const displayName = h.url || h.hostname || (mainSvc ? `${mainSvc} (${h.ip})` : h.ip);
             nodes.push({
-                id: nodeId, name: mainSvc ? `${mainSvc} (${h.ip})` : h.ip, ip: h.ip,
+                id: nodeId, name: displayName, ip: h.ip,
                 mac: '', type: extType, icon: extIcon, vendor: '', network: 'external',
                 machine_label: mainSvc ? `${mainSvc} Server` : 'External Host',
+                hostname: h.hostname || '', url: h.url || '',
                 open_ports: ports.map(p => p.port), open_services: Object.fromEntries(ports.map(p => [p.port, p.service])),
                 ext_status: h.status
             });
@@ -1266,13 +1269,19 @@
                 const cfg = TYPE_CFG[d.type] || TYPE_CFG.unknown;
                 const netLabel = d.network === 'external' ? '🌍 External' : '🏠 Local';
                 const typeLabel = d.machine_label || (d.type === 'target' ? '⭐ Target' : d.type);
+                let urlHtml = '';
+                if (d.url) {
+                    urlHtml = `<div style="margin-top:4px;padding:4px 8px;background:rgba(88,166,255,0.08);border:1px solid rgba(88,166,255,0.2);border-radius:4px;font-family:var(--font-mono);font-size:10px;color:var(--accent-blue);word-break:break-all;">🔗 ${escHtml(d.url)}</div>`;
+                } else if (d.hostname) {
+                    urlHtml = `<div style="margin-top:4px;padding:4px 8px;background:rgba(57,210,192,0.08);border:1px solid rgba(57,210,192,0.2);border-radius:4px;font-family:var(--font-mono);font-size:10px;color:var(--accent-cyan);word-break:break-all;">🌐 ${escHtml(d.hostname)}</div>`;
+                }
                 let portsHtml = '';
                 if (d.open_ports && d.open_ports.length > 0) {
                     portsHtml = '<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border-color);"><span style="color:var(--text-muted);font-size:10px;">🔓 Open ports:</span><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;">' +
                         d.open_ports.map(p => `<span style="background:rgba(63,185,80,0.15);color:var(--accent-green);border:1px solid rgba(63,185,80,0.25);padding:1px 6px;border-radius:3px;font-size:10px;font-family:var(--font-mono);">${p}${d.open_services[p] ? ' (' + d.open_services[p] + ')' : ''}</span>`).join('') +
                         '</div></div>';
                 }
-                tt.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border-color);"><span style="font-size:18px;">${d.icon}</span><div><div style="font-weight:600;font-size:13px;color:${cfg.color};">${escHtml(d.name)}</div><div style="font-size:10px;color:var(--text-muted);">${typeLabel} · ${netLabel}</div></div></div><div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">IP</span><span style="font-family:var(--font-mono);font-size:11px;">${escHtml(d.ip)}</span></div>` +
+                tt.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border-color);"><span style="font-size:18px;">${d.icon}</span><div><div style="font-weight:600;font-size:13px;color:${cfg.color};">${escHtml(d.name)}</div><div style="font-size:10px;color:var(--text-muted);">${typeLabel} · ${netLabel}</div></div></div>${urlHtml}<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">IP</span><span style="font-family:var(--font-mono);font-size:11px;">${escHtml(d.ip)}</span></div>` +
                 (d.mac ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">MAC</span><span style="font-family:var(--font-mono);font-size:10px;">${escHtml(d.mac)}</span></div>` : '') +
                 (d.vendor ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">Vendor</span><span style="font-size:11px;">${escHtml(d.vendor)}</span></div>` : '') +
                 portsHtml;
