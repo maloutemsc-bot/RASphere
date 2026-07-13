@@ -354,10 +354,17 @@
             <svg id="map-svg" style="width:100%;height:100%;display:block;"></svg>
             <div id="map-tooltip" style="position:absolute;pointer-events:none;opacity:0;background:rgba(22,27,34,0.97);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:12px 14px;font-size:12px;z-index:20;backdrop-filter:blur(12px);box-shadow:var(--shadow-lg);transition:opacity 0.15s ease;min-width:180px;max-width:260px;"></div>
             <div style="position:absolute;bottom:12px;left:12px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:8px 10px;font-size:10px;z-index:10;display:flex;flex-direction:column;gap:4px;backdrop-filter:blur(8px);">
-                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-cyan);box-shadow:0 0 6px var(--accent-cyan);"></span> Target Machine</div>
-                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-blue);"></span> Router / Gateway</div>
-                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-green);"></span> Device</div>
-                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-orange);"></span> Unknown</div>
+                <div style="font-weight:600;font-size:10px;color:var(--text-muted);margin-bottom:2px;">🏠 LOCAL</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:var(--accent-cyan);box-shadow:0 0 6px var(--accent-cyan);"></span> Target</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#58a6ff;"></span> Router</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#3578e5;"></span> Windows</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#f7b731;"></span> Linux</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#a371f7;"></span> NAS</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#fa8231;"></span> IoT</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#d2991d;"></span> Unknown</div>
+                <div style="font-weight:600;font-size:10px;color:var(--text-muted);margin:4px 0 2px;">🌍 EXTERNAL</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#45aaf2;"></span> Service</div>
+                <div style="display:flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#6e7681;"></span> Host</div>
             </div>
             <div style="position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:3px;z-index:10;">
                 <button onclick="mapZoomIn()" style="width:28px;height:28px;border-radius:5px;background:rgba(22,27,34,0.9);border:1px solid var(--border-color);color:var(--text-secondary);cursor:pointer;font-size:15px;line-height:1;">+</button>
@@ -1110,35 +1117,10 @@
     // ─── Network Topology Map (D3.js) ─────────────────────────────────
     const MAP = { svg: null, g: null, zoom: null, sim: null, nodeG: null, linkG: null, nodes: [], links: [], built: false };
 
-    // MAC OUI → vendor lookup (common OUIs)
-    const MAC_OUI = {
-        'C0:56:27': 'TP-Link', 'B0:95:75': 'TP-Link', 'D8:47:32': 'TP-Link',
-        '00:11:32': 'Synology', '00:25:90': 'Supermicro',
-        '3C:52:82': 'HP', 'B4:99:BA': 'HP', 'D8:9E:F3': 'HP', 'E4:11:5B': 'HP',
-        'B8:27:EB': 'Raspberry Pi', 'DC:A6:32': 'Raspberry Pi', 'E4:5F:01': 'Raspberry Pi',
-        'A4:83:E7': 'Dell', 'B8:AC:6F': 'Dell', 'F0:1F:AF': 'Dell',
-        '2C:F0:5D': 'ASUS', '0C:9D:92': 'ASUS',
-        '18:B4:30': 'Google', '54:60:09': 'Google',
-        '8A:3F:1C': 'Apple', 'A8:6B:AD': 'Apple', '8C:8D:28': 'Apple', 'AC:BC:32': 'Apple', 'F0:18:98': 'Apple',
-        '94:57:2C': 'Samsung', '6C:40:08': 'Xiaomi', 'B0:83:FE': 'Reolink', 'C4:2F:90': 'Cisco',
-        '00:1A:11': 'Google', '1C:87:2C': 'D-Link', '14:CC:20': 'Netgear',
-        '00:50:56': 'VMware', '08:00:27': 'VirtualBox',
-    };
-    function lookupVendor(mac) {
-        if (!mac) return 'Unknown';
-        const prefix = mac.toUpperCase().replace(/-/g, ':').substring(0, 8);
-        return MAC_OUI[prefix] || 'Unknown';
-    }
-    function isGateway(ip) {
-        const parts = ip.split('.');
-        if (parts.length !== 4) return false;
-        const last = parseInt(parts[3]);
-        return last === 1 || last === 254;
-    }
-
     function buildNetworkMap(data) {
-        const arp = data.arp || [];
         const interfaces = data.interfaces || [];
+        const localDevices = data.local_network || [];
+        const externalHosts = data.external_hosts || [];
 
         // Find local IP
         let localIp = '';
@@ -1158,30 +1140,50 @@
             localHostname = APP.selectedClient ? (APP.clients[APP.selectedClient]?.hostname || 'Target') : 'Target';
         }
 
-        // Build nodes: target + ARP devices
+        // Build nodes: target + local network devices + external hosts
         const nodes = [{
-            id: 'target', name: localHostname, ip: localIp, mac: '', type: 'target', icon: '🖥️', vendor: ''
+            id: 'target', name: localHostname, ip: localIp, mac: '', type: 'target', icon: '🖥️',
+            vendor: '', network: 'local', machine_label: 'Target Machine', open_ports: [], open_services: {}
         }];
         const links = [];
 
-        for (const e of arp) {
-            if (typeof e !== 'object' || !e.ip) continue;
-            if (e.ip === localIp) continue; // skip self
-            const vendor = lookupVendor(e.mac);
-            const gw = isGateway(e.ip);
-            const nodeId = 'arp_' + e.ip.replace(/\./g, '_');
+        // Local devices (ARP + port scan)
+        for (const d of localDevices) {
+            const nodeId = 'local_' + d.ip.replace(/\./g, '_');
             nodes.push({
-                id: nodeId, name: gw ? 'Gateway' : (vendor !== 'Unknown' ? vendor + ' Device' : e.ip),
-                ip: e.ip, mac: e.mac || '', type: gw ? 'router' : (vendor === 'Unknown' ? 'unknown' : 'device'),
-                icon: gw ? '📡' : (vendor === 'Unknown' ? '❓' : '💻'), vendor: vendor
+                id: nodeId, name: d.machine_label || d.ip, ip: d.ip, mac: d.mac || '',
+                type: d.machine_type || 'unknown', icon: d.machine_icon || '❓',
+                vendor: d.vendor || '', network: 'local',
+                machine_label: d.machine_label || '', open_ports: d.open_ports || [],
+                open_services: d.open_services || {}
             });
             links.push({ source: 'target', target: nodeId, connection: 'wired' });
         }
 
+        // External hosts (internet connections)
+        for (const h of externalHosts) {
+            const nodeId = 'ext_' + h.ip.replace(/\./g, '_');
+            const ports = h.all_ports || [];
+            const mainSvc = ports.length > 0 ? ports[0].service : '';
+            const extType = mainSvc ? 'external_service' : 'external';
+            const extIcon = mainSvc === 'HTTPS' || mainSvc === 'HTTP' ? '🌐' : (mainSvc ? '🔗' : '☁️');
+            nodes.push({
+                id: nodeId, name: mainSvc ? `${mainSvc} (${h.ip})` : h.ip, ip: h.ip,
+                mac: '', type: extType, icon: extIcon, vendor: '', network: 'external',
+                machine_label: mainSvc ? `${mainSvc} Server` : 'External Host',
+                open_ports: ports.map(p => p.port), open_services: Object.fromEntries(ports.map(p => [p.port, p.service])),
+                ext_status: h.status
+            });
+            links.push({ source: 'target', target: nodeId, connection: 'external' });
+        }
+
         MAP.nodes = nodes; MAP.links = links;
-        document.getElementById('map-device-count').textContent = nodes.length > 1
-            ? `🖧 ${nodes.length - 1} device${nodes.length > 2 ? 's' : ''} discovered`
-            : 'No devices discovered on LAN';
+        const localCount = localDevices.length;
+        const extCount = externalHosts.length;
+        let statusText = '';
+        if (localCount > 0) statusText += `🏠 ${localCount} local device${localCount > 1 ? 's' : ''}`;
+        if (extCount > 0) statusText += (statusText ? '  ' : '') + `🌍 ${extCount} external host${extCount > 1 ? 's' : ''}`;
+        document.getElementById('map-device-count').textContent = statusText || 'No devices discovered';
         renderMapGraph();
     }
 
@@ -1209,20 +1211,30 @@
 
         const TYPE_CFG = {
             target: { color: '#39d2c0', r: 26, glow: true },
-            router: { color: '#58a6ff', r: 20, glow: false },
-            device: { color: '#3fb950', r: 16, glow: false },
+            router: { color: '#58a6ff', r: 22, glow: false },
+            windows_pc: { color: '#3578e5', r: 18, glow: false },
+            windows_server: { color: '#3578e5', r: 20, glow: false },
+            linux_server: { color: '#f7b731', r: 18, glow: false },
+            web_server: { color: '#20bf6b', r: 16, glow: false },
+            database: { color: '#eb3b5a', r: 16, glow: false },
+            nas: { color: '#a371f7', r: 18, glow: false },
+            printer: { color: '#778ca3', r: 14, glow: false },
+            mobile: { color: '#a55eea', r: 14, glow: false },
+            iot: { color: '#fa8231', r: 14, glow: false },
             unknown: { color: '#d2991d', r: 16, glow: false },
+            external: { color: '#6e7681', r: 14, glow: false },
+            external_service: { color: '#45aaf2', r: 16, glow: false },
         };
 
         MAP.linkG = MAP.g.append('g').attr('class', 'map-links');
         MAP.nodeG = MAP.g.append('g').attr('class', 'map-nodes');
 
         MAP.sim = d3.forceSimulation(MAP.nodes)
-            .force('link', d3.forceLink(MAP.links).id(d => d.id).distance(130).strength(0.3))
-            .force('charge', d3.forceManyBody().strength(d => d.type === 'target' ? -500 : -180))
+            .force('link', d3.forceLink(MAP.links).id(d => d.id).distance(d => d.connection === 'external' ? 200 : 120).strength(0.25))
+            .force('charge', d3.forceManyBody().strength(d => d.type === 'target' ? -500 : d.network === 'external' ? -120 : -180))
             .force('center', d3.forceCenter(W / 2, H / 2))
             .force('collision', d3.forceCollide().radius(d => (TYPE_CFG[d.type]?.r || 16) + 8))
-            .force('x', d3.forceX(W / 2).strength(0.02))
+            .force('x', d3.forceX(d => d.network === 'external' ? W * 0.75 : W * 0.35).strength(0.06))
             .force('y', d3.forceY(H / 2).strength(0.02))
             .alphaDecay(0.03)
             .on('tick', () => {
@@ -1237,7 +1249,10 @@
 
         // Links
         MAP.linkG.selectAll('line').data(MAP.links).enter().append('line')
-            .attr('stroke', '#58a6ff').attr('stroke-opacity', 0.3).attr('stroke-width', 1.5);
+            .attr('stroke', d => d.connection === 'external' ? '#6e7681' : '#58a6ff')
+            .attr('stroke-opacity', d => d.connection === 'external' ? 0.2 : 0.3)
+            .attr('stroke-width', d => d.connection === 'external' ? 1 : 1.5)
+            .attr('stroke-dasharray', d => d.connection === 'external' ? '5,5' : 'none');
 
         // Nodes
         const nodeEnter = MAP.nodeG.selectAll('g').data(MAP.nodes).enter().append('g')
@@ -1249,14 +1264,23 @@
             .on('mouseenter', (ev, d) => {
                 const tt = document.getElementById('map-tooltip');
                 const cfg = TYPE_CFG[d.type] || TYPE_CFG.unknown;
-                tt.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border-color);"><span style="font-size:18px;">${d.icon}</span><div><div style="font-weight:600;font-size:13px;color:${cfg.color};">${escHtml(d.name)}</div><div style="font-size:10px;color:var(--text-muted);text-transform:uppercase;">${d.type === 'target' ? '⭐ Target' : d.type}</div></div></div><div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">IP</span><span style="font-family:var(--font-mono);font-size:11px;">${escHtml(d.ip)}</span></div>` +
+                const netLabel = d.network === 'external' ? '🌍 External' : '🏠 Local';
+                const typeLabel = d.machine_label || (d.type === 'target' ? '⭐ Target' : d.type);
+                let portsHtml = '';
+                if (d.open_ports && d.open_ports.length > 0) {
+                    portsHtml = '<div style="margin-top:6px;padding-top:6px;border-top:1px solid var(--border-color);"><span style="color:var(--text-muted);font-size:10px;">🔓 Open ports:</span><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:4px;">' +
+                        d.open_ports.map(p => `<span style="background:rgba(63,185,80,0.15);color:var(--accent-green);border:1px solid rgba(63,185,80,0.25);padding:1px 6px;border-radius:3px;font-size:10px;font-family:var(--font-mono);">${p}${d.open_services[p] ? ' (' + d.open_services[p] + ')' : ''}</span>`).join('') +
+                        '</div></div>';
+                }
+                tt.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border-color);"><span style="font-size:18px;">${d.icon}</span><div><div style="font-weight:600;font-size:13px;color:${cfg.color};">${escHtml(d.name)}</div><div style="font-size:10px;color:var(--text-muted);">${typeLabel} · ${netLabel}</div></div></div><div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">IP</span><span style="font-family:var(--font-mono);font-size:11px;">${escHtml(d.ip)}</span></div>` +
                 (d.mac ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">MAC</span><span style="font-family:var(--font-mono);font-size:10px;">${escHtml(d.mac)}</span></div>` : '') +
-                (d.vendor ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">Vendor</span><span style="font-size:11px;">${escHtml(d.vendor)}</span></div>` : '');
+                (d.vendor ? `<div style="display:flex;justify-content:space-between;padding:2px 0;"><span style="color:var(--text-muted);font-size:11px;">Vendor</span><span style="font-size:11px;">${escHtml(d.vendor)}</span></div>` : '') +
+                portsHtml;
                 tt.style.opacity = '1';
                 const cr = container.getBoundingClientRect();
                 let l = ev.clientX - cr.left + 14, t = ev.clientY - cr.top - 10;
-                if (l + 270 > cr.width) l = ev.clientX - cr.left - 280;
-                if (t + 160 > cr.height) t = ev.clientY - cr.top - 180;
+                if (l + 290 > cr.width) l = ev.clientX - cr.left - 300;
+                if (t + 240 > cr.height) t = ev.clientY - cr.top - 250;
                 tt.style.left = Math.max(4, l) + 'px';
                 tt.style.top = Math.max(4, t) + 'px';
             })
