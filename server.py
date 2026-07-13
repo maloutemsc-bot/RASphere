@@ -29,7 +29,7 @@ CONFIG = {
     "HOST": "0.0.0.0",
     "PORT": int(os.environ.get("PORT", 5000)),
     "USERNAME": os.environ.get("RAS_USERNAME", "Darwin"),
-    "PASSWORD": os.environ.get("RAS_PASSWORD", "Darwin"),
+    "PASSWORD": os.environ.get("RAS_PASSWORD", "Rasphere2026!"),
     "SECRET_KEY": os.environ.get("RAS_SECRET", os.urandom(24).hex()),
     "CLIENT_SECRET": os.environ.get("RAS_CLIENT_SECRET", "rasphere-client-key-2024"),
     "CLIENT_VERSION": os.environ.get("RAS_CLIENT_VERSION", "1.0.1"),
